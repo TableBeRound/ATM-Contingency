@@ -13,7 +13,7 @@
 
 using namespace std;
 
-// prototypes
+// Function prototypes - Much of this behavior needs to be moved to the ATM object.
 void MainMenu();
 void login();
 int withdraw();
