@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "UI.h"
 #include <iostream>
 #include <iomanip>

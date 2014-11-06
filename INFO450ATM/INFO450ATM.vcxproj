@@ -77,16 +77,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Fall 2014\INFO 450\20141028-ASSIGNMENT08-GLIDEWELL-DANIEL-ATM-Skeleton\INFO450ATM\INFO450ATM\Source.cpp" />
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="ATM.cpp" />
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="Person.cpp" />
-    <ClCompile Include="Source.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="Transaction.cpp" />
     <ClCompile Include="Transfer.cpp" />
-    <ClCompile Include="UserInterface.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Account.h" />
@@ -97,7 +97,7 @@
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="Transaction.h" />
     <ClInclude Include="Transfer.h" />
-    <ClInclude Include="UserInterface.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
