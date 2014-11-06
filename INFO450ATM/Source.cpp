@@ -71,7 +71,6 @@ void login() {
 void MainMenu() {
 	// input from the user used to control the switch
 	int actionToBePerformed = NULL;
-	bool logout = false;
 
 	// shows a preconstructed MainMenu (this MainMenu method also clears the screen everytime it is called)
 	// again for the shallow prototype justin jones is set to automatically appear as the user
@@ -84,20 +83,16 @@ void MainMenu() {
 	cin.ignore(INT_MAX, '\n');
 
 	// calls the users desired interaction based on the user input
-	while (!logout){
-		switch (actionToBePerformed)
-		{
-			case 1: withdraw(); break;
-			case 2: deposit(); break;
-			case 3: balance(); break;
-			case 4: transfer(); break;
-			case 5: history(); break;
-			case 6: login(); break;
-			default: ui->ShowErrorMessage("Invalid menu choice! Please choose 1-6."); break;
-		}	
-
+	switch (actionToBePerformed)
+	{
+	case 1: withdraw(); break;
+	case 2: deposit(); break;
+	case 3: balance(); break;
+	case 4: transfer(); break;
+	case 5: history(); break;
+	case 6: login(); break;
+	default: ui->ShowErrorMessage("Invalid menu choice! Please choose 1-6."); break;
 	}
-
 }
 //void MainMenu() {
 //	int whatAreYouDoing = NULL;

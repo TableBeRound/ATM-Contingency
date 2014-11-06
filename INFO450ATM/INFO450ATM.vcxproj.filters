@@ -42,7 +42,7 @@
     <ClCompile Include="UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Fall 2014\INFO 450\20141028-ASSIGNMENT08-GLIDEWELL-DANIEL-ATM-Skeleton\INFO450ATM\INFO450ATM\Source.cpp">
+    <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
