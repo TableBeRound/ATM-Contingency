@@ -1,5 +1,4 @@
-// Are we the best group?
-// // Danny Glidewell, Tucker Lavell, Anthony Tran
+// Danny Glidewell, Tucker Lavell, Anthony Tran
 // TR 5:30-6:45
 // Assignment: ATM Redo
 // This program will simulate a text based version of an ATM interface and interaction
