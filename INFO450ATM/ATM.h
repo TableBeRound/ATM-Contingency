@@ -12,6 +12,15 @@ class ATM
 public:
 	ATM();
 	~ATM();
+
+	//ATM Functions
+	void login();
+	void MainMenu();
+	int withdraw();
+	int deposit();
+	int transfer();
+	void history();
+	int balance();
 };
 
 #endif
