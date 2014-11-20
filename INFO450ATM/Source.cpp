@@ -13,17 +13,11 @@
 
 using namespace std;
 
-// Function prototypes - Much of this behavior needs to be moved to the ATM object.
-void MainMenu();
-void login();
-int withdraw();
-int deposit();
-int balance();
-int transfer();
-void history();
+// Class prototypes
 UI *ui = new UI();
 ATM *atm = new ATM();
 
 int main() {
-	login();
+	atm->login();
+	return 0;
 }

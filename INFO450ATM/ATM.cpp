@@ -14,15 +14,15 @@ int transfer();
 void history();
 UI *ui = new UI();
 
+// default ATM Constructor
 ATM::ATM()
 {
 }
 
-
+// default ATM Destructor
 ATM::~ATM()
 {
 }
-
 
 // login method
 // we plan on it taking in the eMail AND the PIN before any authentication confirmation is done
