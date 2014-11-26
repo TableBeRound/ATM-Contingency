@@ -24,7 +24,18 @@ int main() {
 	//atm->login();
 
 	Database *db = new Database();
-	Customer *customer = db->createCustomer("Danny", "Glidewell", 1111, "dglidewell@vcu.edu");
+	Customer *customer;
+	/*customer = db->createCustomer("Danny", "Glidewell", 1111, "dglidewell@vcu.edu");
+
+	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
+		<< "Customer First Name: " << customer->GetFirstName() << "\n"
+		<< "Customer Last Name: " << customer->GetLastName() << "\n"
+		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
+		<< "Customer PIN: " << customer->GetPIN() << "\n";
+
+	cout << "\n\n";
+	*/
+	customer = db->getCustomer("dglidewell@vcu.edu");
 
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
