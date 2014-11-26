@@ -3,6 +3,9 @@
 
 #pragma once
 #include "Person.h"
+#include <string>
+
+using namespace std;
 
 // Customer inherits all those basic attributes
 // of the Person class plus some customer-specific
@@ -15,13 +18,23 @@ class Customer :
 	// so I defined it and other similar
 	// attributes in other classes as char 
 	// arrays rather than a numeric datatype.
-	char customerNumber[15];  
-	char emailAddress[30];
-	char PIN[6];
+	int _customerNumber;
+	string _emailAddress;
+	string _custFirstName;
+	string _custLastName;
+	int _PIN;
 
 public:	
 	Customer();
+	Customer(int custNum, string firstName, string lastName, int pin, string emailAddress);
 	~Customer();
+
+	//Get Functions
+	int GetCustomerNumber();
+	string GetEmailAddress();
+	string GetFirstName();
+	string GetLastName();
+	int GetPIN();
 
 	// I can't decide if some of these functions are behaviors  
 	// of the Account class or the Customer class...

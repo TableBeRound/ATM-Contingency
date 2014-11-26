@@ -10,14 +10,29 @@
 #include "Conio.h"
 #include "UI.h"
 #include "ATM.h"
+#include "Database.h"
+#include "Customer.h"
 
 using namespace std;
 
 // Class prototypes
-UI *ui = new UI();
-ATM *atm = new ATM();
+//UI *ui = new UI();
+//ATM *atm = new ATM();
+
 
 int main() {
-	atm->login();
+	//atm->login();
+
+	Database *db = new Database();
+	Customer *customer = db->createCustomer("Danny", "Glidewell", 1111, "dglidewell@vcu.edu");
+
+	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
+		<< "Customer First Name: " << customer->GetFirstName() << "\n"
+		<< "Customer Last Name: " << customer->GetLastName() << "\n"
+		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
+		<< "Customer PIN: " << customer->GetPIN() << "\n";
+
+	system("pause");
+	
 	return 0;
 }

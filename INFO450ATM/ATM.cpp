@@ -26,7 +26,7 @@ ATM::~ATM()
 
 // login method
 // we plan on it taking in the eMail AND the PIN before any authentication confirmation is done
-void login() {
+void ATM::login() {
 	// stores the email addresss and PIN entered by the user
 	char eMail[50] = "NULL";
 	int PIN = NULL;
@@ -53,7 +53,7 @@ void login() {
 
 // MainMenu method
 // uses a switch to determine what the user would like to do during this interaction.
-void MainMenu() {
+void ATM::MainMenu() {
 	// input from the user used to control the switch
 	int actionToBePerformed = NULL;
 
@@ -82,7 +82,7 @@ void MainMenu() {
 
 // withdraw method
 // if the user selected a withdraw they will be taken to this screen
-int withdraw() {
+int ATM::withdraw() {
 	// the amount the person would like to withdraw (increments of $20)
 	int amountToWithdraw = NULL;
 
@@ -109,7 +109,7 @@ int withdraw() {
 
 // deposit method
 // if the user selected deposit they will be taken to this screen
-int deposit() {
+int ATM::deposit() {
 	// the amount the person would like to deposit (increments of $20 for the shallow prototype)
 	int amountToDeposit = NULL;
 
@@ -134,7 +134,7 @@ int deposit() {
 
 // transfer method
 // if the user selected transfer they will be taken to this screen
-int transfer() {
+int ATM::transfer() {
 	// takes in the account the user would like to transfer money to and the amount to transfer
 	char accountToTransferTo[50] = "NULL";
 	int amountToTransfer = NULL;
@@ -169,7 +169,7 @@ int transfer() {
 
 // history method
 // if the user selected see transaction history, they will be taken to this screen
-void history() {
+void ATM::history() {
 	// clears the screen of the MainMenu
 	ui->ClearScreen();
 	// for the shallow prototype we determined we will want the table to look like:
@@ -188,7 +188,7 @@ void history() {
 
 // balance method
 // if the user selected to see their balance, they will be taken to this screen
-int balance() {
+int ATM::balance() {
 	// the amount the person has in their account, taken in from elsewhere
 	int balance = NULL;
 
