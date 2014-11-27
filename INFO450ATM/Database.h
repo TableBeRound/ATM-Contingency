@@ -41,7 +41,7 @@ public:
 		// create statement instance for sql queries/statements
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerId INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
 	}
 
 	// Destructor
@@ -75,7 +75,7 @@ public:
 		// get the customer ID for the customer entry which was just made (the last row id).
 		pStmt->Sql("SELECT last_insert_rowid();");
 		pStmt->Execute();
-		int customerId = pStmt->GetColumnInt(0); // get the int value at the zeroth column 
+		int customerNumber = pStmt->GetColumnInt(0); // get the int value at the zeroth column 
 
 		/*************************************************************************************** 
 		 * Notice how each pStmt is first "loaded" with an SQL statement via the Sql() function
@@ -83,20 +83,20 @@ public:
 		 ***************************************************************************************/
 
 		// return the customer to the calling function
-		return new Customer(customerId, firstName, lastName, pin, emailAddress);
+		return new Customer(customerNumber, firstName, lastName, pin, emailAddress);
 	}	
 
 	// Function which searches the database and returns a customer object based on the 
-	// emailAddress which is passed to it.
+	// emailAddress which is passed to it.   NEEDS INPUT VALIDATION FOR "email" !!!
 	Customer *getCustomer(string email) 
 	{
 		// Here are our variables which store the values which will be returned by 
 		// the database search (assuming the search was successful)
-		int customerID;
-		string firstName;
-		string lastName;
-		int pin;
-		string emailAddress;
+		int customerID = 0;
+		string firstName= "";
+		string lastName = "";
+		int pin = 0;
+		string emailAddress = "";
 
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -111,7 +111,7 @@ public:
 		// column to the variables declared above.
 		while (pStmt->FetchRow())
 		{
-			customerID = pStmt->GetColumnInt("customerId");
+			customerID = pStmt->GetColumnInt("customerNumber");
 			firstName = pStmt->GetColumnString("firstName");
 			lastName = pStmt->GetColumnString("lastName");
 			pin = pStmt->GetColumnInt("PIN");
@@ -126,9 +126,25 @@ public:
 		return new Customer(customerID, firstName, lastName, pin, emailAddress);
 	}
 
-	bool deleteCustomer()
+	bool deleteCustomer(string email)
 	{
-		return false;
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		pStmt->SqlStatement("DELETE FROM Customer WHERE emailAddress = '" + email + "';");
+
+		/*try {
+			pStmt->Sql("DELETE FROM Customer WHERE emailAddress = '" + email + "';");
+		}
+		catch (exception e)
+		{
+			return false;
+		}*/	
+
+		return true;
 	}
 
 	// Account: Create, Delete, Update, Retrieve

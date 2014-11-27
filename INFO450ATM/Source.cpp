@@ -33,15 +33,35 @@ int main() {
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
 		<< "Customer PIN: " << customer->GetPIN() << "\n";
 
-	cout << "\n\n";
-	*/
-	customer = db->getCustomer("dglidewell@vcu.edu");
+	cout << "\n\n";*/
 
+	//customer = db->createCustomer("Tucker", "Lavell", 2222, "lavelltj@vcu.edu");
+
+	/*cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
+		<< "Customer First Name: " << customer->GetFirstName() << "\n"
+		<< "Customer Last Name: " << customer->GetLastName() << "\n"
+		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
+		<< "Customer PIN: " << customer->GetPIN() << "\n";
+
+	cout << "\n\n";*/
+	
+	/*customer = db->getCustomer("dglidewell@vcu.edu");
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
 		<< "Customer PIN: " << customer->GetPIN() << "\n";
+	cout << "\n\n";*/
+		
+	//db->deleteCustomer("lavelltj@vcu.edu");	
+
+	customer = db->getCustomer("lavelltj@vcu.edu");
+	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
+		<< "Customer First Name: " << customer->GetFirstName() << "\n"
+		<< "Customer Last Name: " << customer->GetLastName() << "\n"
+		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
+		<< "Customer PIN: " << customer->GetPIN() << "\n";	
+	cout << "\n\n";
 
 	system("pause");
 	
