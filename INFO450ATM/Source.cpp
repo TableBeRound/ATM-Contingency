@@ -35,7 +35,7 @@ int main() {
 
 	cout << "\n\n";*/
 
-	//customer = db->createCustomer("Tucker", "Lavell", 2222, "lavelltj@vcu.edu");
+	customer = db->createCustomer("Tucker", "Lavell", 2222, "lavelltj@vcu.edu");
 
 	/*cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
@@ -53,7 +53,10 @@ int main() {
 		<< "Customer PIN: " << customer->GetPIN() << "\n";
 	cout << "\n\n";*/
 		
-	//db->deleteCustomer("lavelltj@vcu.edu");	
+	/*if (db->deleteCustomer("lavelltj@vcu.edu"))
+		cout << "Record deleted. \n\n";
+	else
+		cout << "No record deleted. \n\n";*/
 
 	customer = db->getCustomer("lavelltj@vcu.edu");
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"

@@ -136,15 +136,14 @@ public:
 
 		pStmt->SqlStatement("DELETE FROM Customer WHERE emailAddress = '" + email + "';");
 
-		/*try {
-			pStmt->Sql("DELETE FROM Customer WHERE emailAddress = '" + email + "';");
-		}
-		catch (exception e)
-		{
-			return false;
-		}*/	
+		int recordsDeleted = 0;
 
-		return true;
+		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
+
+		if (recordsDeleted)
+			return true;
+		else
+			return false;
 	}
 
 	// Account: Create, Delete, Update, Retrieve
