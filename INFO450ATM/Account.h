@@ -12,19 +12,22 @@ class Account
 	// so I defined it and other similar
 	// attributes in other classes as char 
 	// arrays rather than a numeric datatype.
-	char accountNumber[15];
-	char customerNumber[15];
+	int _accountNumber;
+	int _customerNumber;
 	// I added this attribute in case the ATM expands 
 	// its functionality to accomodate more than just 
 	// checking accounts.
-	char accountType; 
-	float balance;
+	char _accountType; 
+	double _balance;
 
 public:	
-	Account();
+	Account(int accountNumber, int customerNumber, char accountType, double balance);
 	~Account();
 
-	float GetAccountBalance();
+	int GetAccountNumber();
+	int GetCustomerNumber();
+	char GetAccountType();
+	double GetAccountBalance();
 	void WithdrawFunds(float withdrawalAmount);
 	void DepositFunds(float depositAmount);
 	void TransferFundsToAnotherAccount(char destinationAccountNumber, 

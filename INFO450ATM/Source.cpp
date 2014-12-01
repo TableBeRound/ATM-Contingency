@@ -24,7 +24,9 @@ int main() {
 	//atm->login();
 
 	Database *db = new Database();
-	Customer *customer;
+
+#pragma region Database Tests Related to Customer Table
+	//Customer *customer;
 	/*customer = db->createCustomer("Danny", "Glidewell", 1111, "dglidewell@vcu.edu");
 
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
@@ -35,7 +37,7 @@ int main() {
 
 	cout << "\n\n";*/
 
-	customer = db->createCustomer("Tucker", "Lavell", 2222, "lavelltj@vcu.edu");
+	//customer = db->createCustomer("Tucker", "Lavell", 2222, "lavelltj@vcu.edu");
 
 	/*cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
@@ -58,7 +60,7 @@ int main() {
 	else
 		cout << "No record deleted. \n\n";*/
 
-	customer = db->getCustomer("lavelltj@vcu.edu");
+	/*customer = db->getCustomer("lavelltj@vcu.edu");
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
@@ -66,7 +68,35 @@ int main() {
 		<< "Customer PIN: " << customer->GetPIN() << "\n";	
 	cout << "\n\n";
 
-	system("pause");
+	system("pause");*/
+
+#pragma endregion
+
+#pragma region Database Tests Related to Account Table
+	//Account *account;
+	//account = db->createAccount(5, "C");
+	//account = db->getAccount("1", "S");
+
+	//cout << "Account Number: " << account->GetAccountNumber() << "\n" //7
+	//	<< "Customer Number: " << account->GetCustomerNumber() << "\n" //5
+	//	<< "Account Type: " << account->GetAccountType() << "\n" //C
+	//	<< "Account Balance: " << account->GetAccountBalance() << "\n"; //0
+
+	//cout << "\n\n";
+
+	/******************
+	 * Deletion Tests *
+	 ******************/
+	/*string accNum = "3";
+
+	if (db->deleteAccount(accNum))
+		cout << "Account #" + accNum +" deleted.";
+	else
+		cout << "Account doesn't exist.";
+	
+	cout << "\n\n";*/
+	system("Pause");
+#pragma endregion
 	
 	return 0;
 }
