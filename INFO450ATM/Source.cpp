@@ -75,16 +75,16 @@ int main() {
 	* Creation & Retrieval Tests *
 	******************************/
 	
-	//Account *account;
+	Account *account;
 	//account = db->createAccount(1, "C");
-	/*account = db->getAccount(1);
+	account = db->getAccount(1);
 
 	cout << "Account Number: " << account->GetAccountNumber() << "\n" 
 		<< "Customer Number: " << account->GetCustomerNumber() << "\n" 
 		<< "Account Type: " << account->GetAccountType() << "\n" 
 		<< "Account Balance: " << account->GetAccountBalance() << "\n";
 
-	cout << "\n\n";*/
+	cout << "\n\n";
 
 	/******************
 	 * Deletion Tests *

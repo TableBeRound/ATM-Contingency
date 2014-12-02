@@ -44,8 +44,12 @@ public:
 
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, date DATE NOT NULL, transactionAmount FLOAT NOT NULL, transactionType CHAR NOT NULL)");
+		//pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, date DATE NOT NULL, transactionAmount FLOAT NOT NULL, transactionType CHAR NOT NULL)");
 		//pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transfer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
 	}
 
 	// Destructor
@@ -89,6 +93,10 @@ public:
 		 * then executed with either the Execute() or ExecuteAndFree() functions.
 		 ***************************************************************************************/
 
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
+
 		// return the customer to the calling function
 		return new Customer(customerNumber, firstName, lastName, pin, emailAddress);
 	}	
@@ -128,6 +136,9 @@ public:
 
 		// "Clean up"
 		pStmt->FreeQuery();
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
@@ -155,9 +166,19 @@ public:
 		int recordsDeleted = 0;
 		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
 		if (recordsDeleted)
+		{
+			// De-allocate memory used to store pointers
+			delete pDatabase;
+			delete pStmt;
 			return true;
+		}			
 		else
+		{
+			// De-allocate memory used to store pointers
+			delete pDatabase;
+			delete pStmt;
 			return false;
+		}
 	}
 #pragma endregion 
 
@@ -197,6 +218,11 @@ public:
 		***************************************************************************************/
 
 		char accType = accountType[0];
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
+
 		// return the account to the calling function
 		return new Account(accountNumber, customerNumber, accType, initialBalance);
 	}
@@ -239,6 +265,10 @@ public:
 		// returns a string, but the Account object's constructor needs a character for accountType.
 		char retAccType = retrievedAccountType[0];
 
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
+
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
 		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retAccType, retrievedBalance);
@@ -265,9 +295,19 @@ public:
 		int recordsDeleted = 0;
 		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
 		if (recordsDeleted)
+		{
+			// De-allocate memory used to store pointers
+			delete pDatabase;
+			delete pStmt;
 			return true;
+		}
 		else
+		{
+			// De-allocate memory used to store pointers
+			delete pDatabase;
+			delete pStmt;
 			return false;
+		}
 	}
 
 	// updateBalance() takes an accountNumber and a positively or negatively valued
@@ -321,9 +361,19 @@ public:
 		int recordsUpdated = 0;
 		recordsUpdated = pDatabase->GetTotalDatabaseChanges();
 		if (recordsUpdated)
+		{
+			// De-allocate memory used to store pointers
+			delete pDatabase;
+			delete pStmt;
 			return true;
+		}
 		else
+		{
+			// De-allocate memory used to store pointers
+			delete pDatabase;
+			delete pStmt;
 			return false;
+		}			
 	}
 #pragma endregion
 
