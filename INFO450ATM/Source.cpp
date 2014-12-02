@@ -47,7 +47,7 @@ int main() {
 
 	cout << "\n\n";*/
 	
-	/*customer = db->getCustomer("dglidewell@vcu.edu");
+	/*customer = db->getCustomer("lavelltj@vcu.edu");
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
@@ -66,28 +66,30 @@ int main() {
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
 		<< "Customer PIN: " << customer->GetPIN() << "\n";	
-	cout << "\n\n";
-
-	system("pause");*/
+	cout << "\n\n";*/	
 
 #pragma endregion
 
 #pragma region Database Tests Related to Account Table
+	/*****************************
+	* Creation & Retrieval Tests *
+	******************************/
+	
 	//Account *account;
-	//account = db->createAccount(5, "C");
-	//account = db->getAccount("1", "S");
+	//account = db->createAccount(1, "C");
+	/*account = db->getAccount(1);
 
-	//cout << "Account Number: " << account->GetAccountNumber() << "\n" //7
-	//	<< "Customer Number: " << account->GetCustomerNumber() << "\n" //5
-	//	<< "Account Type: " << account->GetAccountType() << "\n" //C
-	//	<< "Account Balance: " << account->GetAccountBalance() << "\n"; //0
+	cout << "Account Number: " << account->GetAccountNumber() << "\n" 
+		<< "Customer Number: " << account->GetCustomerNumber() << "\n" 
+		<< "Account Type: " << account->GetAccountType() << "\n" 
+		<< "Account Balance: " << account->GetAccountBalance() << "\n";
 
-	//cout << "\n\n";
+	cout << "\n\n";*/
 
 	/******************
 	 * Deletion Tests *
 	 ******************/
-	/*string accNum = "3";
+	/*int accNum = 3;
 
 	if (db->deleteAccount(accNum))
 		cout << "Account #" + accNum +" deleted.";
@@ -95,16 +97,29 @@ int main() {
 		cout << "Account doesn't exist.";
 	
 	cout << "\n\n";*/
-	
+
+	/************************
+	 * Update Balance Tests *
+	 ************************/
+	/*double depositAmount = -125.50;
+	if (db->updateBalance(1, depositAmount))
+	{
+		account = db->getAccount(1);
+		cout << "Account Number: " << account->GetAccountNumber() << "\n"
+			<< "Customer Number: " << account->GetCustomerNumber() << "\n"
+			<< "Account Type: " << account->GetAccountType() << "\n"
+			<< "Account Balance: " << account->GetAccountBalance() << "\n";
+
+		cout << "\n\n";
+	}
+	else
+	{
+		cout << "Transaction Unsuccessful\n\n";
+	}*/
+
 #pragma endregion
 
-	double x = 100;
-	double y = -50.5;
-	double z = x + y;
-
-	cout << z << "\n\n";
-
-	system("Pause");
+	system("pause");
 
 	return 0;
 }

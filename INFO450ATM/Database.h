@@ -332,9 +332,9 @@ public:
 	// This function will encapsulate the logic to perform the various types
 	// of transactions on accounts.  This includes withdrawals, deposits, 
 	// and transfers.
-	bool createTransaction()
+	Transaction *createTransaction()
 	{
-		return false;
+		return new Transaction();
 	}
 
 #pragma endregion
