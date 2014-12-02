@@ -15,33 +15,45 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KompexSQLiteDatabase.cpp">
+    <ClCompile Include="src\KompexSQLiteBlob.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="KompexSQLiteStatement.cpp">
+    <ClCompile Include="src\KompexSQLiteDatabase.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="sqlite3.c">
+    <ClCompile Include="src\KompexSQLiteStatement.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shell.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sqlite3.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="KompexSQLiteDatabase.h">
+    <ClInclude Include="inc\KompexSQLiteBlob.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="KompexSQLiteException.h">
+    <ClInclude Include="inc\KompexSQLiteDatabase.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="KompexSQLiteStatement.h">
+    <ClInclude Include="inc\KompexSQLiteException.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="KompexSQLiteStreamRedirection.h">
+    <ClInclude Include="inc\KompexSQLitePrerequisites.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="sqlite3.h">
+    <ClInclude Include="inc\KompexSQLiteStatement.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="sqlite3ext.h">
+    <ClInclude Include="inc\KompexSQLiteStreamRedirection.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\sqlite3.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\sqlite3ext.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

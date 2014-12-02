@@ -82,9 +82,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugStaticLib|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <IncludePath>C:\Users\Danny\Documents\GitHub\INFO450-ATM-Revisited\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Danny\Documents\GitHub\INFO450-ATM-Revisited\lib;$(LibraryPath)</LibraryPath>
-    <SourcePath>C:\Users\Danny\Documents\GitHub\INFO450-ATM-Revisited\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStaticLib|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
