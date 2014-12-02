@@ -18,6 +18,7 @@ public:
 	Transaction();
 	~Transaction();
 
+	
 	// Post transaction to the database and 
 	// update the balance for the account stored
 	// in the sourceAccountNumber variable.
