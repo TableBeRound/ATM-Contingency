@@ -95,8 +95,16 @@ int main() {
 		cout << "Account doesn't exist.";
 	
 	cout << "\n\n";*/
-	system("Pause");
-#pragma endregion
 	
+#pragma endregion
+
+	double x = 100;
+	double y = -50.5;
+	double z = x + y;
+
+	cout << z << "\n\n";
+
+	system("Pause");
+
 	return 0;
 }

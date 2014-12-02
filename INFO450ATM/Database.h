@@ -146,12 +146,14 @@ public:
 		SQLiteDatabase *pDatabase = this->connect();
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
+		// SQL Statement to delete the record
 		pStmt->SqlStatement("DELETE FROM Customer WHERE emailAddress = '" + email + "';");
 
+		// Check to see if any changes have been made to the database
+		// due to the SQL statement executed above.  Return the results
+		// as a boolean value.
 		int recordsDeleted = 0;
-
 		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
-
 		if (recordsDeleted)
 			return true;
 		else
@@ -200,11 +202,7 @@ public:
 	}
 	
 	// Retrieve Account Function:
-	// I would like to make it so that a future version of this function accepts
-	// an integer value for customerNumber rather than a string.  I believe that
-	// this would make things more consistent with the other database functions
-	// related to Account objects.
-	Account *getAccount(string customerNumber, string accountType)
+	Account *getAccount(int customerNumber, string accountType = "C")  // <-- Default accountType is Checking or "C"
 	{
 		// Here are our variables which store the values which will be returned by 
 		// the database search (assuming the search was successful)
@@ -220,7 +218,7 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 		
 		// Use the customerNumber and accountType passed to this method to query the database.
-		pStmt->Sql("SELECT * FROM Account WHERE customerNumber = '"+customerNumber+"' " +
+		pStmt->Sql("SELECT * FROM Account WHERE customerNumber = '"+std::to_string(customerNumber)+"' " +
 			       "AND accountType = '"+accountType+"';");
 
 		// Process the results of the query above - assigning the values of each
@@ -230,35 +228,27 @@ public:
 			retrievedAccountNumber = pStmt->GetColumnInt("accountNumber");
 			retrievedCustomerNumber = pStmt->GetColumnInt("customerNumber");
 			retrievedAccountType = pStmt->GetColumnString("accountType");
-			retrievedBalance = pStmt->GetColumnDouble("balance");			
+			retrievedBalance = pStmt->GetColumnDouble("balance");
 		}
+
+		// "Clean up"
+		pStmt->FreeQuery();
 
 		// This is a little work-around to make the Account constructor and the result from the 
 		// "GetColumnString" function from Kompex's SQLiteStatement "play nice".  GetColumnString
 		// returns a string, but the Account object's constructor needs a character for accountType.
 		char retAccType = retrievedAccountType[0];
 
-		// "Clean up"
-		pStmt->FreeQuery();
-
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
 		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retAccType, retrievedBalance);
-	}
-
-	// This function will encapsulate the logic to perform the various types
-	// of transactions on accounts.  This includes withdrawals, deposits, 
-	// and transfers.
-	bool accountTransaction(double amount, char transactionType)
-	{
-		return false;
 	}
 
 	// Delete Account Function:
 	// I should consider making a more abstract method called 
 	// "deleteRow" whereby one can specify the table name and
 	// the primary key of the row to be deleted.
-	bool deleteAccount(string accountNumber)
+	bool deleteAccount(int accountNumber)
 	{
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -266,13 +256,71 @@ public:
 		SQLiteDatabase *pDatabase = this->connect();
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
-		pStmt->SqlStatement("DELETE FROM Account WHERE accountNumber = '" + accountNumber + "';");
+		// SQL Statement to delete the record
+		pStmt->SqlStatement("DELETE FROM Account WHERE accountNumber = '" + std::to_string(accountNumber) + "';");
 
+		// Check to see if any changes have been made to the database
+		// due to the SQL statement executed above.  Return the results
+		// as a boolean value.
 		int recordsDeleted = 0;
-
 		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
-
 		if (recordsDeleted)
+			return true;
+		else
+			return false;
+	}
+
+	// updateBalance() takes an accountNumber and a positively or negatively valued
+	// double to retrieve the balance for a particular account and add the transaction
+	// amount to the balance.  We can simply add the value of transactionAmount to the 
+	// currentBalance of the Account because doubles inherently provide for signed 
+	// and unsigned values.  Thus, we can pass a negative double to this funciton for
+	// withdrawals and a positive number for deposits.
+	bool updateBalance(int accountNumber, double transactionAmount)
+	{
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		/*************************************************
+		 * STEP 1: Retrieve the Account's currentBalance.
+		 *************************************************/ 
+		// Initialize variable to store the current balance of the account.
+		double currentBalance = 0.0;
+
+		// Get the value of the current balance using the accountNumber passed to the function.
+		pStmt->Sql("SELECT balance FROM Account WHERE accountNumber = '" + std::to_string(accountNumber) + "';");
+
+		// Store the results of the SQL statement executed above in the variable initialized above.
+		while (pStmt->FetchRow())
+		{
+			currentBalance = pStmt->GetColumnDouble("balance");
+		}
+
+		// "Post-Query Clean up" (It's a Kompex Wrapper thing)
+		pStmt->FreeQuery();
+
+		/*************************************************
+		* STEP 2: Calculate the Account's newBalance
+		*************************************************/		
+		double newBalance = currentBalance + transactionAmount; // <-- transactionAmount can be a positive or negative number
+		                                                        //     depending on whether it is a deposit or withdrawal!!!
+
+		/*****************************************************************
+		* STEP 3: Update the Account with the value stored in newBalance.
+		******************************************************************/		
+		pStmt->SqlStatement("UPDATE Account SET balance = '" + std::to_string(newBalance) + "' " +
+			                "WHERE accountNumber = '" + std::to_string(accountNumber) + "';");
+
+
+		// Check to see if any changes have been made to the database
+		// due to the SQL statement executed above.  Return the results
+		// as a boolean value.
+		int recordsUpdated = 0;
+		recordsUpdated = pDatabase->GetTotalDatabaseChanges();
+		if (recordsUpdated)
 			return true;
 		else
 			return false;
@@ -281,7 +329,13 @@ public:
 
 #pragma region Functions related to Transaciton objects
 
-	// Transaction: Create, Delete, Retrieve
+	// This function will encapsulate the logic to perform the various types
+	// of transactions on accounts.  This includes withdrawals, deposits, 
+	// and transfers.
+	bool createTransaction()
+	{
+		return false;
+	}
 
 #pragma endregion
 };
