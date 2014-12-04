@@ -13,7 +13,7 @@ class Transaction
 	// that I was mis-identifying the transactionType attribute
 	// for a class.
 	char transactionType; 
-
+	
 public:
 	Transaction();
 	~Transaction();
