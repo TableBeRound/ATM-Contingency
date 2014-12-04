@@ -122,7 +122,7 @@ public:
 
 		// Use the email address passed to this method to query the database.
 		pStmt->Sql("SELECT * FROM Customer WHERE emailAddress = ?;");
-		//pStmt->BindString(1, email);      // First question mark in the SQL statement above
+		pStmt->BindString(1, email);      // First question mark in the SQL statement above
 
 		// Process the results of the query above - assigning the values of each
 		// column to the variables declared above.
@@ -159,7 +159,8 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
 		// SQL Statement to delete the record
-		pStmt->SqlStatement("DELETE FROM Customer WHERE emailAddress = '" + email + "';");
+		pStmt->SqlStatement("DELETE FROM Customer WHERE emailAddress = ?;");
+		pStmt->BindString(1, email);
 
 		// Check to see if any changes have been made to the database
 		// due to the SQL statement executed above.  Return the results
