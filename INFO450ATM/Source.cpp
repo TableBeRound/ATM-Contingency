@@ -65,8 +65,8 @@ int main() {
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
-		<< "Customer PIN: " << customer->GetPIN() << "\n";	
-	cout << "\n\n";*/	
+		<< "Customer PIN: " << customer->GetPIN() << "\n";	*/
+	cout << "\n\n";	
 
 #pragma endregion
 
