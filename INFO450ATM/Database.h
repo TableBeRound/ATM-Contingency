@@ -121,7 +121,8 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
 		// Use the email address passed to this method to query the database.
-		pStmt->Sql("SELECT * FROM Customer WHERE emailAddress = '" + email + "';");
+		pStmt->Sql("SELECT * FROM Customer WHERE emailAddress = ?;");
+		pStmt->BindString(1, email);      // First question mark in the VALUES() clause above
 
 		// Process the results of the query above - assigning the values of each
 		// column to the variables declared above.

@@ -26,7 +26,7 @@ int main() {
 	Database *db = new Database();
 
 #pragma region Database Tests Related to Customer Table
-	//Customer *customer;
+	Customer *customer;
 	/*customer = db->createCustomer("Danny", "Glidewell", 1111, "dglidewell@vcu.edu");
 
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
@@ -47,13 +47,13 @@ int main() {
 
 	cout << "\n\n";*/
 	
-	/*customer = db->getCustomer("lavelltj@vcu.edu");
+	/**/customer = db->getCustomer("lavelltj@vcu.edu");
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
 		<< "Customer PIN: " << customer->GetPIN() << "\n";
-	cout << "\n\n";*/
+	cout << "\n\n";
 		
 	/*if (db->deleteCustomer("lavelltj@vcu.edu"))
 		cout << "Record deleted. \n\n";
@@ -65,8 +65,8 @@ int main() {
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
-		<< "Customer PIN: " << customer->GetPIN() << "\n";	*/
-	cout << "\n\n";	
+		<< "Customer PIN: " << customer->GetPIN() << "\n";	
+	cout << "\n\n";	*/
 
 #pragma endregion
 
@@ -75,16 +75,16 @@ int main() {
 	* Creation & Retrieval Tests *
 	******************************/
 	
-	Account *account;
+	//Account *account;
 	//account = db->createAccount(1, "C");
-	account = db->getAccount(1);
+	/*account = db->getAccount(1);
 
 	cout << "Account Number: " << account->GetAccountNumber() << "\n" 
 		<< "Customer Number: " << account->GetCustomerNumber() << "\n" 
 		<< "Account Type: " << account->GetAccountType() << "\n" 
 		<< "Account Balance: " << account->GetAccountBalance() << "\n";
 
-	cout << "\n\n";
+	cout << "\n\n";*/
 
 	/******************
 	 * Deletion Tests *
