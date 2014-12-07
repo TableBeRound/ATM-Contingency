@@ -142,7 +142,7 @@ int ATM::deposit() {
 	// again for the shallow prototype, there will only be success, 
 	// so this screen will automatically be displayed next
 	
-	db->createTransaction(account->GetAccountNumber, amountToDeposit, );
+	// db->createTransaction(account->GetAccountNumber, amountToDeposit, );
 	ui->ShowTransactionSuccessMessage();
 
 
