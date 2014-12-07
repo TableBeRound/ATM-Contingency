@@ -7,11 +7,11 @@ Transaction::Transaction()
 	this->_accountNumber = 0;
 	this->_transactionAmount = 0.0;
 	this->_date = "------";
-	this->_transactionType = "NULL";
+	this->_transactionType = ' ';
 }
 
 // Typical Constructor for Transaction objects
-Transaction::Transaction(int transactionNum, int acctNum, double transactionAmt, string date, string transactionType)
+Transaction::Transaction(int transactionNum, int acctNum, double transactionAmt, string date, char transactionType)
 {
 	this->_transactionNumber = transactionNum;
 	this->_accountNumber = acctNum;
@@ -45,7 +45,7 @@ string Transaction::GetDate()
 	return this->_date;
 }
 
-string Transaction::GetTransactionType()
+char Transaction::GetTransactionType()
 {
 	return this->_transactionType;
 }

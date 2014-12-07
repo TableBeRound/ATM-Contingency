@@ -1,14 +1,13 @@
 #include "Transfer.h"
 
 // Typical constructor for Transfer object
-Transfer::Transfer(int transactionNum, int sourceAcctNum, int destinationAcctNum, double transactionAmt, string date, string transactionType)
+Transfer::Transfer(int transactionNum, int sourceAcctNum, int destinationAcctNum, double transactionAmt, string date)
 {
 	this->_transactionNumber = transactionNum;
 	this->_accountNumber = sourceAcctNum;
 	this->_destinationAccountNumber = destinationAcctNum;
 	this->_transactionAmount = transactionAmt;
-	this->_date = date;
-	this->_transactionType = transactionType;
+	this->_date = date;	
 }
 
 
