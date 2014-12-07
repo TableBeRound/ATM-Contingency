@@ -20,14 +20,15 @@ public:
 
 	//ATM Functions
 	bool login(string email, int PIN);
-	void MainMenu(Customer cust);
+	void MainMenu();
 	int withdraw();
 	int deposit();
 	int transfer();
 	void history();
-	int balance();
+	void balance();
 	void logout();
 	double CustomAmount();
+	void shutdown();
 };
 
 #endif

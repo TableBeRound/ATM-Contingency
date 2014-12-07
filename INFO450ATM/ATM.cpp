@@ -195,4 +195,11 @@ void ATM::balance() {
 void ATM::logout()
 {
 	// Logout procedure needs to be fleshed out
-};
+	customer = NULL;
+	account = NULL;
+}
+
+void ATM::shutdown()
+{
+
+}
