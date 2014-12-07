@@ -325,5 +325,9 @@ void UI::NaviMenu()
 						select6 = ' ';
 						select5 = '*';
 					}
+		case VK_RETURN: if (select1 == '*')
+		{
+
+		}
 	}
 }
