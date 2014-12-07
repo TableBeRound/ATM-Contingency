@@ -218,7 +218,6 @@ void ATM::logout()
 
 bool ATM::ValidateAmountInput(double amountEntered)
 {
-	double amountEntered;
 	bool intervalOf20;
 
 	intervalOf20 = (int)amountEntered % 20;
