@@ -27,7 +27,7 @@ public:
 	void history();
 	int balance();
 	void logout();
-	double AmountUsed();
+	bool ValidateAmountInput(double amountInput);
 	void shutdown();
 };
 

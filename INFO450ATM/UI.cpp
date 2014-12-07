@@ -256,7 +256,9 @@ void UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 						}
 						else if (amount6 == '*')
 						{
-							atm->AmountUsed();
+							cout << "Inpute Amount:\t$";
+							cin >> amountToBeUsed;
+							atm->ValidateAmountInput(amountToBeUsed);
 						}
 	}
 }

@@ -197,21 +197,19 @@ void ATM::logout()
 	// Logout procedure needs to be fleshed out
 }
 
-double ATM::AmountUsed()
+bool ATM::ValidateAmountInput(double amountEntered)
 {
 	double amountEntered;
 	bool intervalOf20;
 
-	cout << "Input Amount:\t$";
-	cin >> amountEntered;
 	intervalOf20 = (int)amountEntered % 20;
 	if (intervalOf20)
 	{
-		return amountEntered;
+		return true;
 	}
 	else
 	{
 		ui->ShowErrorMessage("The amount input is not an interval of $20.00!");
-		return 0;
+		return false;
 	}
 }
