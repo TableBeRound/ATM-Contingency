@@ -177,3 +177,80 @@ void UI::ClearBuffer()
 	cin.clear();
 	cin.ignore(INT_MAX, '\n');
 }
+
+void UI::NaviMenu()
+{
+	// maybe array later
+	//char select[6];
+	char select1 = '*';
+	char select2 = ' ';
+	char select3 = ' ';
+	char select4 = ' ';
+	char select5 = ' ';
+	char select6 = ' ';
+
+	switch (getch())
+	{
+		case VK_DOWN: if (select1 == '*')
+					{
+						select1 = ' ';
+						select2 = '*';
+					}
+					  else if (select2 == '*')
+					  {
+						  select2 = ' ';
+						  select3 = ' ';
+					  }
+					  else if (select3 == '*')
+					  {
+						  select3 = ' ';
+						  select4 = '*';
+					  }
+					  else if (select4 == '*')
+					  {
+						  select4 = ' ';
+						  select5 = '*';
+					  }
+					  else if (select5 == '*')
+					  {
+						  select5 = ' ';
+						  select6 = '*';
+					  }
+					  else if (select6 == '*')
+					  {
+						  select6 = ' ';
+						  select1 = '*';
+					  }
+					  break;
+		case VK_UP: if (select1 == '*')
+					{
+						select1 = ' ';
+						select6 = '*';
+					}
+					else if (select2 == '*')
+					{
+						select2 = ' ';
+						select1 = '*';
+					}
+					else if (select3 == '*')
+					{
+						select3 = ' ';
+						select2 = '*';
+					}
+					else if (select4 == '*')
+					{
+						select4 = ' ';
+						select3 = '*';
+					}
+					else if (select5 == '*')
+					{
+						select5 = ' ';
+						select4 = '*';
+					}
+					else if (select6 == '*')
+					{
+						select6 = ' ';
+						select5 = '*';
+					}
+	}
+}

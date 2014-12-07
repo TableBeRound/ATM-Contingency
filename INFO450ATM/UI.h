@@ -29,6 +29,7 @@ public:
 	void PauseScreen();
 	void PressAnyKeyToContinue(); //<---- Pauses screen and waits for a key press
 	void ClearBuffer(); //<--- used to clear cin buffer if needed
+	void NaviMenu(); //<---navigate menus using arrow keys
 };
 
 #endif
