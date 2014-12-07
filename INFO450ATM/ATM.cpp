@@ -3,6 +3,8 @@
 #include "Database.h"
 #include "Customer.h"
 #include "UI.h"
+#include <ctime>
+
 
 using namespace std;
 
@@ -10,7 +12,14 @@ UI *ui = new UI();
 Customer *customer;
 Account *account;
 Database *db = new Database();
-
+int timestamp() {
+	time_t t = time(0);   // get time now
+	struct tm * now = localtime(&t);
+	cout << (now->tm_year + 1900) << '-'
+		<< (now->tm_mon + 1) << '-'
+		<< now->tm_mday
+		<< endl;
+}
 // default ATM Constructor
 ATM::ATM()
 {
@@ -122,10 +131,20 @@ int ATM::deposit() {
 	cin >> amountToDeposit;
 
 	ui->ClearBuffer();
+#pragma region Deposit logic
+	//Logic for Deposit
+	
+	db->updateBalance(account->GetAccountNumber, amountToDeposit);
+	//Will send the function the account number and the deposit amount
+	//In case you're lazy, The updatebalance function will add the amount to deposit to the current balance and give you the updated balance
 
+#pragma endregion
 	// again for the shallow prototype, there will only be success, 
 	// so this screen will automatically be displayed next
+	
+	db->createTransaction(account->GetAccountNumber, amountToDeposit, );
 	ui->ShowTransactionSuccessMessage();
+	
 
 	// recalls MainMenu, meaning the screen is cleared of everything
 	// that happened during withdraw
