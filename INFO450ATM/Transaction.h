@@ -17,11 +17,11 @@ protected:
 	// withdrawals and one for deposits, but I determined 
 	// that I was mis-identifying the transactionType attribute
 	// for a class.
-	string _transactionType; 
+	char _transactionType; 
 
 public:
 	Transaction();
-	Transaction(int transactionNum, int acctNum, double transactionAmt, string date, string transactionType);
+	Transaction(int transactionNum, int acctNum, double transactionAmt, string date, char transactionType);
 	~Transaction();
 
 	// Get & Set Funcitons
@@ -29,7 +29,7 @@ public:
 	int GetAccountNumber();
 	double GetTransactionAmount();
 	string GetDate();
-	string GetTransactionType();
+	char GetTransactionType();
 
 	// Post transaction to the database and 
 	// update the balance for the account stored

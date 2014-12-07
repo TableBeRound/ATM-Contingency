@@ -44,8 +44,8 @@ public:
 
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, date DATE NOT NULL, transactionAmount FLOAT NOT NULL, transactionType CHAR NOT NULL)");
-		//pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transfer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL, transactionType CHAR NOT NULL)");
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transfer (transferNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL)");
 
 		// De-allocate memory used to store pointers
 		delete pDatabase;
@@ -386,7 +386,7 @@ public:
 
 	// This function will encapsulate the logic to perform 
 	// withdrawals and deposits.
-	Transaction *createTransaction(int accountNumber, double transactionAmt, string date, string transactionType)
+	Transaction *createTransaction(int accountNumber, double transactionAmt, string date, char transactionType)
 	{
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -403,7 +403,7 @@ public:
 		pStmt->BindInt(1, accountNumber);      // First question mark in the VALUES() clause above
 		pStmt->BindString(2, date);     // Second question mark in the VALUES() clause above
 		pStmt->BindDouble(3, transactionAmt);              // Third question mark in the VALUES() clause above
-		pStmt->BindString(4, transactionType);  // Fourth question mark in the VALUES() clause above		
+		pStmt->BindString(4, std::to_string(transactionType));  // Fourth question mark in the VALUES() clause above		
 
 		// executes the INSERT statement and cleans-up automatically
 		pStmt->ExecuteAndFree();
@@ -425,20 +425,63 @@ public:
 		return new Transaction(transactionNumber, accountNumber, transactionAmt, date, transactionType);
 	}
 
-	Transaction *getTransaction()
+	Transaction *getTransaction(int transactionNumber)
 	{
-		return new Transaction();
+		// Here are our variables which store the values which will be returned by 
+		// the database search (assuming the search was successful)
+		int retrievedTransactionNumber = 0;
+		int retrievedAccountNumber = 0;
+		double retrievedTransactionAmt = 0.0;
+		string retrievedDate = "";
+		string retrievedTransactionType = "";		
+
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+		
+		// Use the customerNumber and accountType passed to this method to query the database.
+		pStmt->Sql("SELECT * FROM Transaction WHERE transactionNumber = ?;");
+		pStmt->BindInt(1, transactionNumber);       
+
+		// Process the results of the query above - assigning the values of each
+		// column to the variables declared above.
+		while (pStmt->FetchRow())
+		{
+			retrievedTransactionNumber = pStmt->GetColumnInt("transactionNumber");
+			retrievedAccountNumber = pStmt->GetColumnInt("accountNumber");
+			retrievedTransactionAmt = pStmt->GetColumnDouble("transactionAmount");
+			retrievedDate = pStmt->GetColumnString("date");
+			retrievedTransactionType = pStmt->GetColumnString("transactionType");
+		}
+
+		// "Clean up"
+		pStmt->FreeQuery();
+
+		// This is a little work-around to make the Account constructor and the result from the 
+		// "GetColumnString" function from Kompex's SQLiteStatement "play nice".  GetColumnString
+		// returns a string, but the Account object's constructor needs a character for accountType.
+		char retTransType = retrievedTransactionType[0];
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
+
+		// Use the variables, which have been assigned values via the query above, 
+		// to create a Customer object to return.
+		return new Transaction(retrievedTransactionNumber, retrievedAccountNumber, retrievedTransactionAmt, retrievedDate, retTransType);
 	}
 
-	bool editTransaction()
-	{
+	/*bool editTransaction()
+	{		
 		return false;
-	}
+	}*/
 
-	bool deleteTransation()
+	/*bool deleteTransaction()
 	{
 		return false;
-	}
+	}*/
 
 #pragma endregion
 };
