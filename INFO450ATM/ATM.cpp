@@ -118,7 +118,7 @@ int ATM::deposit() {
 
 	// prints a precontructed transaction amounts menu
 	// has a clear screen function inside that clears everything that happened on the MainMenu
-	ui->ShowTransactionAmountMenu("depositied");
+	ui->ShowTransactionAmountMenu("deposited");
 	// takes in the amount the user would like to deposit
 	cin >> amountToDeposit;
 
