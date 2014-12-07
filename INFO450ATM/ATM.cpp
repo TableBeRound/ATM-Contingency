@@ -9,6 +9,7 @@ using namespace std;
 UI *ui = new UI();
 Customer *customer;
 Account *account;
+Database *db = new Database();
 
 // default ATM Constructor
 ATM::ATM()
@@ -38,12 +39,6 @@ bool ATM::login(string email, int PIN) {
 	ui->ClearBuffer();
 
 #pragma region Authentication logic
-	// Create a customer object to store the result of the database lookup
-	
-
-	// Database object to perform lookup
-	Database *db = new Database();
-
 	customer = db->getCustomer(email);
 
 	// Test to see if a valid Customer was returned by the getCustomer()
@@ -51,7 +46,11 @@ bool ATM::login(string email, int PIN) {
 	if (customer->GetCustomerNumber() != 0)
 	{
 		if (customer->GetPIN() == PIN)
+		{
+			account = db->getAccount(customer->GetCustomerNumber());
+			MainMenu();
 			return true;
+	}
 	}
 	else
 		return false;
@@ -60,7 +59,7 @@ bool ATM::login(string email, int PIN) {
 
 // MainMenu method
 // uses a switch to determine what the user would like to do during this interaction.
-void ATM::MainMenu(Customer cust) {
+void ATM::MainMenu() {
 
 
 	// input from the user used to control the switch
@@ -68,7 +67,7 @@ void ATM::MainMenu(Customer cust) {
 
 	// shows a preconstructed MainMenu (this MainMenu method also clears the screen everytime it is called)
 	// again for the shallow prototype justin jones is set to automatically appear as the user
-	ui->ShowTransactionTypeMenu("Justin", "Jones");
+	ui->ShowTransactionTypeMenu(customer->GetFirstName(), customer->GetLastName());
 	cin >> actionToBePerformed;
 
 	ui->ClearBuffer();
@@ -184,39 +183,16 @@ void ATM::history() {
 
 // balance method
 // if the user selected to see their balance, they will be taken to this screen
-int ATM::balance() {
+void ATM::balance() {
 	// the amount the person has in their account, taken in from elsewhere
 	int balance = NULL;
 
-	// uses a preconstructed account balance screen to print the balance for the user
-	// for the shallow prototype we already set a name and a balance
-	ui->ShowAccountBalance("Justin Jones", 10000000000.23);
+	string customerName = customer->GetFirstName() + " " + customer->GetLastName();
 
-	// recalls MainMenu, meaning the screen is cleared of everything
-	// that happened during balance
-	return 0;
+	ui->ShowAccountBalance(customerName, account->GetAccountBalance());	
 }
 
 void ATM::logout()
 {
 	// Logout procedure needs to be fleshed out
-}
-
-double ATM::CustomAmount()
-{
-	double amountEntered;
-	bool intervalOf20;
-
-	cout << "Input Amount:\t$";
-	cin >> amountEntered;
-	intervalOf20 = (int)amountEntered % 20;
-	if (intervalOf20)
-	{
-		return amountEntered;
-	}
-	else
-	{
-		ui->ShowErrorMessage("The amount input is not an interval of $20.00!");
-		return 0;
-	}
-}
+};
