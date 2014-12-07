@@ -48,7 +48,7 @@ bool ATM::login(string email, int PIN) {
 		if (customer->GetPIN() == PIN)
 		{
 			account = db->getAccount(customer->GetCustomerNumber());
-			MainMenu(customer, account);
+			MainMenu();
 			return true;
 		}
 	}
@@ -59,7 +59,7 @@ bool ATM::login(string email, int PIN) {
 
 // MainMenu method
 // uses a switch to determine what the user would like to do during this interaction.
-void ATM::MainMenu(Customer *cust, Account *acct) {
+void ATM::MainMenu() {
 
 
 	// input from the user used to control the switch
@@ -67,7 +67,7 @@ void ATM::MainMenu(Customer *cust, Account *acct) {
 
 	// shows a preconstructed MainMenu (this MainMenu method also clears the screen everytime it is called)
 	// again for the shallow prototype justin jones is set to automatically appear as the user
-	ui->ShowTransactionTypeMenu(cust->GetFirstName(), cust->GetLastName());
+	ui->ShowTransactionTypeMenu(customer->GetFirstName(), customer->GetLastName());
 	cin >> actionToBePerformed;
 
 	ui->ClearBuffer();
@@ -75,11 +75,11 @@ void ATM::MainMenu(Customer *cust, Account *acct) {
 	// calls the users desired interaction based on the user input
 	switch (actionToBePerformed)
 	{
-	case 1: withdraw(acct); break;
-	case 2: deposit(acct); break;
+	case 1: withdraw(); break;
+	case 2: deposit(); break;
 	case 3: balance(); break;
-	case 4: transfer(acct); break;
-	case 5: history(acct); break;
+	case 4: transfer(); break;
+	case 5: history(); break;
 	case 6: logout(); break;
 	default: ui->ShowErrorMessage("Invalid menu choice! Please choose 1-6."); break;
 	}
@@ -87,7 +87,7 @@ void ATM::MainMenu(Customer *cust, Account *acct) {
 
 // withdraw method
 // if the user selected a withdraw they will be taken to this screen
-int ATM::withdraw(Account *acct) {
+int ATM::withdraw() {
 	// the amount the person would like to withdraw (increments of $20)
 	int amountToWithdraw = NULL;
 
@@ -111,7 +111,7 @@ int ATM::withdraw(Account *acct) {
 
 // deposit method
 // if the user selected deposit they will be taken to this screen
-int ATM::deposit(Account *acct) {
+int ATM::deposit() {
 	// the amount the person would like to deposit (increments of $20 for the shallow prototype)
 	int amountToDeposit = NULL;
 
@@ -134,7 +134,7 @@ int ATM::deposit(Account *acct) {
 
 // transfer method
 // if the user selected transfer they will be taken to this screen
-int ATM::transfer(Account *acct) {
+int ATM::transfer() {
 	// takes in the account the user would like to transfer money to and the amount to transfer
 	char accountToTransferTo[50] = "NULL";
 	int amountToTransfer = NULL;
@@ -165,7 +165,7 @@ int ATM::transfer(Account *acct) {
 
 // history method
 // if the user selected see transaction history, they will be taken to this screen
-void ATM::history(Account *acct) {
+void ATM::history() {
 	// clears the screen of the MainMenu
 	ui->ClearScreen();
 	// for the shallow prototype we determined we will want the table to look like:
@@ -183,20 +183,24 @@ void ATM::history(Account *acct) {
 
 // balance method
 // if the user selected to see their balance, they will be taken to this screen
-int ATM::balance() {
+void ATM::balance() {
 	// the amount the person has in their account, taken in from elsewhere
 	int balance = NULL;
 
-	// uses a preconstructed account balance screen to print the balance for the user
-	// for the shallow prototype we already set a name and a balance
-	ui->ShowAccountBalance("Justin Jones", 10000000000.23);
+	string customerName = customer->GetFirstName() + " " + customer->GetLastName();
 
-	// recalls MainMenu, meaning the screen is cleared of everything
-	// that happened during balance
-	return 0;
+	ui->ShowAccountBalance(customerName, account->GetAccountBalance());	
 }
 
 void ATM::logout()
 {
 	// Logout procedure needs to be fleshed out
+	customer = NULL;
+	account = NULL;
 };
+
+void ATM::shutdown()
+{
+	delete customer;
+	delete account;
+}
