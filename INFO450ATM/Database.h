@@ -246,8 +246,9 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 		
 		// Use the customerNumber and accountType passed to this method to query the database.
-		pStmt->Sql("SELECT * FROM Account WHERE customerNumber = '"+std::to_string(customerNumber)+"' " +
-			       "AND accountType = '"+accountType+"';");
+		pStmt->Sql("SELECT * FROM Account WHERE customerNumber = ? AND accountType = ?;");
+		pStmt->BindInt(1, customerNumber);
+		pStmt->BindString(2, accountType);			       
 
 		// Process the results of the query above - assigning the values of each
 		// column to the variables declared above.
@@ -289,7 +290,8 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
 		// SQL Statement to delete the record
-		pStmt->SqlStatement("DELETE FROM Account WHERE accountNumber = '" + std::to_string(accountNumber) + "';");
+		pStmt->SqlStatement("DELETE FROM Account WHERE accountNumber = ?;");
+		pStmt->BindInt(1, accountNumber);
 
 		// Check to see if any changes have been made to the database
 		// due to the SQL statement executed above.  Return the results
@@ -333,7 +335,8 @@ public:
 		double currentBalance = 0.0;
 
 		// Get the value of the current balance using the accountNumber passed to the function.
-		pStmt->Sql("SELECT balance FROM Account WHERE accountNumber = '" + std::to_string(accountNumber) + "';");
+		pStmt->Sql("SELECT balance FROM Account WHERE accountNumber = ?;");
+		pStmt->BindInt(1, accountNumber);
 
 		// Store the results of the SQL statement executed above in the variable initialized above.
 		while (pStmt->FetchRow())
@@ -353,9 +356,9 @@ public:
 		/*****************************************************************
 		* STEP 3: Update the Account with the value stored in newBalance.
 		******************************************************************/		
-		pStmt->SqlStatement("UPDATE Account SET balance = '" + std::to_string(newBalance) + "' " +
-			                "WHERE accountNumber = '" + std::to_string(accountNumber) + "';");
-
+		pStmt->SqlStatement("UPDATE Account SET balance = ? WHERE accountNumber = ?;");
+		pStmt->BindDouble(1, newBalance);
+		pStmt->BindInt	(2, accountNumber);
 
 		// Check to see if any changes have been made to the database
 		// due to the SQL statement executed above.  Return the results
