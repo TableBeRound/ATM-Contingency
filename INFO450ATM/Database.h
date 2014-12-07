@@ -42,10 +42,13 @@ public:
 		// create statement instance for sql queries/statements
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL, transactionType CHAR NOT NULL)");
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transfer (transferNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL)");
+		pStmt->Sql("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
+		pStmt->ExecuteAndFree();
+		pStmt->Sql("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");
+		pStmt->ExecuteAndFree();
+		pStmt->Sql("CREATE TABLE IF NOT EXISTS Transfer (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");
+		pStmt->ExecuteAndFree();
+		//pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transfer (transferNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL)");
 
 		// De-allocate memory used to store pointers
 		delete pDatabase;
