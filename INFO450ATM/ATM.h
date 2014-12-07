@@ -5,6 +5,7 @@
 
 #include <string>
 #include "Customer.h"
+#include "Account.h"
 
 using namespace std;
 
@@ -20,11 +21,11 @@ public:
 
 	//ATM Functions
 	bool login(string email, int PIN);
-	void MainMenu(Customer cust);
-	int withdraw();
-	int deposit();
-	int transfer();
-	void history();
+	void MainMenu(Customer *cust, Account *acct);
+	int withdraw(Account *acct);
+	int deposit(Account *acct);
+	int transfer(Account *acct);
+	void history(Account *acct);
 	int balance();
 	void logout();
 };

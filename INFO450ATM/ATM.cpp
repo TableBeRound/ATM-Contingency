@@ -9,6 +9,7 @@ using namespace std;
 UI *ui = new UI();
 Customer *customer;
 Account *account;
+Database *db = new Database();
 
 // default ATM Constructor
 ATM::ATM()
@@ -38,12 +39,6 @@ bool ATM::login(string email, int PIN) {
 	ui->ClearBuffer();
 
 #pragma region Authentication logic
-	// Create a customer object to store the result of the database lookup
-	
-
-	// Database object to perform lookup
-	Database *db = new Database();
-
 	customer = db->getCustomer(email);
 
 	// Test to see if a valid Customer was returned by the getCustomer()
@@ -51,7 +46,11 @@ bool ATM::login(string email, int PIN) {
 	if (customer->GetCustomerNumber() != 0)
 	{
 		if (customer->GetPIN() == PIN)
+		{
+			account = db->getAccount(customer->GetCustomerNumber());
+			MainMenu(customer, account);
 			return true;
+		}
 	}
 	else
 		return false;
@@ -60,7 +59,7 @@ bool ATM::login(string email, int PIN) {
 
 // MainMenu method
 // uses a switch to determine what the user would like to do during this interaction.
-void ATM::MainMenu(Customer cust) {
+void ATM::MainMenu(Customer *cust, Account *acct) {
 
 
 	// input from the user used to control the switch
@@ -68,7 +67,7 @@ void ATM::MainMenu(Customer cust) {
 
 	// shows a preconstructed MainMenu (this MainMenu method also clears the screen everytime it is called)
 	// again for the shallow prototype justin jones is set to automatically appear as the user
-	ui->ShowTransactionTypeMenu("Justin", "Jones");
+	ui->ShowTransactionTypeMenu(cust->GetFirstName(), cust->GetLastName());
 	cin >> actionToBePerformed;
 
 	ui->ClearBuffer();
@@ -76,11 +75,11 @@ void ATM::MainMenu(Customer cust) {
 	// calls the users desired interaction based on the user input
 	switch (actionToBePerformed)
 	{
-	case 1: withdraw(); break;
-	case 2: deposit(); break;
+	case 1: withdraw(acct); break;
+	case 2: deposit(acct); break;
 	case 3: balance(); break;
-	case 4: transfer(); break;
-	case 5: history(); break;
+	case 4: transfer(acct); break;
+	case 5: history(acct); break;
 	case 6: logout(); break;
 	default: ui->ShowErrorMessage("Invalid menu choice! Please choose 1-6."); break;
 	}
@@ -88,7 +87,7 @@ void ATM::MainMenu(Customer cust) {
 
 // withdraw method
 // if the user selected a withdraw they will be taken to this screen
-int ATM::withdraw() {
+int ATM::withdraw(Account *acct) {
 	// the amount the person would like to withdraw (increments of $20)
 	int amountToWithdraw = NULL;
 
@@ -112,7 +111,7 @@ int ATM::withdraw() {
 
 // deposit method
 // if the user selected deposit they will be taken to this screen
-int ATM::deposit() {
+int ATM::deposit(Account *acct) {
 	// the amount the person would like to deposit (increments of $20 for the shallow prototype)
 	int amountToDeposit = NULL;
 
@@ -135,7 +134,7 @@ int ATM::deposit() {
 
 // transfer method
 // if the user selected transfer they will be taken to this screen
-int ATM::transfer() {
+int ATM::transfer(Account *acct) {
 	// takes in the account the user would like to transfer money to and the amount to transfer
 	char accountToTransferTo[50] = "NULL";
 	int amountToTransfer = NULL;
@@ -166,7 +165,7 @@ int ATM::transfer() {
 
 // history method
 // if the user selected see transaction history, they will be taken to this screen
-void ATM::history() {
+void ATM::history(Account *acct) {
 	// clears the screen of the MainMenu
 	ui->ClearScreen();
 	// for the shallow prototype we determined we will want the table to look like:
