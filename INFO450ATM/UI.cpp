@@ -39,22 +39,95 @@ void UI::ShowPINPrompt()
 // Display the menu of possible transactions to the user as selections 1-6
 void UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 {
+	char select1 = '*';
+	char select2 = ' ';
+	char select3 = ' ';
+	char select4 = ' ';
+	char select5 = ' ';
+	char select6 = ' ';
 
 	this->ClearScreen();
 	cout << endl
 		<< "\t\t\t    Welcome " + custFirstName + " " + custLastName
 		<< endl << endl
-		<< "Please make a selection (1-4):" << endl
+		<< "Please make a selection (1-6):" << endl
 		<< endl
-		<< "\t1) Make a withdrawal" << endl      //<---- Choice #1
-		<< "\t2) Make a deposit" << endl         //<---- Choice #2
-		<< "\t3) Check account balance" << endl  //<---- Choice #3
-		<< "\t4) Make a transfer" << endl		 //<---- Choice #4
-		<< "\t5) See Account History" << endl	 //<---- Choice #5
-		<< "\t6) Logout" << endl                 //<---- Choice #6
-		<< endl
-		<< "User selection: ";
+		<< "\t[" << select1 << "]1) Make a withdrawal" << endl      //<---- Choice #1
+		<< "\t[" << select2 << "]2) Make a deposit" << endl         //<---- Choice #2
+		<< "\t[" << select3 << "]3) Check account balance" << endl  //<---- Choice #3
+		<< "\t[" << select4 << "]4) Make a transfer" << endl		 //<---- Choice #4
+		<< "\t[" << select5 << "]5) See Account History" << endl	 //<---- Choice #5
+		<< "\t[" << select6 << "]6) Logout" << endl                 //<---- Choice #6
+		<< endl;
 
+	switch (getch())
+	{
+		case VK_DOWN: if (select1 == '*')
+					{
+						select1 = ' ';
+						select2 = '*';
+					}
+				  else if (select2 == '*')
+				  {
+					  select2 = ' ';
+					  select3 = '*';
+				  }
+				  else if (select3 == '*')
+				  {
+					  select3 = ' ';
+					  select4 = '*';
+				  }
+				  else if (select4 == '*')
+				  {
+					  select4 = ' ';
+					  select5 = '*';
+				  }
+				  else if (select5 == '*')
+				  {
+					  select5 = ' ';
+					  select6 = '*';
+				  }
+				  else if (select6 == '*')
+				  {
+					  select6 = ' ';
+					  select1 = '*';
+				  }
+				  break;
+		case VK_UP: if (select1 == '*')
+					{
+						select1 = ' ';
+						select6 = '*';
+					}
+					else if (select2 == '*')
+					{
+						select2 = ' ';
+						select1 = '*';
+					}
+					else if (select3 == '*')
+					{
+						select3 = ' ';
+						select2 = '*';
+					}
+					else if (select4 == '*')
+					{
+						select4 = ' ';
+						select3 = '*';
+					}
+					else if (select5 == '*')
+					{
+						select5 = ' ';
+						select4 = '*';
+					}
+					else if (select6 == '*')
+					{
+						select6 = ' ';
+						select5 = '*';
+					}
+		case VK_RETURN: if (select1 == '*')
+						{
+							
+						}
+	}
 	this->PauseScreen();
 }
 
@@ -199,7 +272,7 @@ void UI::NaviMenu()
 					  else if (select2 == '*')
 					  {
 						  select2 = ' ';
-						  select3 = ' ';
+						  select3 = '*';
 					  }
 					  else if (select3 == '*')
 					  {
