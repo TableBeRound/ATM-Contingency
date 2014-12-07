@@ -9,8 +9,8 @@ using namespace std;
 class Transaction
 {
 protected:
-	int _accountNumber;
 	int _transactionNumber;
+	int _accountNumber;	
 	string _date;
 	double _transactionAmount;
 	// I thought about having two separate classes, one for 

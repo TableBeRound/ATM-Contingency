@@ -44,7 +44,7 @@ public:
 
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");
-		//pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, date DATE NOT NULL, transactionAmount FLOAT NOT NULL, transactionType CHAR NOT NULL)");
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, date DATE NOT NULL, transactionAmount FLOAT NOT NULL, transactionType CHAR NOT NULL)");
 		//pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transfer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
 
 		// De-allocate memory used to store pointers
@@ -382,14 +382,62 @@ public:
 	}
 #pragma endregion
 
-#pragma region Functions related to Transaciton objects
+#pragma region Functions related to Transaction objects
 
-	// This function will encapsulate the logic to perform the various types
-	// of transactions on accounts.  This includes withdrawals, deposits, 
-	// and transfers.
-	Transaction *createTransaction()
+	// This function will encapsulate the logic to perform 
+	// withdrawals and deposits.
+	Transaction *createTransaction(int accountNumber, double transactionAmt, string date, string transactionType)
+	{
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);  // Notice how the SQLiteStatement 
+																    // pointer (pStmt) is "tied" to the 
+		                                                            // SQLiteDatabase object that pDatabase 
+		                                                            // points to.
+
+		// Use the SQLiteStatement pointer (pStmt) created 
+		// above to send a SQL statement to the database.
+		pStmt->Sql("INSERT INTO Transaction (accountNumber, date, transactionAmount, transactionType VALUES(?, ?, ?, ?);");
+		pStmt->BindInt(1, accountNumber);      // First question mark in the VALUES() clause above
+		pStmt->BindString(2, date);     // Second question mark in the VALUES() clause above
+		pStmt->BindDouble(3, transactionAmt);              // Third question mark in the VALUES() clause above
+		pStmt->BindString(4, transactionType);  // Fourth question mark in the VALUES() clause above		
+
+		// executes the INSERT statement and cleans-up automatically
+		pStmt->ExecuteAndFree();
+
+		// get the customer ID for the customer entry which was just made (the last row id).
+		pStmt->Sql("SELECT last_insert_rowid();");
+		pStmt->Execute();
+		int transactionNumber = pStmt->GetColumnInt(0); // get the int value at the zeroth column 
+
+		/***************************************************************************************
+		* Notice how each pStmt is first "loaded" with an SQL statement via the Sql() function
+		* then executed with either the Execute() or ExecuteAndFree() functions.
+		***************************************************************************************/
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
+
+		return new Transaction(transactionNumber, accountNumber, transactionAmt, date, transactionType);
+	}
+
+	Transaction *getTransaction()
 	{
 		return new Transaction();
+	}
+
+	bool editTransaction()
+	{
+		return false;
+	}
+
+	bool deleteTransation()
+	{
+		return false;
 	}
 
 #pragma endregion
