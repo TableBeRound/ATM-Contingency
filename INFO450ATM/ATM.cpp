@@ -134,7 +134,7 @@ int ATM::deposit() {
 #pragma region Deposit logic
 	//Logic for Deposit
 
-	db->updateBalance(account->GetAccountNumber, amountToDeposit);
+	//db->updateBalance(account->GetAccountNumber(), amountToDeposit);
 	//Will send the function the account number and the deposit amount
 	//In case you're lazy, The updatebalance function will add the amount to deposit to the current balance and give you the updated balance
 
