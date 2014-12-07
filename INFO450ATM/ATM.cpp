@@ -200,4 +200,23 @@ int ATM::balance() {
 void ATM::logout()
 {
 	// Logout procedure needs to be fleshed out
-};
+}
+
+double ATM::CustomAmount()
+{
+	double amountEntered;
+	bool intervalOf20;
+
+	cout << "Input Amount:\t$";
+	cin >> amountEntered;
+	intervalOf20 = (int)amountEntered % 20;
+	if (intervalOf20)
+	{
+		return amountEntered;
+	}
+	else
+	{
+		ui->ShowErrorMessage("The amount input is not an interval of $20.00!");
+		return 0;
+	}
+}

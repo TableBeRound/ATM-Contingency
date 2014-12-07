@@ -27,6 +27,7 @@ public:
 	void history();
 	int balance();
 	void logout();
+	double CustomAmount();
 };
 
 #endif
