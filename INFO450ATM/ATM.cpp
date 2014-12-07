@@ -34,18 +34,14 @@ void ATM::login() {
 	// prompts the User to enter their email
 	ui->ShowLoginPrompt();
 	cin >> eMail;
-	/**************** CODE TO CLEAR THE INPUT BUFFER ****************
-	****************************************************************/
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
+
+	ui->ClearBuffer();
 
 	// prompts the user to enter their PIN, without clearing the LoginPrompt
 	ui->ShowPINPrompt();
 	cin >> PIN;
-	/**************** CODE TO CLEAR THE INPUT BUFFER ****************
-	****************************************************************/
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
+
+	ui->ClearBuffer();
 
 	//instead of authentication, for now it just automatically takes you in to the main menu
 	MainMenu();
@@ -62,10 +58,7 @@ void ATM::MainMenu() {
 	ui->ShowTransactionTypeMenu("Justin", "Jones");
 	cin >> actionToBePerformed;
 
-	/**************** CODE TO CLEAR THE INPUT BUFFER ****************
-	****************************************************************/
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
+	ui->ClearBuffer();
 
 	// calls the users desired interaction based on the user input
 	switch (actionToBePerformed)
@@ -91,10 +84,8 @@ int ATM::withdraw() {
 	ui->ShowTransactionAmountMenu("withdrawn");
 	// takes in the amount the user would like to withdraw
 	cin >> amountToWithdraw;
-	/**************** CODE TO CLEAR THE INPUT BUFFER ****************
-	****************************************************************/
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
+
+	ui->ClearBuffer();
 
 	// again for the shallow prototype, there will only be success, 
 	// so this screen will automatically be displayed next
@@ -118,10 +109,8 @@ int ATM::deposit() {
 	ui->ShowTransactionAmountMenu("depositied");
 	// takes in the amount the user would like to deposit
 	cin >> amountToDeposit;
-	/**************** CODE TO CLEAR THE INPUT BUFFER ****************
-	****************************************************************/
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
+
+	ui->ClearBuffer();
 	// again for the shallow prototype, there will only be success, 
 	// so this screen will automatically be displayed next
 	ui->ShowTransactionSuccessMessage();
@@ -144,18 +133,14 @@ int ATM::transfer() {
 	ui->ShowTransactionAmountMenu("transfered");
 	// takes in the amount the user would like to transfer
 	cin >> amountToTransfer;
-	/**************** CODE TO CLEAR THE INPUT BUFFER ****************
-	****************************************************************/
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
+
+	ui->ClearBuffer();
 	// asks the user for the email of the account to transfer money to
 	cout << "Please enter the Account you would like to transfer to: ";
 	// takes in the email of the account to transfer money to
 	cin >> accountToTransferTo;
-	/**************** CODE TO CLEAR THE INPUT BUFFER ****************
-	****************************************************************/
-	cin.clear();
-	cin.ignore(INT_MAX, '\n');
+
+	ui->ClearBuffer();
 
 	// again for the shallow prototype, there will only be success, 
 	// so this screen will automatically be displayed next

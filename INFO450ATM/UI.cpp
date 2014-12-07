@@ -36,7 +36,7 @@ void UI::ShowPINPrompt()
 		<< "Please enter PIN: ";
 }
 
-// Display the menu of possible transactions to the user as selections 1-4
+// Display the menu of possible transactions to the user as selections 1-6
 void UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 {
 
@@ -167,4 +167,13 @@ void UI::PressAnyKeyToContinue()
 	cout << "Press any key to continue...";
 	while (!_kbhit()){}
 	char key = _getch();
+}
+
+/**************** CODE TO CLEAR THE INPUT BUFFER ****************
+****************************************************************/
+// may not be used
+void UI::ClearBuffer()
+{
+	cin.clear();
+	cin.ignore(INT_MAX, '\n');
 }
