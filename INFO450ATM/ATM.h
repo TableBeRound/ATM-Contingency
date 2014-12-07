@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string>
+#include "Customer.h"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ public:
 
 	//ATM Functions
 	bool login(string email, int PIN);
-	void MainMenu();
+	void MainMenu(Customer cust);
 	int withdraw();
 	int deposit();
 	int transfer();

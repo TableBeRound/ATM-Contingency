@@ -7,6 +7,8 @@
 using namespace std;
 
 UI *ui = new UI();
+Customer *customer;
+Account *account;
 
 // default ATM Constructor
 ATM::ATM()
@@ -41,7 +43,7 @@ bool ATM::login(string email, int PIN) {
 
 #pragma region Authentication logic
 	// Create a customer object to store the result of the database lookup
-	Customer *customer;
+	
 
 	// Database object to perform lookup
 	Database *db = new Database();
@@ -62,7 +64,9 @@ bool ATM::login(string email, int PIN) {
 
 // MainMenu method
 // uses a switch to determine what the user would like to do during this interaction.
-void ATM::MainMenu() {
+void ATM::MainMenu(Customer cust) {
+
+
 	// input from the user used to control the switch
 	int actionToBePerformed = NULL;
 
@@ -112,7 +116,6 @@ int ATM::withdraw() {
 
 	// recalls MainMenu, meaning the screen is cleared of everything
 	// that happened during withdraw
-	MainMenu();
 	return 0;
 }
 
@@ -137,7 +140,6 @@ int ATM::deposit() {
 
 	// recalls MainMenu, meaning the screen is cleared of everything
 	// that happened during withdraw
-	MainMenu();
 	return 0;
 }
 
@@ -172,7 +174,6 @@ int ATM::transfer() {
 
 	// recalls MainMenu, meaning the screen is cleared of everything
 	// that happened during deposit
-	MainMenu();
 	return 0;
 }
 
@@ -192,7 +193,6 @@ void ATM::history() {
 
 	// recalls MainMenu, meaning the screen is cleared of everything
 	// that happened during history
-	MainMenu();
 }
 
 // balance method
@@ -207,7 +207,6 @@ int ATM::balance() {
 
 	// recalls MainMenu, meaning the screen is cleared of everything
 	// that happened during balance
-	MainMenu();
 	return 0;
 }
 
