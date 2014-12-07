@@ -39,67 +39,70 @@ void UI::ShowPINPrompt()
 }
 
 // Display the menu of possible transactions to the user as selections 1-6
-void UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
+int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 {
-	char select1 = '*';
-	char select2 = ' ';
-	char select3 = ' ';
-	char select4 = ' ';
-	char select5 = ' ';
-	char select6 = ' ';
 
-	this->ClearScreen();
-	cout << endl
-		<< "\t\t\t    Welcome " + custFirstName + " " + custLastName
-		<< endl << endl
-		<< "Please make a selection (1-6):" << endl
-		<< endl
-		<< "\t[" << select1 << "]1) Make a withdrawal" << endl      //<---- Choice #1
-		<< "\t[" << select2 << "]2) Make a deposit" << endl         //<---- Choice #2
-		<< "\t[" << select3 << "]3) Check account balance" << endl  //<---- Choice #3
-		<< "\t[" << select4 << "]4) Make a transfer" << endl		 //<---- Choice #4
-		<< "\t[" << select5 << "]5) See Account History" << endl	 //<---- Choice #5
-		<< "\t[" << select6 << "]6) Logout" << endl                 //<---- Choice #6
-		<< endl;
+		char withdraw = '*';
+		char deposit = ' ';
+		char balance = ' ';
+		char select4 = ' ';
+		char select5 = ' ';
+		char select6 = ' ';
 
-	switch (getch())
-	{
-		case VK_DOWN: if (select1 == '*')
-					{
-						select1 = ' ';
-						select2 = '*';
-					}
-				  else if (select2 == '*')
-				  {
-					  select2 = ' ';
-					  select3 = '*';
-				  }
-				  else if (select3 == '*')
-				  {
-					  select3 = ' ';
-					  select4 = '*';
-				  }
-				  else if (select4 == '*')
-				  {
-					  select4 = ' ';
-					  select5 = '*';
-				  }
-				  else if (select5 == '*')
-				  {
-					  select5 = ' ';
-					  select6 = '*';
-				  }
-				  else if (select6 == '*')
-				  {
-					  select6 = ' ';
-					  select1 = '*';
-				  }
-				  break;
-		case VK_UP: if (select1 == '*')
-					{
-						select1 = ' ';
-						select6 = '*';
-					}
+		while (getch() != VK_RETURN)
+		{
+			this->ClearScreen();
+			cout << endl
+				<< "\t\t\t    Welcome " + custFirstName + " " + custLastName
+				<< endl << endl
+				<< "Please make a selection (1-6):" << endl
+				<< endl
+				<< "\t[" << select1 << "]1) Make a withdrawal" << endl      //<---- Choice #1
+				<< "\t[" << select2 << "]2) Make a deposit" << endl         //<---- Choice #2
+				<< "\t[" << select3 << "]3) Check account balance" << endl  //<---- Choice #3
+				<< "\t[" << select4 << "]4) Make a transfer" << endl		 //<---- Choice #4
+				<< "\t[" << select5 << "]5) See Account History" << endl	 //<---- Choice #5
+				<< "\t[" << select6 << "]6) Logout" << endl                 //<---- Choice #6
+				<< endl;
+
+			switch (getch())
+			{
+			case VK_DOWN: if (withdraw == '*')
+			{
+				withdraw = ' ';
+				deposit = '*';
+			}
+					  else if (deposit == '*')
+					  {
+						  deposit = ' ';
+						  balance = '*';
+					  }
+					  else if (select3 == '*')
+					  {
+						  select3 = ' ';
+						  select4 = '*';
+					  }
+					  else if (select4 == '*')
+					  {
+						  select4 = ' ';
+						  select5 = '*';
+					  }
+					  else if (select5 == '*')
+					  {
+						  select5 = ' ';
+						  select6 = '*';
+					  }
+					  else if (select6 == '*')
+					  {
+						  select6 = ' ';
+						  select1 = '*';
+					  }
+					  break;
+			case VK_UP: if (select1 == '*')
+			{
+				select1 = ' ';
+				select6 = '*';
+			}
 					else if (select2 == '*')
 					{
 						select2 = ' ';
@@ -126,33 +129,40 @@ void UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 						select5 = '*';
 					}
 					break;
-		case VK_RETURN: if (select1 == '*')
-						{
-							atm->withdraw();
-						}
-						else if (select2 == '*')
-						{
-							atm->deposit();
-						}
-						else if (select3 == '*')
-						{
-							atm->balance();
-						}
-						else if (select4 == '*')
-						{
-							atm->transfer();
-						}
-						else if (select5 == '*')
-						{
-							atm->history();
-						}
-						else if (select6 == '*')
-						{
-							atm->logout();
-						}
-						break;
-		default:
+			default:
 			ShowErrorMessage("This key does not do anything!"); break;
+		}
+	}
+		switch (getch())
+		{
+			case VK_RETURN: if (select1 == '*')
+			{
+				atm->withdraw();
+			}
+					else if (select2 == '*')
+					{
+						atm->deposit();
+					}
+					else if (select3 == '*')
+					{
+						atm->balance();
+					}
+					else if (select4 == '*')
+					{
+						atm->transfer();
+					}
+					else if (select5 == '*')
+					{
+						atm->history();
+					}
+					else if (select6 == '*')
+					{
+						atm->logout();
+					}
+					break;
+			default:
+				ShowErrorMessage("This key does not do anything!"); break;
+	}
 	}
 	this->PauseScreen();
 }
@@ -258,7 +268,10 @@ void UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 						{
 							cout << "Input Amount:\t$";
 							cin >> amountToBeUsed;
-							atm->ValidateAmountInput(amountToBeUsed);
+							if (!atm->ValidateAmountInput(amountToBeUsed)
+							{
+								ShowErrorMessage("The amount input is not an interval of $20.00!");
+							}
 						}
 	}
 }

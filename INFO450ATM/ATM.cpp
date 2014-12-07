@@ -70,27 +70,31 @@ bool ATM::login(string email, int PIN) {
 // uses a switch to determine what the user would like to do during this interaction.
 void ATM::MainMenu() {
 
-
-	// input from the user used to control the switch
-	int actionToBePerformed = NULL;
-
-	// shows a preconstructed MainMenu (this MainMenu method also clears the screen everytime it is called)
-	// again for the shallow prototype justin jones is set to automatically appear as the user
-	ui->ShowTransactionTypeMenu(customer->GetFirstName(), customer->GetLastName());
-	cin >> actionToBePerformed;
-
-	ui->ClearBuffer();
-
-	// calls the users desired interaction based on the user input
-	switch (actionToBePerformed)
+	bool logout = false;
+	while (!logout)
 	{
-	case 1: withdraw(); break;
-	case 2: deposit(); break;
-	case 3: balance(); break;
-	case 4: transfer(); break;
-	case 5: history(); break;
-	case 6: logout(); break;
-	default: ui->ShowErrorMessage("Invalid menu choice! Please choose 1-6."); break;
+		// input from the user used to control the switch
+		
+		// shows a preconstructed MainMenu (this MainMenu method also clears the screen everytime it is called)
+		// again for the shallow prototype justin jones is set to automatically appear as the user
+		int actionToBePerformed = ui->ShowTransactionTypeMenu(customer->GetFirstName(), customer->GetLastName());
+
+		//***************** Delete  *********************		
+		//ui->ClearBuffer();
+
+		//// calls the users desired interaction based on the user input
+		//switch (actionToBePerformed)
+		//{
+		//case 1: withdraw(); break;
+		//case 2: deposit(); break;
+		//case 3: balance(); break;
+		//case 4: transfer(); break;
+		//case 5: history(); break;
+		//case 6: logout = true; break;
+		//default: ui->ShowErrorMessage("Invalid menu choice! Please choose 1-6."); break;
+		//}
+		//**************************************
+		
 	}
 }
 
@@ -211,23 +215,15 @@ void ATM::balance() {
 	ui->ShowAccountBalance(customerName, account->GetAccountBalance());	
 }
 
-void ATM::logout()
+void ATM::customerLogout()
 {
 	// Logout procedure needs to be fleshed out
 }
 
-bool ATM::ValidateAmountInput(double amountEntered)
+void ATM::ValidateAmountInput(double amountEntered)
 {
-	bool intervalOf20;
-
-	intervalOf20 = (int)amountEntered % 20;
-	if (intervalOf20)
-	{
-		return true;
-	}
-	else
+	if ((int)amountEntered % 20 > 0)
 	{
 		ui->ShowErrorMessage("The amount input is not an interval of $20.00!");
-		return false;
 	}
 }

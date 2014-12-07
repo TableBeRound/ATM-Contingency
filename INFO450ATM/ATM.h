@@ -26,8 +26,8 @@ public:
 	int transfer();
 	void history();
 	void balance();
-	void logout();
-	bool ValidateAmountInput(double amountInput);
+	void customerLogout();
+	void ValidateAmountInput(double amountInput);
 	void shutdown();
 };
 

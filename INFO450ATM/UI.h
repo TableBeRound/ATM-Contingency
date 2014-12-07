@@ -17,7 +17,7 @@ public:
 	// The function names are pretty self-explanatory.
 	void ShowLoginPrompt();
 	void ShowPINPrompt();
-	void ShowTransactionTypeMenu(string custFirstName, string custLastname);
+	int ShowTransactionTypeMenu(string custFirstName, string custLastname);
 	void ShowTransactionAmountMenu(char *actionToBePerformed);
 	void ShowAccountBalance(string acctNum, double acctBalance);
 	void ShowTransactionSuccessMessage();
