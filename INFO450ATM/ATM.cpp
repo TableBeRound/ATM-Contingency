@@ -1,17 +1,11 @@
 #include "ATM.h"
 #include <iostream>
+#include "Database.h"
+#include "Customer.h"
 #include "UI.h"
 
 using namespace std;
 
-// Function prototypes - Much of this behavior needs to be moved to the ATM object.
-void MainMenu();
-void login();
-int withdraw();
-int deposit();
-int balance();
-int transfer();
-void history();
 UI *ui = new UI();
 
 // default ATM Constructor
@@ -26,14 +20,12 @@ ATM::~ATM()
 
 // login method
 // we plan on it taking in the eMail AND the PIN before any authentication confirmation is done
-void ATM::login() {
-	// stores the email addresss and PIN entered by the user
-	char eMail[50] = "NULL";
-	int PIN = NULL;
+bool ATM::login(string email, int PIN) {
+	// stores the email addresss and PIN entered by the user	
 
 	// prompts the User to enter their email
 	ui->ShowLoginPrompt();
-	cin >> eMail;
+	cin >> email;
 	/**************** CODE TO CLEAR THE INPUT BUFFER ****************
 	****************************************************************/
 	cin.clear();
@@ -47,8 +39,25 @@ void ATM::login() {
 	cin.clear();
 	cin.ignore(INT_MAX, '\n');
 
-	//instead of authentication, for now it just automatically takes you in to the main menu
-	MainMenu();
+#pragma region Authentication logic
+	// Create a customer object to store the result of the database lookup
+	Customer *customer;
+
+	// Database object to perform lookup
+	Database *db = new Database();
+
+	customer = db->getCustomer(email);
+
+	// Test to see if a valid Customer was returned by the getCustomer()
+	// function call above.
+	if (customer->GetCustomerNumber() != 0)
+	{
+		if (customer->GetPIN() == PIN)
+			return true;
+	}
+	else
+		return false;
+#pragma endregion
 }
 
 // MainMenu method
@@ -75,7 +84,7 @@ void ATM::MainMenu() {
 	case 3: balance(); break;
 	case 4: transfer(); break;
 	case 5: history(); break;
-	case 6: login(); break;
+	case 6: logout(); break;
 	default: ui->ShowErrorMessage("Invalid menu choice! Please choose 1-6."); break;
 	}
 }
@@ -201,3 +210,8 @@ int ATM::balance() {
 	MainMenu();
 	return 0;
 }
+
+void ATM::logout()
+{
+	// Logout procedure needs to be fleshed out
+};

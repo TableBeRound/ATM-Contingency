@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include <string>
+
+using namespace std;
+
 // I haven't yet thought about this class as I've 
 // been focusing on the objects which are stored 
 // in the database.
@@ -14,13 +18,14 @@ public:
 	~ATM();
 
 	//ATM Functions
-	void login();
+	bool login(string email, int PIN);
 	void MainMenu();
 	int withdraw();
 	int deposit();
 	int transfer();
 	void history();
 	int balance();
+	void logout();
 };
 
 #endif
