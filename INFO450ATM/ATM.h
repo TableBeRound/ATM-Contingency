@@ -27,7 +27,7 @@ public:
 	void history();
 	void balance();
 	void logout();
-	double CustomAmount();
+	double AmountUsed();
 	void shutdown();
 };
 

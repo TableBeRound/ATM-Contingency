@@ -256,7 +256,7 @@ void UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 						}
 						else if (amount6 == '*')
 						{
-							atm->CustomAmount();
+							atm->AmountUsed();
 						}
 	}
 }
