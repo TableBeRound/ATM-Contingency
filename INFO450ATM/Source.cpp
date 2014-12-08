@@ -127,12 +127,13 @@ int main() {
 #pragma endregion
 
 #pragma region Database Tests Related to Transaction Table
+	
 	/*
 	Customer *customer = db->getCustomer("dglidewell@vcu.edu");
 	Account *account = db->getAccount(customer->GetCustomerNumber());
 
-	double transAmt = 75.00;
-	char transType = 'W';
+	double transAmt = 13.13;
+	string transType = "D";
 	string transDate = "12/08/2014";
 	Transaction *transaction = db->createTransaction(account->GetAccountNumber(), transAmt, transType, transDate);
 	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
@@ -144,31 +145,16 @@ int main() {
 	cout << "\n\n";
 	*/
 
-	/*cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
-		<< "Customer First Name: " << customer->GetFirstName() << "\n"
-		<< "Customer Last Name: " << customer->GetLastName() << "\n"
-		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
-		<< "Customer PIN: " << customer->GetPIN() << "\n";
+	/*
+	Transaction *transaction = db->getTransaction(7);
+	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
+		<< "Account Number: " << transaction->GetAccountNumber() << "\n"
+		<< "Transaction Amount: " << transaction->GetTransactionAmount() << "\n"
+		<< "Transaction Type: " << transaction->GetTransactionType() << "\n"
+		<< "Transaction Date: " << transaction->GetDate();
 
 	cout << "\n\n";
-
-	cout << "Account Number: " << account->GetAccountNumber() << "\n"
-		<< "Customer Number: " << account->GetCustomerNumber() << "\n"
-		<< "Account Type: " << account->GetAccountType() << "\n"
-		<< "Account Balance: " << account->GetAccountBalance() << "\n";
-
-	cout << "\n\n";
-
-	cout << std::to_string(transAmt);
-	cout << "\n\n";
-
-	cout << transType;
-	cout << "\n\n";
-
-	cout << transDate;
-	cout << "\n\n";
-	*/
-
+	*/	
 #pragma endregion
 
 	system("pause");

@@ -390,7 +390,7 @@ public:
 
 	// This function will encapsulate the logic to perform 
 	// withdrawals and deposits.
-	Transaction *createTransaction(int accountNumber, double transactionAmt, char transactionType, string date)
+	Transaction *createTransaction(int accountNumber, double transactionAmt, string transactionType, string date)
 	{
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -399,15 +399,14 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);  // Notice how the SQLiteStatement 
 																    // pointer (pStmt) is "tied" to the 
 		                                                            // SQLiteDatabase object that pDatabase 
-		                                                            // points to.
-
+		                                                            // points to.		
 		// Use the SQLiteStatement pointer (pStmt) created 
 		// above to send a SQL statement to the database.
 		pStmt->Sql("INSERT INTO AccountTransaction (accountNumber, transactionAmount, transactionType, date) VALUES(?, ?, ?, ?);");
-		pStmt->BindInt(1, accountNumber);                         // First question mark in the VALUES() clause above
-		pStmt->BindDouble(3, transactionAmt);                     // Second question mark in the VALUES() clause above
-		pStmt->BindString(4, std::to_string(transactionType));                                // Third question mark in the VALUES() clause above
-		pStmt->BindString(2, date);                               // Fourth question mark in the VALUES() clause above		
+		pStmt->BindInt(1, accountNumber);        // First question mark in the VALUES() clause above
+		pStmt->BindDouble(2, transactionAmt);    // Second question mark in the VALUES() clause above
+		pStmt->BindString(3, transactionType);   // Third question mark in the VALUES() clause above
+		pStmt->BindString(4, date);              // Fourth question mark in the VALUES() clause above		
 
 		// executes the INSERT statement and cleans-up automatically
 		pStmt->ExecuteAndFree();
@@ -461,12 +460,7 @@ public:
 		}
 
 		// "Clean up"
-		pStmt->FreeQuery();
-
-		// This is a little work-around to make the Account constructor and the result from the 
-		// "GetColumnString" function from Kompex's SQLiteStatement "play nice".  GetColumnString
-		// returns a string, but the Account object's constructor needs a character for accountType.
-		char retTransType = retrievedTransactionType[0];
+		pStmt->FreeQuery();		
 
 		// De-allocate memory used to store pointers
 		/*delete pDatabase;
@@ -474,7 +468,7 @@ public:
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
-		return new Transaction(retrievedTransactionNumber, retrievedAccountNumber, retrievedTransactionAmt, retTransType, retrievedDate);
+		return new Transaction(retrievedTransactionNumber, retrievedAccountNumber, retrievedTransactionAmt, retrievedTransactionType, retrievedDate);
 	}
 
 	/*bool editTransaction()

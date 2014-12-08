@@ -52,7 +52,9 @@ bool ATM::login(string email, int PIN) {
 			account = db->getAccount(customer->GetCustomerNumber());
 			MainMenu();
 			return true;
-	}
+		}
+		else
+			return false;
 	}
 	else
 		return false;
