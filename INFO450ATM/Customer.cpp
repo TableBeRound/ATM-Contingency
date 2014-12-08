@@ -5,13 +5,13 @@ Customer::Customer()
 {
 }
 
-Customer::Customer(int custNum, string firstName, string lastName, int pin, string emailAddress)
+Customer::Customer(int custNum, string lastName, string firstName, string emailAddress, int pin)
 {
-	this->_customerNumber = custNum;
-	this->_custFirstName = firstName;
+	this->_customerNumber = custNum;	
 	this->_custLastName = lastName;
-	this->_PIN = pin;
+	this->_custFirstName = firstName;	
 	this->_emailAddress = emailAddress;
+	this->_PIN = pin;
 }
 
 Customer::~Customer()

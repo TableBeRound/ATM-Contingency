@@ -45,6 +45,9 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 		char withdraw = '*';
 		char deposit = ' ';
 		char balance = ' ';
+		char select1 = ' ';
+		char select2 = ' ';
+		char select3 = ' ';
 		char select4 = ' ';
 		char select5 = ' ';
 		char select6 = ' ';
@@ -141,28 +144,27 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			}
 					else if (select2 == '*')
 					{
-						atm->deposit();
+						return 1;
 					}
 					else if (select3 == '*')
 					{
-						atm->balance();
+						return 2;
 					}
 					else if (select4 == '*')
 					{
-						atm->transfer();
+						return 3;
 					}
 					else if (select5 == '*')
 					{
-						atm->history();
+						return 4;
 					}
 					else if (select6 == '*')
 					{
-						atm->logout();
+						return 5;
 					}
 					break;
 			default:
 				ShowErrorMessage("This key does not do anything!"); break;
-	}
 	}
 	this->PauseScreen();
 }
@@ -263,16 +265,7 @@ void UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 						else if (amount5 == '*')
 						{
 							amountToBeUsed = 100.00;
-						}
-						else if (amount6 == '*')
-						{
-							cout << "Input Amount:\t$";
-							cin >> amountToBeUsed;
-							if (!atm->ValidateAmountInput(amountToBeUsed)
-							{
-								ShowErrorMessage("The amount input is not an interval of $20.00!");
-							}
-						}
+						}						
 	}
 }
 

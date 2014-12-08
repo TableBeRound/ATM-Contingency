@@ -21,15 +21,15 @@ protected:
 
 public:
 	Transaction();
-	Transaction(int transactionNum, int acctNum, double transactionAmt, string date, char transactionType);
+	Transaction(int transactionNum, int acctNum, double transactionAmt, char transactionType, string date);
 	~Transaction();
 
 	// Get & Set Funcitons
 	int GetTransactionNumber();
 	int GetAccountNumber();
-	double GetTransactionAmount();
-	string GetDate();
+	double GetTransactionAmount();	
 	char GetTransactionType();
+	string GetDate();
 
 	// Post transaction to the database and 
 	// update the balance for the account stored

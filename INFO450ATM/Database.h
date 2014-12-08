@@ -42,17 +42,14 @@ public:
 		// create statement instance for sql queries/statements
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
-		pStmt->Sql("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");
-		pStmt->ExecuteAndFree();
-		pStmt->Sql("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");
-		pStmt->ExecuteAndFree();
-		pStmt->Sql("CREATE TABLE IF NOT EXISTS Transfer (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");
-		pStmt->ExecuteAndFree();
-		//pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Transfer (transferNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL)");
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");		
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");				
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, transactionType VARCHAR(1) NOT NULL, date VARCHAR(10) NOT NULL)");
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransfer (transferNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL)");
 
 		// De-allocate memory used to store pointers
-		delete pDatabase;
-		delete pStmt;
+		//delete pDatabase;
+		//delete pStmt;
 	}
 
 	// Destructor
@@ -64,7 +61,7 @@ public:
 #pragma region Functions related to Customer objects
 	// Create Customer Function: 
 	// This is the function used to create a customer entry in the database.
-	Customer *createCustomer(string firstName, string lastName, int pin, string emailAddress) 
+	Customer *createCustomer(string lastName, string firstName, string emailAddress, int pin) 
 	{
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -77,11 +74,11 @@ public:
 
 		// Use the SQLiteStatement pointer (pStmt) created 
 		// above to send a SQL statement to the database.
-		pStmt->Sql("INSERT INTO Customer (lastName, firstName, PIN, emailAddress) VALUES(?, ?, ?, ?);");
+		pStmt->Sql("INSERT INTO Customer (lastName, firstName, emailAddress, PIN) VALUES(?, ?, ?, ?);");
 		pStmt->BindString(1, lastName);      // First question mark in the VALUES() clause above
 		pStmt->BindString(2, firstName);     // Second question mark in the VALUES() clause above
-		pStmt->BindInt(3, pin);              // Third question mark in the VALUES() clause above
-		pStmt->BindString(4, emailAddress);  // Fourth question mark in the VALUES() clause above
+		pStmt->BindString(3, emailAddress);              // Third question mark in the VALUES() clause above
+		pStmt->BindInt(4, pin);  // Fourth question mark in the VALUES() clause above
 
 		// executes the INSERT statement and cleans-up automatically
 		pStmt->ExecuteAndFree();
@@ -97,11 +94,11 @@ public:
 		 ***************************************************************************************/
 
 		// De-allocate memory used to store pointers
-		delete pDatabase;
-		delete pStmt;
+		//delete pDatabase;
+		//delete pStmt;
 
 		// return the customer to the calling function
-		return new Customer(customerNumber, firstName, lastName, pin, emailAddress);
+		return new Customer(customerNumber, lastName, firstName, emailAddress, pin);
 	}	
 
 	// Retrieve Customer Function:
@@ -131,22 +128,22 @@ public:
 		// column to the variables declared above.
 		while (pStmt->FetchRow())
 		{
-			retrievedCustomerID = pStmt->GetColumnInt("customerNumber");
-			retrievedFirstName = pStmt->GetColumnString("firstName");
+			retrievedCustomerID = pStmt->GetColumnInt("customerNumber");			
 			retrievedLastName = pStmt->GetColumnString("lastName");
-			retrievedPIN = pStmt->GetColumnInt("PIN");
+			retrievedFirstName = pStmt->GetColumnString("firstName");
 			retrievedEmailAddress = pStmt->GetColumnString("emailAddress");
+			retrievedPIN = pStmt->GetColumnInt("PIN");			
 		}
 
 		// "Clean up"
 		pStmt->FreeQuery();
 		// De-allocate memory used to store pointers
-		delete pDatabase;
-		delete pStmt;
+		//delete pDatabase;
+		//delete pStmt;
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
-		return new Customer(retrievedCustomerID, retrievedFirstName, retrievedLastName, retrievedPIN, retrievedEmailAddress);
+		return new Customer(retrievedCustomerID, retrievedLastName, retrievedFirstName, retrievedEmailAddress, retrievedPIN);
 	}
 
 	// Delete Customer Function:
@@ -162,26 +159,27 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
 		// SQL Statement to delete the record
-		pStmt->SqlStatement("DELETE FROM Customer WHERE emailAddress = ?;");
+		pStmt->Sql("DELETE FROM Customer WHERE emailAddress = ?;");
 		pStmt->BindString(1, email);
+		pStmt->ExecuteAndFree();
 
-		// Check to see if any changes have been made to the database
-		// due to the SQL statement executed above.  Return the results
-		// as a boolean value.
+		 /*Check to see if any changes have been made to the database
+		 due to the SQL statement executed above.  Return the results
+		 as a boolean value.*/
 		int recordsDeleted = 0;
 		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
 		if (recordsDeleted)
 		{
 			// De-allocate memory used to store pointers
-			delete pDatabase;
-			delete pStmt;
+			/*delete pDatabase;
+			delete pStmt;*/
 			return true;
 		}			
 		else
 		{
 			// De-allocate memory used to store pointers
-			delete pDatabase;
-			delete pStmt;
+			/*delete pDatabase;
+			delete pStmt;*/
 			return false;
 		}
 	}
@@ -216,6 +214,7 @@ public:
 		pStmt->Sql("SELECT last_insert_rowid();");
 		pStmt->Execute();
 		int accountNumber = pStmt->GetColumnInt(0); // get the int value at the zeroth column 
+		pStmt->FreeQuery();
 
 		/***************************************************************************************
 		* Notice how each pStmt is first "loaded" with an SQL statement via the Sql() function
@@ -225,8 +224,8 @@ public:
 		char accType = accountType[0];
 
 		// De-allocate memory used to store pointers
-		delete pDatabase;
-		delete pStmt;
+		/*delete pDatabase;
+		delete pStmt;*/
 
 		// return the account to the calling function
 		return new Account(accountNumber, customerNumber, accType, initialBalance);
@@ -251,7 +250,7 @@ public:
 		// Use the customerNumber and accountType passed to this method to query the database.
 		pStmt->Sql("SELECT * FROM Account WHERE customerNumber = ? AND accountType = ?;");
 		pStmt->BindInt(1, customerNumber);
-		pStmt->BindString(2, accountType);			       
+		pStmt->BindString(2, accountType);	
 
 		// Process the results of the query above - assigning the values of each
 		// column to the variables declared above.
@@ -272,8 +271,8 @@ public:
 		char retAccType = retrievedAccountType[0];
 
 		// De-allocate memory used to store pointers
-		delete pDatabase;
-		delete pStmt;
+		/*delete pDatabase;
+		delete pStmt;*/
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
@@ -293,8 +292,9 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
 		// SQL Statement to delete the record
-		pStmt->SqlStatement("DELETE FROM Account WHERE accountNumber = ?;");
+		pStmt->Sql("DELETE FROM Account WHERE accountNumber = ?;");
 		pStmt->BindInt(1, accountNumber);
+		pStmt->ExecuteAndFree();
 
 		// Check to see if any changes have been made to the database
 		// due to the SQL statement executed above.  Return the results
@@ -304,15 +304,15 @@ public:
 		if (recordsDeleted)
 		{
 			// De-allocate memory used to store pointers
-			delete pDatabase;
-			delete pStmt;
+			/*delete pDatabase;
+			delete pStmt;*/
 			return true;
 		}
 		else
 		{
 			// De-allocate memory used to store pointers
-			delete pDatabase;
-			delete pStmt;
+			/*delete pDatabase;
+			delete pStmt;*/
 			return false;
 		}
 	}
@@ -359,9 +359,10 @@ public:
 		/*****************************************************************
 		* STEP 3: Update the Account with the value stored in newBalance.
 		******************************************************************/		
-		pStmt->SqlStatement("UPDATE Account SET balance = ? WHERE accountNumber = ?;");
+		pStmt->Sql("UPDATE Account SET balance = ? WHERE accountNumber = ?;");
 		pStmt->BindDouble(1, newBalance);
 		pStmt->BindInt	(2, accountNumber);
+		pStmt->ExecuteAndFree();
 
 		// Check to see if any changes have been made to the database
 		// due to the SQL statement executed above.  Return the results
@@ -371,15 +372,15 @@ public:
 		if (recordsUpdated)
 		{
 			// De-allocate memory used to store pointers
-			delete pDatabase;
-			delete pStmt;
+			/*delete pDatabase;
+			delete pStmt;*/
 			return true;
 		}
 		else
 		{
 			// De-allocate memory used to store pointers
-			delete pDatabase;
-			delete pStmt;
+			/*delete pDatabase;
+			delete pStmt;*/
 			return false;
 		}			
 	}
@@ -389,7 +390,7 @@ public:
 
 	// This function will encapsulate the logic to perform 
 	// withdrawals and deposits.
-	Transaction *createTransaction(int accountNumber, double transactionAmt, string date, char transactionType)
+	Transaction *createTransaction(int accountNumber, double transactionAmt, char transactionType, string date)
 	{
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -402,11 +403,11 @@ public:
 
 		// Use the SQLiteStatement pointer (pStmt) created 
 		// above to send a SQL statement to the database.
-		pStmt->Sql("INSERT INTO Transaction (accountNumber, date, transactionAmount, transactionType VALUES(?, ?, ?, ?);");
-		pStmt->BindInt(1, accountNumber);      // First question mark in the VALUES() clause above
-		pStmt->BindString(2, date);     // Second question mark in the VALUES() clause above
-		pStmt->BindDouble(3, transactionAmt);              // Third question mark in the VALUES() clause above
-		pStmt->BindString(4, std::to_string(transactionType));  // Fourth question mark in the VALUES() clause above		
+		pStmt->Sql("INSERT INTO AccountTransaction (accountNumber, transactionAmount, transactionType, date) VALUES(?, ?, ?, ?);");
+		pStmt->BindInt(1, accountNumber);                         // First question mark in the VALUES() clause above
+		pStmt->BindDouble(3, transactionAmt);                     // Second question mark in the VALUES() clause above
+		pStmt->BindString(4, std::to_string(transactionType));                                // Third question mark in the VALUES() clause above
+		pStmt->BindString(2, date);                               // Fourth question mark in the VALUES() clause above		
 
 		// executes the INSERT statement and cleans-up automatically
 		pStmt->ExecuteAndFree();
@@ -422,10 +423,10 @@ public:
 		***************************************************************************************/
 
 		// De-allocate memory used to store pointers
-		delete pDatabase;
-		delete pStmt;
+		/*delete pDatabase;
+		delete pStmt;*/
 
-		return new Transaction(transactionNumber, accountNumber, transactionAmt, date, transactionType);
+		return new Transaction(transactionNumber, accountNumber, transactionAmt, transactionType, date);
 	}
 
 	Transaction *getTransaction(int transactionNumber)
@@ -445,7 +446,7 @@ public:
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 		
 		// Use the customerNumber and accountType passed to this method to query the database.
-		pStmt->Sql("SELECT * FROM Transaction WHERE transactionNumber = ?;");
+		pStmt->Sql("SELECT * FROM AccountTransaction WHERE transactionNumber = ?;");
 		pStmt->BindInt(1, transactionNumber);       
 
 		// Process the results of the query above - assigning the values of each
@@ -468,12 +469,12 @@ public:
 		char retTransType = retrievedTransactionType[0];
 
 		// De-allocate memory used to store pointers
-		delete pDatabase;
-		delete pStmt;
+		/*delete pDatabase;
+		delete pStmt;*/
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
-		return new Transaction(retrievedTransactionNumber, retrievedAccountNumber, retrievedTransactionAmt, retrievedDate, retTransType);
+		return new Transaction(retrievedTransactionNumber, retrievedAccountNumber, retrievedTransactionAmt, retTransType, retrievedDate);
 	}
 
 	/*bool editTransaction()

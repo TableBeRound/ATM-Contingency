@@ -12,14 +12,7 @@ UI *ui = new UI();
 Customer *customer;
 Account *account;
 Database *db = new Database();
-int timestamp() {
-	time_t t = time(0);   // get time now
-	struct tm * now = localtime(&t);
-	cout << (now->tm_year + 1900) << '-'
-		<< (now->tm_mon + 1) << '-'
-		<< now->tm_mday
-		<< endl;
-}
+
 // default ATM Constructor
 ATM::ATM()
 {
@@ -226,4 +219,9 @@ void ATM::ValidateAmountInput(double amountEntered)
 	{
 		ui->ShowErrorMessage("The amount input is not an interval of $20.00!");
 	}
+}
+
+string ATM::GetTimeStamp()
+{
+	return " ";
 }

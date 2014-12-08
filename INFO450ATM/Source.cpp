@@ -15,19 +15,15 @@
 
 using namespace std;
 
-// Class prototypes
-//UI *ui = new UI();
-//ATM *atm = new ATM();
-
-
 int main() {
 	//atm->login();
 
 	Database *db = new Database();
 
 #pragma region Database Tests Related to Customer Table
-	Customer *customer;
-	/*customer = db->createCustomer("Danny", "Glidewell", 1111, "dglidewell@vcu.edu");
+	/*
+	Customer *customer; 
+	customer = db->createCustomer("Glidewell", "Danny", "dglidewell@vcu.edu", 1111);
 
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
@@ -35,38 +31,34 @@ int main() {
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
 		<< "Customer PIN: " << customer->GetPIN() << "\n";
 
-	cout << "\n\n";*/
+	cout << "\n\n";
+	*/
 
-	//customer = db->createCustomer("Tucker", "Lavell", 2222, "lavelltj@vcu.edu");
-
-	/*cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
-		<< "Customer First Name: " << customer->GetFirstName() << "\n"
-		<< "Customer Last Name: " << customer->GetLastName() << "\n"
-		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
-		<< "Customer PIN: " << customer->GetPIN() << "\n";
-
-	cout << "\n\n";*/
-	
-	/**/customer = db->getCustomer("lavelltj@vcu.edu");
+	/*
+	Customer *customer;
+	customer = db->getCustomer("lavelltj@vcu.edu");
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
 		<< "Customer PIN: " << customer->GetPIN() << "\n";
 	cout << "\n\n";
-		
-	/*if (db->deleteCustomer("lavelltj@vcu.edu"))
+	*/
+
+	/*
+	if (db->deleteCustomer("lavelltj@vcu.edu"))
 		cout << "Record deleted. \n\n";
 	else
-		cout << "No record deleted. \n\n";*/
+		cout << "No record deleted. \n\n";
 
-	/*customer = db->getCustomer("lavelltj@vcu.edu");
+	customer = db->getCustomer("lavelltj@vcu.edu");
 	cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 		<< "Customer First Name: " << customer->GetFirstName() << "\n"
 		<< "Customer Last Name: " << customer->GetLastName() << "\n"
 		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
-		<< "Customer PIN: " << customer->GetPIN() << "\n";	
-	cout << "\n\n";	*/
+		<< "Customer PIN: " << customer->GetPIN() << "\n";
+	cout << "\n\n";
+	*/
 
 #pragma endregion
 
@@ -74,37 +66,52 @@ int main() {
 	/*****************************
 	* Creation & Retrieval Tests *
 	******************************/
-	
-	//Account *account;
-	//account = db->createAccount(1, "C");
-	/*account = db->getAccount(1);
+	/*
+	Customer *customer = db->getCustomer("lavelltj@vcu.edu");
+
+	Account *account;
+	account = db->createAccount(customer->GetCustomerNumber(), "C");
+	account = db->getAccount(customer->GetCustomerNumber());
 
 	cout << "Account Number: " << account->GetAccountNumber() << "\n" 
 		<< "Customer Number: " << account->GetCustomerNumber() << "\n" 
 		<< "Account Type: " << account->GetAccountType() << "\n" 
 		<< "Account Balance: " << account->GetAccountBalance() << "\n";
 
-	cout << "\n\n";*/
+	cout << "\n\n";
+	*/	
 
 	/******************
 	 * Deletion Tests *
 	 ******************/
-	/*int accNum = 3;
-
-	if (db->deleteAccount(accNum))
-		cout << "Account #" + accNum +" deleted.";
+	/*
+	Customer *customer = db->getCustomer("dglidewell@vcu.edu");
+	Account *account = db->getAccount(customer->GetCustomerNumber());
+	if (db->deleteAccount(account->GetAccountNumber()))
+		cout << "Account #" + std::to_string(account->GetAccountNumber()) +" deleted.";
 	else
 		cout << "Account doesn't exist.";
 	
-	cout << "\n\n";*/
+	cout << "\n\n";
+	*/
 
 	/************************
 	 * Update Balance Tests *
 	 ************************/
-	/*double depositAmount = -125.50;
-	if (db->updateBalance(1, depositAmount))
+	/*	
+	Customer *customer = db->getCustomer("dglidewell@vcu.edu");
+	Account *account = db->getAccount(customer->GetCustomerNumber());
+	cout << "Account Number: " << account->GetAccountNumber() << "\n"
+		<< "Customer Number: " << account->GetCustomerNumber() << "\n"
+		<< "Account Type: " << account->GetAccountType() << "\n"
+		<< "Account Balance: " << account->GetAccountBalance() << "\n";
+
+	cout << "\n\n";
+
+	double depositAmount = 750;
+	if (db->updateBalance(account->GetAccountNumber(), depositAmount))
 	{
-		account = db->getAccount(1);
+		account = db->getAccount(customer->GetCustomerNumber());
 		cout << "Account Number: " << account->GetAccountNumber() << "\n"
 			<< "Customer Number: " << account->GetCustomerNumber() << "\n"
 			<< "Account Type: " << account->GetAccountType() << "\n"
@@ -115,7 +122,52 @@ int main() {
 	else
 	{
 		cout << "Transaction Unsuccessful\n\n";
-	}*/
+	}
+	*/
+#pragma endregion
+
+#pragma region Database Tests Related to Transaction Table
+	/*
+	Customer *customer = db->getCustomer("dglidewell@vcu.edu");
+	Account *account = db->getAccount(customer->GetCustomerNumber());
+
+	double transAmt = 75.00;
+	char transType = 'W';
+	string transDate = "12/08/2014";
+	Transaction *transaction = db->createTransaction(account->GetAccountNumber(), transAmt, transType, transDate);
+	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
+		<< "Account Number: " << transaction->GetAccountNumber() << "\n"
+		<< "Transaction Amount: " << transaction->GetTransactionAmount() << "\n"
+		<< "Transaction Type: " << transaction->GetTransactionType() << "\n"
+		<< "Transaction Date: " << transaction->GetDate();
+
+	cout << "\n\n";
+	*/
+
+	/*cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
+		<< "Customer First Name: " << customer->GetFirstName() << "\n"
+		<< "Customer Last Name: " << customer->GetLastName() << "\n"
+		<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
+		<< "Customer PIN: " << customer->GetPIN() << "\n";
+
+	cout << "\n\n";
+
+	cout << "Account Number: " << account->GetAccountNumber() << "\n"
+		<< "Customer Number: " << account->GetCustomerNumber() << "\n"
+		<< "Account Type: " << account->GetAccountType() << "\n"
+		<< "Account Balance: " << account->GetAccountBalance() << "\n";
+
+	cout << "\n\n";
+
+	cout << std::to_string(transAmt);
+	cout << "\n\n";
+
+	cout << transType;
+	cout << "\n\n";
+
+	cout << transDate;
+	cout << "\n\n";
+	*/
 
 #pragma endregion
 

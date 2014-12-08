@@ -29,6 +29,7 @@ public:
 	void customerLogout();
 	void ValidateAmountInput(double amountInput);
 	void shutdown();
+	string GetTimeStamp();
 };
 
 #endif

@@ -26,7 +26,7 @@ class Customer :
 
 public:	
 	Customer();
-	Customer(int custNum, string firstName, string lastName, int pin, string emailAddress);
+	Customer(int custNum, string lastName, string firstName, string emailAddress, int pin);
 	~Customer();
 
 	//Get Functions
