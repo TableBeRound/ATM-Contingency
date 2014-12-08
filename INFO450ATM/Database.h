@@ -476,10 +476,39 @@ public:
 		return false;
 	}*/
 
-	/*bool deleteTransaction()
+	bool deleteTransaction(int transactionNumber)
 	{
-		return false;
-	}*/
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		// SQL Statement to delete the record
+		pStmt->Sql("DELETE FROM AccountTransaction WHERE transactionNumber = ?;");
+		pStmt->BindInt(1, transactionNumber);
+		pStmt->ExecuteAndFree();
+
+		// Check to see if any changes have been made to the database
+		// due to the SQL statement executed above.  Return the results
+		// as a boolean value.
+		int recordsDeleted = 0;
+		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
+		if (recordsDeleted)
+		{
+			// De-allocate memory used to store pointers
+			/*delete pDatabase;
+			delete pStmt;*/
+			return true;
+		}
+		else
+		{
+			// De-allocate memory used to store pointers
+			/*delete pDatabase;
+			delete pStmt;*/
+			return false;
+		}
+	}
 
 #pragma endregion
 };

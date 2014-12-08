@@ -127,7 +127,9 @@ int main() {
 #pragma endregion
 
 #pragma region Database Tests Related to Transaction Table
-	
+	/*****************************
+	* Creation & Retrieval Tests *
+	******************************/
 	/*
 	Customer *customer = db->getCustomer("dglidewell@vcu.edu");
 	Account *account = db->getAccount(customer->GetCustomerNumber());
@@ -155,6 +157,38 @@ int main() {
 
 	cout << "\n\n";
 	*/	
+
+	/******************
+	* Deletion Tests *
+	******************/
+	/*	
+	int numOfTransactionToBeDeleted = 2;
+	Transaction *transaction = db->getTransaction(numOfTransactionToBeDeleted);
+	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
+	<< "Account Number: " << transaction->GetAccountNumber() << "\n"
+	<< "Transaction Amount: " << transaction->GetTransactionAmount() << "\n"
+	<< "Transaction Type: " << transaction->GetTransactionType() << "\n"
+	<< "Transaction Date: " << transaction->GetDate();
+
+	cout << "\n\n";
+
+	if (db->deleteTransaction(numOfTransactionToBeDeleted))
+		cout << "Transaction #" + std::to_string(transaction->GetTransactionNumber()) +" deleted.";
+	else
+		cout << "Transaction doesn't exist.";
+
+	cout << "\n\n";
+	
+	transaction = db->getTransaction(numOfTransactionToBeDeleted);
+	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
+		<< "Account Number: " << transaction->GetAccountNumber() << "\n"
+		<< "Transaction Amount: " << transaction->GetTransactionAmount() << "\n"
+		<< "Transaction Type: " << transaction->GetTransactionType() << "\n"
+		<< "Transaction Date: " << transaction->GetDate();
+
+	cout << "\n\n";
+	*/
+	
 #pragma endregion
 
 	system("pause");
