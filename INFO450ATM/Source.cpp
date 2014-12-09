@@ -16,9 +16,46 @@
 using namespace std;
 
 int main() {
-	//atm->login();
 
-	Database *db = new Database();
+	// Boolean value for determining when to shutdown the ATM
+	bool atmShutdown = false;
+	ATM *atm = new ATM();
+
+	do
+	{
+		if (atm->login())
+			atm->MainMenu();
+
+		cout << "\n\nStrike the \" Y \" key to close the program. Press any other key to continue.";
+		int c = _getch();
+		switch (c)
+		{
+		case 121:
+			atmShutdown = true;
+			break;
+		}			
+
+	} while (!atmShutdown);		
+
+#pragma region ATM tests
+	
+	/*bool loginSuccess = atm->login();
+
+	if (loginSuccess)
+	{
+		cout << "\n\nLogin Success! \n\n";
+	}
+	else
+	{
+		cout << "\n\nLogin Unsuccessfull...\n\n";
+	}	
+
+	system("pause");*/
+#pragma endregion
+	
+
+#pragma region Dannys Database Tests
+	//Database *db = new Database();
 
 #pragma region Database Tests Related to Customer Table
 	/*
@@ -191,7 +228,10 @@ int main() {
 	
 #pragma endregion
 
-	system("pause");
+	//system("pause");
+#pragma endregion
+
+	
 
 	return 0;
 }

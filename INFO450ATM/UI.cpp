@@ -3,11 +3,11 @@
 #include <iomanip>
 #include "Windows.h"
 #include "Conio.h"
-#include "ATM.h"
+#include "ATM.h" // <----------------------------THIS NEEDS TO DISAPPEAR!!!
 
 using namespace std;
 
-ATM *atm = new ATM();
+ATM *atm = new ATM(); // <----------------------------THIS NEEDS TO DISAPPEAR!!!
 // Default constructor
 UI::UI()
 {
@@ -19,8 +19,10 @@ UI::~UI()
 }
 
 // Display standard login to the user
-void UI::ShowLoginPrompt()
+string UI::ShowLoginPrompt()
 {
+	string emailInput = "";
+
 	this->ClearScreen();
 	cout << endl
 		<< "\t\t\t***********************" << endl
@@ -29,144 +31,158 @@ void UI::ShowLoginPrompt()
 		<< endl
 		<< endl
 		<< "Please enter your email: ";
+	cin >> emailInput;
+
+	return emailInput;
 }
 
 // Prompt the user to enter a PIN
-void UI::ShowPINPrompt()
+int UI::ShowPINPrompt()
 {
+	int pinInput = NULL;
+
 	cout << endl << endl
 		<< "Please enter PIN: ";
+	cin >> pinInput;
+
+	return pinInput;
 }
 
 // Display the menu of possible transactions to the user as selections 1-6
 int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
-{
+{	
+	char select1 = '*';
+	char select2 = ' ';
+	char select3 = ' ';
+	char select4 = ' ';
+	char select5 = ' ';
+	char select6 = ' ';
+	int keyboardHit = 0;
+	int userSelection = 0;	
+	
+	// As long as the user hasn't hit the Enter key loop
+	while (keyboardHit != KEY_ENTER)
+	{
+		this->ClearScreen();
+		cout << endl
+			<< "\t\t\t    Welcome " + custFirstName + " " + custLastName
+			<< endl << endl
+			<< "Please use the UP/DOWN arrow keys to make a selection (1-6):" << endl
+			<< endl
+			<< "\t[" << select1 << "]1) Make a withdrawal" << endl      //<---- Choice #1
+			<< "\t[" << select2 << "]2) Make a deposit" << endl         //<---- Choice #2
+			<< "\t[" << select3 << "]3) Check account balance" << endl  //<---- Choice #3
+			<< "\t[" << select4 << "]4) Make a transfer" << endl		 //<---- Choice #4
+			<< "\t[" << select5 << "]5) See Account History" << endl	 //<---- Choice #5
+			<< "\t[" << select6 << "]6) Logout" << endl                 //<---- Choice #6
+			<< endl;
 
-		char withdraw = '*';
-		char deposit = ' ';
-		char balance = ' ';
-		char select1 = ' ';
-		char select2 = ' ';
-		char select3 = ' ';
-		char select4 = ' ';
-		char select5 = ' ';
-		char select6 = ' ';
+		// Get keyboard input from the customer
+		keyboardHit = _getch();
 
-		while (getch() != VK_RETURN)
+		// This switch moves the asterisk amongst the menu
+		// items depending on what key has been hit
+		switch (keyboardHit)
 		{
-			this->ClearScreen();
-			cout << endl
-				<< "\t\t\t    Welcome " + custFirstName + " " + custLastName
-				<< endl << endl
-				<< "Please make a selection (1-6):" << endl
-				<< endl
-				<< "\t[" << select1 << "]1) Make a withdrawal" << endl      //<---- Choice #1
-				<< "\t[" << select2 << "]2) Make a deposit" << endl         //<---- Choice #2
-				<< "\t[" << select3 << "]3) Check account balance" << endl  //<---- Choice #3
-				<< "\t[" << select4 << "]4) Make a transfer" << endl		 //<---- Choice #4
-				<< "\t[" << select5 << "]5) See Account History" << endl	 //<---- Choice #5
-				<< "\t[" << select6 << "]6) Logout" << endl                 //<---- Choice #6
-				<< endl;
-
-			switch (getch())
+		case KEY_DOWN:
+			if (select1 == '*')
 			{
-			case VK_DOWN: if (withdraw == '*')
-			{
-				withdraw = ' ';
-				deposit = '*';
+				select1 = ' ';
+				select2 = '*';				
 			}
-					  else if (deposit == '*')
-					  {
-						  deposit = ' ';
-						  balance = '*';
-					  }
-					  else if (select3 == '*')
-					  {
-						  select3 = ' ';
-						  select4 = '*';
-					  }
-					  else if (select4 == '*')
-					  {
-						  select4 = ' ';
-						  select5 = '*';
-					  }
-					  else if (select5 == '*')
-					  {
-						  select5 = ' ';
-						  select6 = '*';
-					  }
-					  else if (select6 == '*')
-					  {
-						  select6 = ' ';
-						  select1 = '*';
-					  }
-					  break;
-			case VK_UP: if (select1 == '*')
+			else if (select2 == '*')
+			{
+				select2 = ' ';
+				select3 = '*';				
+			}
+			else if (select3 == '*')
+			{
+				select3 = ' ';
+				select4 = '*';
+			}
+			else if (select4 == '*')
+			{
+				select4 = ' ';
+				select5 = '*';
+			}
+			else if (select5 == '*')
+			{
+				select5 = ' ';
+				select6 = '*';
+			}
+			else if (select6 == '*')
+			{
+				select6 = ' ';
+				select1 = '*';
+			}
+			break;
+
+		case KEY_UP:
+			if (select1 == '*')
 			{
 				select1 = ' ';
 				select6 = '*';
 			}
-					else if (select2 == '*')
-					{
-						select2 = ' ';
-						select1 = '*';
-					}
-					else if (select3 == '*')
-					{
-						select3 = ' ';
-						select2 = '*';
-					}
-					else if (select4 == '*')
-					{
-						select4 = ' ';
-						select3 = '*';
-					}
-					else if (select5 == '*')
-					{
-						select5 = ' ';
-						select4 = '*';
-					}
-					else if (select6 == '*')
-					{
-						select6 = ' ';
-						select5 = '*';
-					}
-					break;
-			default:
-			ShowErrorMessage("This key does not do anything!"); break;
+			else if (select2 == '*')
+			{
+				select2 = ' ';
+				select1 = '*';
+			}
+			else if (select3 == '*')
+			{
+				select3 = ' ';
+				select2 = '*';
+			}
+			else if (select4 == '*')
+			{
+				select4 = ' ';
+				select3 = '*';
+			}
+			else if (select5 == '*')
+			{
+				select5 = ' ';
+				select4 = '*';
+			}
+			else if (select6 == '*')
+			{
+				select6 = ' ';
+				select5 = '*';
+			}
+			break;
 		}
 	}
-		switch (getch())
-		{
-			case VK_RETURN: if (select1 == '*')
-			{
-				atm->withdraw();
-			}
-					else if (select2 == '*')
-					{
-						return 1;
-					}
-					else if (select3 == '*')
-					{
-						return 2;
-					}
-					else if (select4 == '*')
-					{
-						return 3;
-					}
-					else if (select5 == '*')
-					{
-						return 4;
-					}
-					else if (select6 == '*')
-					{
-						return 5;
-					}
-					break;
-			default:
-				ShowErrorMessage("This key does not do anything!"); break;
+
+	// After the Enter Key has been pressed, determine
+	// what selection was made by which variable has 
+	// the asterisk assigned to it.
+	if (select1 == '*')
+	{
+		userSelection = 1;
 	}
-	this->PauseScreen();
+	else if (select2 == '*')
+	{
+		userSelection = 2;
+	}
+	else if (select3 == '*')
+	{
+		userSelection = 3;
+	}
+	else if (select4 == '*')
+	{
+		userSelection = 4;
+	}
+	else if (select5 == '*')
+	{
+		userSelection = 5;
+	}
+	else if (select6 == '*')
+	{
+		userSelection = 6;
+	}
+	
+	// Return the value of the selection determined by the above if statement.
+	keyboardHit = NULL;
+	return userSelection;
 }
 
 // Display the menu of possible transactions amounts to the user.
@@ -193,7 +209,7 @@ void UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 		<< "\t\t[" << amount6 << "] Custom Amount"
 		<< endl;
 
-	switch (getch())
+	switch (_getch())
 	{
 		case VK_RIGHT: if (amount1 == '*')
 					{ 
@@ -371,84 +387,3 @@ void UI::ClearBuffer()
 	cin.clear();
 	cin.ignore(INT_MAX, '\n');
 }
-
-//void UI::NaviMenu()
-//{
-//	// maybe array later
-//	//char select[6];
-//	char select1 = '*';
-//	char select2 = ' ';
-//	char select3 = ' ';
-//	char select4 = ' ';
-//	char select5 = ' ';
-//	char select6 = ' ';
-//
-//	switch (getch())
-//	{
-//		case VK_DOWN: if (select1 == '*')
-//					{
-//						select1 = ' ';
-//						select2 = '*';
-//					}
-//					  else if (select2 == '*')
-//					  {
-//						  select2 = ' ';
-//						  select3 = '*';
-//					  }
-//					  else if (select3 == '*')
-//					  {
-//						  select3 = ' ';
-//						  select4 = '*';
-//					  }
-//					  else if (select4 == '*')
-//					  {
-//						  select4 = ' ';
-//						  select5 = '*';
-//					  }
-//					  else if (select5 == '*')
-//					  {
-//						  select5 = ' ';
-//						  select6 = '*';
-//					  }
-//					  else if (select6 == '*')
-//					  {
-//						  select6 = ' ';
-//						  select1 = '*';
-//					  }
-//					  break;
-//		case VK_UP: if (select1 == '*')
-//					{
-//						select1 = ' ';
-//						select6 = '*';
-//					}
-//					else if (select2 == '*')
-//					{
-//						select2 = ' ';
-//						select1 = '*';
-//					}
-//					else if (select3 == '*')
-//					{
-//						select3 = ' ';
-//						select2 = '*';
-//					}
-//					else if (select4 == '*')
-//					{
-//						select4 = ' ';
-//						select3 = '*';
-//					}
-//					else if (select5 == '*')
-//					{
-//						select5 = ' ';
-//						select4 = '*';
-//					}
-//					else if (select6 == '*')
-//					{
-//						select6 = ' ';
-//						select5 = '*';
-//					}
-//		case VK_RETURN: if (select1 == '*')
-//		{
-//
-//		}
-//	}
-//}

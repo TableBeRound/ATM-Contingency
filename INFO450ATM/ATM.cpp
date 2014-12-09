@@ -1,10 +1,6 @@
 #include "ATM.h"
 #include <iostream>
-#include "Database.h"
-#include "Customer.h"
-#include "UI.h"
 #include <ctime>
-
 
 using namespace std;
 
@@ -23,21 +19,15 @@ ATM::~ATM()
 {
 }
 
-// login method
-// we plan on it taking in the eMail AND the PIN before any authentication confirmation is done
-bool ATM::login(string email, int PIN) {
+bool ATM::login() {
 	// stores the email addresss and PIN entered by the user	
 
 	// prompts the User to enter their email
-	ui->ShowLoginPrompt();
-	cin >> email;
-
+	email = ui->ShowLoginPrompt();
 	ui->ClearBuffer();
 
 	// prompts the user to enter their PIN, without clearing the LoginPrompt
-	ui->ShowPINPrompt();
-	cin >> PIN;
-
+	pin = ui->ShowPINPrompt();
 	ui->ClearBuffer();
 
 #pragma region Authentication logic
@@ -47,10 +37,9 @@ bool ATM::login(string email, int PIN) {
 	// function call above.
 	if (customer->GetCustomerNumber() != 0)
 	{
-		if (customer->GetPIN() == PIN)
-		{
-			account = db->getAccount(customer->GetCustomerNumber());
-			MainMenu();
+		if (customer->GetPIN() == pin)
+		{		
+			//account = db->getAccount(customer->GetCustomerNumber());
 			return true;
 		}
 		else
@@ -59,38 +48,53 @@ bool ATM::login(string email, int PIN) {
 	else
 		return false;
 #pragma endregion
+
 }
 
 // MainMenu method
 // uses a switch to determine what the user would like to do during this interaction.
 void ATM::MainMenu() {
 
-	bool logout = false;
-	while (!logout)
-	{
-		// input from the user used to control the switch
+	bool userLogout = false;
+	
+	do{
+		// input from the user used to control the switch			
+		int actionToBePerformed = 0;
 		
-		// shows a preconstructed MainMenu (this MainMenu method also clears the screen everytime it is called)
-		// again for the shallow prototype justin jones is set to automatically appear as the user
-		int actionToBePerformed = ui->ShowTransactionTypeMenu(customer->GetFirstName(), customer->GetLastName());
+		actionToBePerformed = ui->ShowTransactionTypeMenu(customer->GetFirstName(), customer->GetLastName());
 
-		//***************** Delete  *********************		
-		//ui->ClearBuffer();
-
-		//// calls the users desired interaction based on the user input
-		//switch (actionToBePerformed)
-		//{
-		//case 1: withdraw(); break;
-		//case 2: deposit(); break;
-		//case 3: balance(); break;
-		//case 4: transfer(); break;
-		//case 5: history(); break;
-		//case 6: logout = true; break;
-		//default: ui->ShowErrorMessage("Invalid menu choice! Please choose 1-6."); break;
-		//}
-		//**************************************
-		
-	}
+		// calls the users desired interaction based on the user input
+		switch (actionToBePerformed)
+		{
+		case 1:
+			//withdraw();
+			cout << "Perform Withdrawal" << endl << endl;
+			system("pause");
+			break;
+		case 2:
+			//deposit();
+			cout << "Perform Deposit" << endl << endl;
+			system("pause");
+			break;
+		case 3:
+			//balance();
+			cout << "Perform Balance Inquiry" << endl << endl;
+			system("pause");
+			break;
+		case 4:
+			//transfer();
+			cout << "Perform Transfer" << endl << endl;
+			system("pause");
+			break;
+		case 5:
+			//history();
+			cout << "Perform Transaction History" << endl << endl;
+			system("pause");
+			break;
+		case 6: userLogout = true;			
+			break;
+		}
+	} while (!userLogout);
 }
 
 // withdraw method

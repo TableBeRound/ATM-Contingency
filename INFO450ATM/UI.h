@@ -5,6 +5,17 @@
 
 using namespace std;
 
+// These are preprocessor directives used in 
+// the logic which facilitates menu navigation. 
+// Inspiration for this code and the code in the 
+// switches which use these directives was found at:
+// http://www.stackoverflow.com/questions/24708700/c-detect-when-user-presses-arrow-key
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
+#define KEY_ENTER 13
+
 // The Display object represents the "screen" of the UI
 class UI
 {
@@ -15,8 +26,8 @@ public:
 
 	// All of these functions print things to the screen.
 	// The function names are pretty self-explanatory.
-	void ShowLoginPrompt();
-	void ShowPINPrompt();
+	string ShowLoginPrompt();
+	int ShowPINPrompt();
 	int ShowTransactionTypeMenu(string custFirstName, string custLastname);
 	void ShowTransactionAmountMenu(char *actionToBePerformed);
 	void ShowAccountBalance(string acctNum, double acctBalance);

@@ -5,21 +5,27 @@
 
 #include <string>
 #include "Customer.h"
+#include "UI.h"
+#include "Account.h"
+#include "Database.h"
 
 using namespace std;
 
-// I haven't yet thought about this class as I've 
-// been focusing on the objects which are stored 
-// in the database.
 
 class ATM
 {
+	bool atmShutdown = false;
+	string email = "";
+	int pin = NULL;
+
 public:
 	ATM();
 	~ATM();
 
+	bool GetAtmShutdown();
+
 	//ATM Functions
-	bool login(string email, int PIN);
+	bool login();
 	void MainMenu();
 	int withdraw();
 	int deposit();
