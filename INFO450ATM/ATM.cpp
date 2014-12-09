@@ -67,9 +67,7 @@ void ATM::MainMenu() {
 		switch (actionToBePerformed)
 		{
 		case 1:
-			//withdraw();
-			cout << "Perform Withdrawal" << endl << endl;
-			system("pause");
+			performWithdrawal();
 			break;
 		case 2:
 			performDeposit();
@@ -97,39 +95,29 @@ void ATM::MainMenu() {
 
 // withdraw method
 // if the user selected a withdraw they will be taken to this screen
-int ATM::performWithdrawal() {
-	// the amount the person would like to withdraw (increments of $20)
-	int amountToWithdraw = NULL;
+// SHOULD THIS FUNCTION RETURN A TRANSACTION OBJECT? - we could build a growing
+// list of transactions which are processed once a user logs out.
+void ATM::performWithdrawal() 
+{
+	// At this point, the user will be shown the transaction menu where they 
+	// will make a selection.  The amount which they would like to withdraw
+	// is then returned and stored in the "amountToWithdraw" variable declared below.
+	double amountToWithdraw = ui->ShowTransactionAmountMenu("withdrawn");
 
-	// prints a preconstructed transaction amounts menu
-	// has a clear screen function inside that clears everything that happened on the MainMenu
-	ui->ShowTransactionAmountMenu("withdrawn");
-	// takes in the amount the user would like to withdraw
-	cin >> amountToWithdraw;
-
-	ui->ClearBuffer();
-
-	// again for the shallow prototype, there will only be success, 
-	// so this screen will automatically be displayed next
-	ui->ShowTransactionSuccessMessage();
-
-
-	// recalls MainMenu, meaning the screen is cleared of everything
-	// that happened during withdraw
-	return 0;
+	cout << "\n\nAmount to be withdrawn: " << std::to_string(amountToWithdraw) << "\n\n";
+	system("pause");
 }
 
 // deposit method
 // if the user selected deposit they will be taken to this screen
 // SHOULD THIS FUNCTION RETURN A TRANSACTION OBJECT? - we could build a growing
 // list of transactions which are processed once a user logs out.
-void ATM::performDeposit() {
-
+void ATM::performDeposit() 
+{
 	// At this point, the user will be shown the transaction menu where they 
 	// will make a selection.  The amount which they would like to deposit
 	// is then returned and stored in the "amountToDeposit" variable declared below.
 	double amountToDeposit = ui->ShowTransactionAmountMenu("deposited");
-	// takes in the amount the user would like to deposit
 
 	cout << "\n\nAmount to be deposited: " << std::to_string(amountToDeposit) << "\n\n";
 	system("pause");
