@@ -72,9 +72,7 @@ void ATM::MainMenu() {
 			system("pause");
 			break;
 		case 2:
-			//deposit();
-			cout << "Perform Deposit" << endl << endl;
-			system("pause");
+			performDeposit();
 			break;
 		case 3:
 			//balance();
@@ -99,7 +97,7 @@ void ATM::MainMenu() {
 
 // withdraw method
 // if the user selected a withdraw they will be taken to this screen
-int ATM::withdraw() {
+int ATM::performWithdrawal() {
 	// the amount the person would like to withdraw (increments of $20)
 	int amountToWithdraw = NULL;
 
@@ -123,40 +121,23 @@ int ATM::withdraw() {
 
 // deposit method
 // if the user selected deposit they will be taken to this screen
-int ATM::deposit() {
-	// the amount the person would like to deposit (increments of $20 for the shallow prototype)
-	int amountToDeposit = NULL;
+// SHOULD THIS FUNCTION RETURN A TRANSACTION OBJECT? - we could build a growing
+// list of transactions which are processed once a user logs out.
+void ATM::performDeposit() {
 
-	// prints a precontructed transaction amounts menu
-	// has a clear screen function inside that clears everything that happened on the MainMenu
-	ui->ShowTransactionAmountMenu("deposited");
+	// At this point, the user will be shown the transaction menu where they 
+	// will make a selection.  The amount which they would like to deposit
+	// is then returned and stored in the "amountToDeposit" variable declared below.
+	double amountToDeposit = ui->ShowTransactionAmountMenu("deposited");
 	// takes in the amount the user would like to deposit
-	cin >> amountToDeposit;
 
-	ui->ClearBuffer();
-#pragma region Deposit logic
-	//Logic for Deposit
-
-	//db->updateBalance(account->GetAccountNumber(), amountToDeposit);
-	//Will send the function the account number and the deposit amount
-	//In case you're lazy, The updatebalance function will add the amount to deposit to the current balance and give you the updated balance
-
-#pragma endregion
-	// again for the shallow prototype, there will only be success, 
-	// so this screen will automatically be displayed next
-	
-	// db->createTransaction(account->GetAccountNumber, amountToDeposit, );
-	ui->ShowTransactionSuccessMessage();
-
-
-	// recalls MainMenu, meaning the screen is cleared of everything
-	// that happened during withdraw
-	return 0;
+	cout << "\n\nAmount to be deposited: " << std::to_string(amountToDeposit) << "\n\n";
+	system("pause");
 }
 
 // transfer method
 // if the user selected transfer they will be taken to this screen
-int ATM::transfer() {
+int ATM::performTransfer() {
 	// takes in the account the user would like to transfer money to and the amount to transfer
 	char accountToTransferTo[50] = "NULL";
 	int amountToTransfer = NULL;

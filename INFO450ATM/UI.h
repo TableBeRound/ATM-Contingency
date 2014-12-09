@@ -29,7 +29,7 @@ public:
 	string ShowLoginPrompt();
 	int ShowPINPrompt();
 	int ShowTransactionTypeMenu(string custFirstName, string custLastname);
-	void ShowTransactionAmountMenu(char *actionToBePerformed);
+	double ShowTransactionAmountMenu(char *actionToBePerformed);
 	void ShowAccountBalance(string acctNum, double acctBalance);
 	void ShowTransactionSuccessMessage();
 	void ShowErrorMessage(char *message);

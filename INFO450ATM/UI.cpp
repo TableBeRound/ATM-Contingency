@@ -50,7 +50,7 @@ int UI::ShowPINPrompt()
 
 // Display the menu of possible transactions to the user as selections 1-6
 int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
-{	
+{
 	char select1 = '*';
 	char select2 = ' ';
 	char select3 = ' ';
@@ -58,8 +58,8 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 	char select5 = ' ';
 	char select6 = ' ';
 	int keyboardHit = 0;
-	int userSelection = 0;	
-	
+	int userSelection = 0;
+
 	// As long as the user hasn't hit the Enter key loop
 	while (keyboardHit != KEY_ENTER)
 	{
@@ -88,12 +88,12 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			if (select1 == '*')
 			{
 				select1 = ' ';
-				select2 = '*';				
+				select2 = '*';
 			}
 			else if (select2 == '*')
 			{
 				select2 = ' ';
-				select3 = '*';				
+				select3 = '*';
 			}
 			else if (select3 == '*')
 			{
@@ -179,110 +179,121 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 	{
 		userSelection = 6;
 	}
-	
+
 	// Return the value of the selection determined by the above if statement.
 	keyboardHit = NULL;
 	return userSelection;
 }
 
 // Display the menu of possible transactions amounts to the user.
-void UI::ShowTransactionAmountMenu(char *actionToBePerformed)
+double UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 {
 	char amount1 = '*';
 	char amount2 = ' ';
 	char amount3 = ' ';
 	char amount4 = ' ';
 	char amount5 = ' ';
-	char amount6 = ' ';
-	double amountToBeUsed = NULL;
+	double transactionAmount = NULL;
+	int keyboardHit = NULL;
 
-	this->ClearScreen();
-	cout << endl
-		<< "\t\t   Please select amount to be " << actionToBePerformed << ":"
-		<< endl << endl
-		<< "Please select amount:" << endl
-		<< "\t[" << amount1 << "] $20.00" 
-		<< "\t\t[" << amount2 << "] $40.00"
-		<< "\t\t[" << amount3 << "] $60.00"
-		<< "\t\t[" << amount4 << "] $80.00"
-		<< "\t\t[" << amount5 << "] $100.00"
-		<< "\t\t[" << amount6 << "] Custom Amount"
-		<< endl;
-
-	switch (_getch())
+	while (keyboardHit != KEY_ENTER)
 	{
-		case VK_RIGHT: if (amount1 == '*')
-					{ 
-						amount1 = ' ';
-						amount2 = '*';
-					}
-				   else if (amount2 == '*')
-				   {
-					   amount2 = ' ';
-					   amount3 = '*';
-				   }
-				   else if (amount3 == '*')
-				   {
-					   amount3 = ' ';
-					   amount4 = '*';
-				   }
-				   else if (amount4 == '*')
-				   {
-					   amount4 = ' ';
-					   amount5 = '*';
-				   }
-				   else if (amount5 == '*')
-				   {
-					   amount5 = ' ';
-					   amount1 = '*';
-				   }
-				   break;
-		case VK_LEFT: if (amount1 == '*')
-					{
-						amount1 = ' ';
-						amount5 = '*';
-					}
-					  else if (amount2 = '*')
-					  {
-						  amount2 = ' ';
-						  amount1 = '*';
-					  }
-					  else if (amount3 = '*')
-					  {
-						  amount3 = ' ';
-						  amount2 = '*';
-					  }
-					  else if (amount4 = '*')
-					  {
-						  amount4 = ' ';
-						  amount3 = '*';
-					  }
-					  else if (amount5 = '*')
-					  {
-						  amount5 = ' ';
-						  amount4 = '*';
-					  }
-		case VK_RETURN: if (amount1 == '*')
-						{
-							amountToBeUsed = 20.00;
-						}
-						else if (amount2 == '*')
-						{
-							amountToBeUsed = 40.00;
-						}
-						else if (amount3 == '*')
-						{
-							amountToBeUsed = 60.00;
-						}
-						else if (amount4 == '*')
-						{
-							amountToBeUsed = 80.00;
-						}
-						else if (amount5 == '*')
-						{
-							amountToBeUsed = 100.00;
-						}						
+		this->ClearScreen();
+		cout << endl
+			<< "\t\t   Please select amount to be " << actionToBePerformed << ":"
+			<< endl << endl
+			<< "Please use the UP/DOWN arrow keys to make a selection (1-6):" << endl
+			<< endl
+			<< "\t[" << amount1 << "]1) $20" << endl      //<---- Choice #1
+			<< "\t[" << amount2 << "]2) $40" << endl      //<---- Choice #2
+			<< "\t[" << amount3 << "]3) $60" << endl      //<---- Choice #3
+			<< "\t[" << amount4 << "]4) $80" << endl      //<---- Choice #4
+			<< "\t[" << amount5 << "]5) $100" << endl	  //<---- Choice #5			
+			<< endl;
+
+		keyboardHit = _getch();
+
+		switch (keyboardHit)
+		{
+		case KEY_DOWN:
+			if (amount1 == '*')
+			{
+				amount1 = ' ';
+				amount2 = '*';
+			}
+			else if (amount2 == '*')
+			{
+				amount2 = ' ';
+				amount3 = '*';
+			}
+			else if (amount3 == '*')
+			{
+				amount3 = ' ';
+				amount4 = '*';
+			}
+			else if (amount4 == '*')
+			{
+				amount4 = ' ';
+				amount5 = '*';
+			}
+			else if (amount5 == '*')
+			{
+				amount5 = ' ';
+				amount1 = '*';
+			}
+			break;
+
+		case KEY_UP:
+			if (amount1 == '*')
+			{
+				amount1 = ' ';
+				amount5 = '*';
+			}
+			else if (amount2 == '*')
+			{
+				amount2 = ' ';
+				amount1 = '*';
+			}
+			else if (amount3 == '*')
+			{
+				amount3 = ' ';
+				amount2 = '*';
+			}
+			else if (amount4 == '*')
+			{
+				amount4 = ' ';
+				amount3 = '*';
+			}
+			else if (amount5 == '*')
+			{
+				amount5 = ' ';
+				amount4 = '*';
+			}
+		}
 	}
+
+	if (amount1 == '*')
+	{
+		transactionAmount = 20;
+	}
+	else if (amount2 == '*')
+	{
+		transactionAmount = 40;
+	}
+	else if (amount3 == '*')
+	{
+		transactionAmount = 60;
+	}
+	else if (amount4 == '*')
+	{
+		transactionAmount = 80;
+	}
+	else if (amount5 == '*')
+	{
+		transactionAmount = 100;
+	}
+
+	return transactionAmount;
 }
 
 // Display the menu of possible transactions amounts to the user.

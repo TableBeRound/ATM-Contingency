@@ -27,9 +27,9 @@ public:
 	//ATM Functions
 	bool login();
 	void MainMenu();
-	int withdraw();
-	int deposit();
-	int transfer();
+	int performWithdrawal();
+	void performDeposit();
+	int performTransfer();
 	void history();
 	void balance();
 	void customerLogout();
