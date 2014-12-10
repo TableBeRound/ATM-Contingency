@@ -1,6 +1,6 @@
 // Danny Glidewell, Tucker Lavell, Anthony Tran, Joshua Blanton, Ian Renninger
 // TR 5:30-6:45
-// Assignment: ATM Redo
+// Assignment: ATM Revisited
 // This program will simulate a text based version of an ATM interface and interaction
 // for the Shallow prototype of the ATM, there are only successful interactions with this ATM
 
@@ -30,12 +30,42 @@ int main() {
 		int c = _getch();
 		switch (c)
 		{
+		// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
 		case 121:
 			atmShutdown = true;
 			break;
 		}			
-
 	} while (!atmShutdown);		
+
+#pragma region Load the Database
+	//Database *db = new Database();
+
+	///*Load the Customer Table*/
+	//Customer *customer;
+	//customer = db->createCustomer("Glidewell", "Danny", "dglidewell@vcu.edu", 1111);
+
+	//cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
+	//	<< "Customer First Name: " << customer->GetFirstName() << "\n"
+	//	<< "Customer Last Name: " << customer->GetLastName() << "\n"
+	//	<< "Customer Email Address: " << customer->GetEmailAddress() << "\n"
+	//	<< "Customer PIN: " << customer->GetPIN() << "\n";
+
+	//cout << "\n\n";
+
+	///*Load the Account Table*/
+	//Account *account;
+	//account = db->createAccount(customer->GetCustomerNumber(), "C");	
+
+	//cout << "Account Number: " << account->GetAccountNumber() << "\n"
+	//	<< "Customer Number: " << account->GetCustomerNumber() << "\n"
+	//	<< "Account Type: " << account->GetAccountType() << "\n"
+	//	<< "Account Balance: " << account->GetAccountBalance() << "\n";
+
+	//cout << "\n\n";
+
+	//system("pause");
+
+#pragma endregion
 
 #pragma region ATM tests
 	
@@ -51,8 +81,7 @@ int main() {
 	}	
 
 	system("pause");*/
-#pragma endregion
-	
+#pragma endregion	
 
 #pragma region Dannys Database Tests
 	//Database *db = new Database();
@@ -230,8 +259,6 @@ int main() {
 
 	//system("pause");
 #pragma endregion
-
-	
 
 	return 0;
 }

@@ -13,8 +13,7 @@ UI *ui = new UI();
 // This made more sense to me rather than passing these objects
 // back and forth between the various functions.
 Customer *customer;
-Account *account = new Account(1, 2, 'C', 100.00); //<---- Dummy data while database 
-												   //      is being worked on.
+Account *account;
 
 // This database object is used to communicate with the embedded SQLite database.
 Database *db = new Database();
@@ -54,7 +53,7 @@ bool ATM::Login() {
 	{
 		if (customer->GetPIN() == pin)
 		{		
-			// database lookup for account should happen here
+			account = db->getAccount(customer->GetCustomerNumber());
 			return true;
 		}
 		else
