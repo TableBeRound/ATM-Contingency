@@ -26,11 +26,7 @@ public:
 	int GetCustomerNumber();
 	char GetAccountType();
 	double GetAccountBalance();
-	void WithdrawFunds(float withdrawalAmount);
-	void DepositFunds(float depositAmount);
-	void TransferFundsToAnotherAccount(char destinationAccountNumber, 
-									   float amountToTransfer);
-	void GenerateTransactionHistory();
+	void SetAccountBalance(double newAccountBalance);
 	void CloseAccount();
 };
 

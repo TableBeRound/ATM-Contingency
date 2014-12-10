@@ -34,21 +34,9 @@ double Account::GetAccountBalance()
 	return this->_balance;
 }
 
-void Account::WithdrawFunds(float withdrawalAmount){
-
-}
-
-void Account::DepositFunds(float depositAmount){
-
-}
-
-void Account::TransferFundsToAnotherAccount(char destinationAccountNumber, 
-											float amountToTransfer){
-
-}
-
-void Account::GenerateTransactionHistory(){
-
+void Account::SetAccountBalance(double newAccountBalance)
+{
+	this->_balance = newAccountBalance;
 }
 
 void Account::CloseAccount(){

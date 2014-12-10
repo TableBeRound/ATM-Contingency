@@ -1,13 +1,15 @@
 #include "ATM.h"
 #include <iostream>
-#include <ctime>
+#include <vector>
 
 using namespace std;
 
 UI *ui = new UI();
 Customer *customer;
-Account *account;
+// Account has been filled with dummy data while database is being worked on.
+Account *account = new Account(1, 2, 'C', 100.00);
 Database *db = new Database();
+std::vector<Transaction> collectionOfTransactions;
 
 // default ATM Constructor
 ATM::ATM()
@@ -39,7 +41,7 @@ bool ATM::login() {
 	{
 		if (customer->GetPIN() == pin)
 		{		
-			//account = db->getAccount(customer->GetCustomerNumber());
+			// database lookup for account should happen here
 			return true;
 		}
 		else
@@ -73,9 +75,7 @@ void ATM::MainMenu() {
 			performDeposit();
 			break;
 		case 3:
-			//balance();
-			cout << "Perform Balance Inquiry" << endl << endl;
-			system("pause");
+			performBalanceInquiry();
 			break;
 		case 4:
 			//transfer();
@@ -93,38 +93,70 @@ void ATM::MainMenu() {
 	} while (!userLogout);
 }
 
-// withdraw method
-// if the user selected a withdraw they will be taken to this screen
-// SHOULD THIS FUNCTION RETURN A TRANSACTION OBJECT? - we could build a growing
-// list of transactions which are processed once a user logs out.
+// This logic executes if the user selected to see their balance from the Main Menu
+void ATM::performBalanceInquiry() {
+
+	// Build a string to show the customer's name.
+	string customerName = customer->GetFirstName() + " " + customer->GetLastName();
+
+	// Show the current balance of the account.
+	ui->ShowAccountBalance(customerName, account->GetAccountBalance());
+}
+
+// This logic executes if the user selected to make a withdrawal from the Main Menu
 void ATM::performWithdrawal() 
 {
+	// Get the current balance of the account
+	double accountBalance = account->GetAccountBalance();
+
 	// At this point, the user will be shown the transaction menu where they 
 	// will make a selection.  The amount which they would like to withdraw
 	// is then returned and stored in the "amountToWithdraw" variable declared below.
 	double amountToWithdraw = ui->ShowTransactionAmountMenu("withdrawn");
 
-	cout << "\n\nAmount to be withdrawn: " << std::to_string(amountToWithdraw) << "\n\n";
-	system("pause");
+	// Check to see if the customer has the available funds to perform the withdrawal
+	if (accountBalance >= amountToWithdraw)
+	{
+		// Create a new Transaction object and add it to the "batch" of transactions to process 
+		// when the user chooses to log out.
+		Transaction newWithdrawal = Transaction(account->GetAccountNumber(), amountToWithdraw, "W", GetDate());
+		collectionOfTransactions.push_back(newWithdrawal);
+
+		// Add the amount of the new deposit to the account's balance
+		accountBalance -= amountToWithdraw;
+		account->SetAccountBalance(accountBalance);
+
+		// Show the user that the transaction was a success.
+		ui->ShowTransactionSuccessMessage();
+	}
+	else
+		// If the user does not have sufficient funds to cover the withdrawal, display this error message.
+		ui->ShowErrorMessage("There are insufficient funds in this account to perform a withdrawal of that amount.");
 }
 
-// deposit method
-// if the user selected deposit they will be taken to this screen
-// SHOULD THIS FUNCTION RETURN A TRANSACTION OBJECT? - we could build a growing
-// list of transactions which are processed once a user logs out.
+// This logic executes if the user selected to make a deposit from the Main Menu
 void ATM::performDeposit() 
 {
+	double accountBalance = account->GetAccountBalance();
 	// At this point, the user will be shown the transaction menu where they 
 	// will make a selection.  The amount which they would like to deposit
 	// is then returned and stored in the "amountToDeposit" variable declared below.
 	double amountToDeposit = ui->ShowTransactionAmountMenu("deposited");
 
-	cout << "\n\nAmount to be deposited: " << std::to_string(amountToDeposit) << "\n\n";
-	system("pause");
+	// Create a new Transaction object and add it to the "batch" of transactions to process 
+	// when the user chooses to log out.
+	Transaction newDeposit = Transaction(account->GetAccountNumber(), amountToDeposit, "W", GetDate());
+	collectionOfTransactions.push_back(newDeposit);
+
+	// Add the amount of the new deposit to the account's balance
+	accountBalance += amountToDeposit;
+	account->SetAccountBalance(accountBalance);
+
+	// Show the user that the transaction was a success.
+	ui->ShowTransactionSuccessMessage();
 }
 
-// transfer method
-// if the user selected transfer they will be taken to this screen
+// This logic executes if the user selected to make a transfer from the Main Menu
 int ATM::performTransfer() {
 	// takes in the account the user would like to transfer money to and the amount to transfer
 	char accountToTransferTo[50] = "NULL";
@@ -154,49 +186,21 @@ int ATM::performTransfer() {
 	return 0;
 }
 
-// history method
-// if the user selected see transaction history, they will be taken to this screen
-void ATM::history() {
-	// clears the screen of the MainMenu
-	ui->ClearScreen();
-	// for the shallow prototype we determined we will want the table to look like:
-	// Transaction #		Description				Date		Amount
-	cout << "Transaction #\t\t Description\t\t\t\t Date\t\t Amount" << endl;
-
-	// this will pause the screen so that the user can see what their previous transactions have been, and from where
-	ui->PauseScreen();
-	// when a key is pressed it will continue with the rest of history()
-	ui->PressAnyKeyToContinue();
-
-	// recalls MainMenu, meaning the screen is cleared of everything
-	// that happened during history
+// This logic executes if the user selected to view their transaction history from the Main Menu
+void ATM::showTransactionHistory() 
+{
+	
 }
 
-// balance method
-// if the user selected to see their balance, they will be taken to this screen
-void ATM::balance() {
-	// the amount the person has in their account, taken in from elsewhere
-	int balance = NULL;
-
-	string customerName = customer->GetFirstName() + " " + customer->GetLastName();
-
-	ui->ShowAccountBalance(customerName, account->GetAccountBalance());	
-}
-
-void ATM::customerLogout()
+// logoutCustomer writes all the new transactions (if any) to the database
+// and performs any other house-cleaning routines.
+void ATM::logoutCustomer()
 {
 	// Logout procedure needs to be fleshed out
 }
 
-void ATM::ValidateAmountInput(double amountEntered)
-{
-	if ((int)amountEntered % 20 > 0)
-	{
-		ui->ShowErrorMessage("The amount input is not an interval of $20.00!");
-	}
-}
-
-string ATM::GetTimeStamp()
+// Returns a timestamp for all database transactions
+string ATM::GetDate()
 {
 	return " ";
 }

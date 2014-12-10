@@ -8,6 +8,7 @@
 #include "UI.h"
 #include "Account.h"
 #include "Database.h"
+#include "Transaction.h"
 
 using namespace std;
 
@@ -27,15 +28,14 @@ public:
 	//ATM Functions
 	bool login();
 	void MainMenu();
+	void performBalanceInquiry();
 	void performWithdrawal();
 	void performDeposit();
 	int performTransfer();
-	void history();
-	void balance();
-	void customerLogout();
-	void ValidateAmountInput(double amountInput);
+	void showTransactionHistory();	
+	void logoutCustomer();
 	void shutdown();
-	string GetTimeStamp();
+	string GetDate();
 };
 
 #endif

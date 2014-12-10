@@ -22,6 +22,7 @@ protected:
 public:
 	Transaction();
 	Transaction(int transactionNum, int acctNum, double transactionAmt, string transactionType, string date);
+	Transaction(int acctNum, double transactionAmt, string transactionType, string date);
 	~Transaction();
 
 	// Get & Set Funcitons

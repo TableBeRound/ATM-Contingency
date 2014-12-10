@@ -20,6 +20,21 @@ Transaction::Transaction(int transactionNum, int acctNum, double transactionAmt,
 	this->_date = date;
 }
 
+// Alternative constructor for use while building a "batch" of Transaction objects.
+// We need an alternative, because we don't yet know the transaction number these
+// transactions will be given by the DBMS at the time that we create the transaction
+// in the ATM logic (performWithdrawal(), performDeposit() functions).
+Transaction::Transaction(int acctNum, double transactionAmt, string transactionType, string date)
+{
+	// We give each of these transactions the transaction number
+	// "0" for the reason stated above.
+	this->_transactionNumber = 0;
+	this->_accountNumber = acctNum;
+	this->_transactionAmount = transactionAmt;
+	this->_transactionType = transactionType;
+	this->_date = date;
+}
+
 Transaction::~Transaction()
 {
 }
