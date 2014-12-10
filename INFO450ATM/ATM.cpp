@@ -136,7 +136,7 @@ void ATM::PerformWithdrawal()
 	{
 		// Create a new Transaction object and add it to the "batch" of transactions to process 
 		// when the user chooses to log out.
-		Transaction newWithdrawal = Transaction(account->GetAccountNumber(), amountToWithdraw, "W", GetDate());
+		Transaction newWithdrawal = Transaction(account->GetAccountNumber(), amountToWithdraw, "W");
 		collectionOfTransactions.push_back(newWithdrawal);
 
 		// Add the amount of the new deposit to the account's balance
@@ -162,7 +162,7 @@ void ATM::PerformDeposit()
 
 	// Create a new Transaction object and add it to the "batch" of transactions to process 
 	// when the user chooses to log out.
-	Transaction newDeposit = Transaction(account->GetAccountNumber(), amountToDeposit, "D", GetDate());
+	Transaction newDeposit = Transaction(account->GetAccountNumber(), amountToDeposit, "D");
 	collectionOfTransactions.push_back(newDeposit);
 
 	// Add the amount of the new deposit to the account's balance
@@ -209,27 +209,24 @@ void ATM::ShowTransactionHistory()
 	
 }
 
-// logoutCustomer writes all the new transactions (if any) to the database
+// logoutCustomer() writes all the new transactions (if any) to the database
 // and performs any other house-cleaning routines.
 void ATM::LogoutCustomer()
 {
+	// Move through the collection of Transactions and write each one to the database.
+	// This could be more efficient if we employed a batch process rather than writing
+	// each transaction one at a time.
+	for (unsigned int i = 0; i < collectionOfTransactions.size(); i++)
+	{
+		db->createTransaction(collectionOfTransactions[i].GetAccountNumber(),
+							  collectionOfTransactions[i].GetTransactionAmount(),
+							  collectionOfTransactions[i].GetTransactionType());
+	}	
+
 	// Update the account information which is stored in the database to reflect 
 	// the account's new balance after all the transactions have taken place.
 	db->updateBalance(account->GetAccountNumber(), account->GetAccountBalance());
 
-	// Test Code to display the List of Transactions to the console:
-	cout << "\n\nTransaction Information\n";
-	cout << "Account Number: " + std::to_string(collectionOfTransactions[0].GetAccountNumber()) << endl;
-	cout << "Transaction Type: " + collectionOfTransactions[0].GetTransactionType() << endl;
-	cout << "Transaction Amount: " + std::to_string(collectionOfTransactions[0].GetTransactionAmount()) << endl;
-
-	system("pause");
-
+	// Clear out the vector keeping track of the customer's transactions
 	collectionOfTransactions.clear();
-}
-
-// *************** The GetDate() function is not necessary *************************
-string ATM::GetDate() // <----- SQLite has a TIMESTAMP datatype!!!
-{
-	return " ";
 }

@@ -10,7 +10,7 @@ Transaction::Transaction()
 	this->_transactionType = ' ';
 }
 
-// Typical Constructor for Transaction objects
+// Typical Constructor for Transaction objects retrieved from Database
 Transaction::Transaction(int transactionNum, int acctNum, double transactionAmt, string transactionType, string date)
 {
 	this->_transactionNumber = transactionNum;
@@ -24,7 +24,7 @@ Transaction::Transaction(int transactionNum, int acctNum, double transactionAmt,
 // We need an alternative, because we don't yet know the transaction number these
 // transactions will be given by the DBMS at the time that we create the transaction
 // in the ATM logic (performWithdrawal(), performDeposit() functions).
-Transaction::Transaction(int acctNum, double transactionAmt, string transactionType, string date)
+Transaction::Transaction(int acctNum, double transactionAmt, string transactionType)
 {
 	// We give each of these transactions the transaction number
 	// "0" for the reason stated above.
@@ -32,7 +32,7 @@ Transaction::Transaction(int acctNum, double transactionAmt, string transactionT
 	this->_accountNumber = acctNum;
 	this->_transactionAmount = transactionAmt;
 	this->_transactionType = transactionType;
-	this->_date = date;
+	this->_date = "";
 }
 
 Transaction::~Transaction()

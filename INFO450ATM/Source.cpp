@@ -16,7 +16,6 @@
 using namespace std;
 
 int main() {
-
 	// Boolean value for determining when to shutdown the ATM
 	bool atmShutdown = false;
 	ATM *atm = new ATM();
@@ -202,10 +201,12 @@ int main() {
 	Customer *customer = db->getCustomer("dglidewell@vcu.edu");
 	Account *account = db->getAccount(customer->GetCustomerNumber());
 
-	double transAmt = 13.13;
+	double transAmt = 7.11;
 	string transType = "D";
-	string transDate = "12/08/2014";
-	Transaction *transaction = db->createTransaction(account->GetAccountNumber(), transAmt, transType, transDate);
+	db->createTransaction(account->GetAccountNumber(), transAmt, transType);
+
+	Transaction *transaction = db->getTransaction(3);
+
 	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
 		<< "Account Number: " << transaction->GetAccountNumber() << "\n"
 		<< "Transaction Amount: " << transaction->GetTransactionAmount() << "\n"
@@ -213,24 +214,15 @@ int main() {
 		<< "Transaction Date: " << transaction->GetDate();
 
 	cout << "\n\n";
-	*/
 
-	/*
-	Transaction *transaction = db->getTransaction(7);
-	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
-		<< "Account Number: " << transaction->GetAccountNumber() << "\n"
-		<< "Transaction Amount: " << transaction->GetTransactionAmount() << "\n"
-		<< "Transaction Type: " << transaction->GetTransactionType() << "\n"
-		<< "Transaction Date: " << transaction->GetDate();
-
-	cout << "\n\n";
+	system("pause");
 	*/	
 
 	/******************
 	* Deletion Tests *
 	******************/
 	/*	
-	int numOfTransactionToBeDeleted = 2;
+	int numOfTransactionToBeDeleted = 1;
 	Transaction *transaction = db->getTransaction(numOfTransactionToBeDeleted);
 	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
 	<< "Account Number: " << transaction->GetAccountNumber() << "\n"

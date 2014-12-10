@@ -34,7 +34,6 @@ public:
 	int PerformTransfer();
 	void ShowTransactionHistory();	
 	void LogoutCustomer();
-	string GetDate();
 };
 
 #endif

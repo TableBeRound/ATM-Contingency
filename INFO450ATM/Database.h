@@ -44,7 +44,7 @@ public:
 
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");		
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");				
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, transactionType VARCHAR(1) NOT NULL, date VARCHAR(10) NOT NULL)");
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, transactionType VARCHAR(1) NOT NULL, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransfer (transferNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL)");
 
 		// De-allocate memory used to store pointers
@@ -390,7 +390,7 @@ public:
 
 	// This function will encapsulate the logic to perform 
 	// withdrawals and deposits.
-	Transaction *createTransaction(int accountNumber, double transactionAmt, string transactionType, string date)
+	void createTransaction(int accountNumber, double transactionAmt, string transactionType)
 	{
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -402,30 +402,13 @@ public:
 		                                                            // points to.		
 		// Use the SQLiteStatement pointer (pStmt) created 
 		// above to send a SQL statement to the database.
-		pStmt->Sql("INSERT INTO AccountTransaction (accountNumber, transactionAmount, transactionType, date) VALUES(?, ?, ?, ?);");
+		pStmt->Sql("INSERT INTO AccountTransaction (accountNumber, transactionAmount, transactionType) VALUES(?, ?, ?);");
 		pStmt->BindInt(1, accountNumber);        // First question mark in the VALUES() clause above
 		pStmt->BindDouble(2, transactionAmt);    // Second question mark in the VALUES() clause above
-		pStmt->BindString(3, transactionType);   // Third question mark in the VALUES() clause above
-		pStmt->BindString(4, date);              // Fourth question mark in the VALUES() clause above		
+		pStmt->BindString(3, transactionType);   // Third question mark in the VALUES() clause above		
 
 		// executes the INSERT statement and cleans-up automatically
 		pStmt->ExecuteAndFree();
-
-		// get the customer ID for the customer entry which was just made (the last row id).
-		pStmt->Sql("SELECT last_insert_rowid();");
-		pStmt->Execute();
-		int transactionNumber = pStmt->GetColumnInt(0); // get the int value at the zeroth column 
-
-		/***************************************************************************************
-		* Notice how each pStmt is first "loaded" with an SQL statement via the Sql() function
-		* then executed with either the Execute() or ExecuteAndFree() functions.
-		***************************************************************************************/
-
-		// De-allocate memory used to store pointers
-		/*delete pDatabase;
-		delete pStmt;*/
-
-		return new Transaction(transactionNumber, accountNumber, transactionAmt, transactionType, date);
 	}
 
 	Transaction *getTransaction(int transactionNumber)
@@ -434,9 +417,9 @@ public:
 		// the database search (assuming the search was successful)
 		int retrievedTransactionNumber = 0;
 		int retrievedAccountNumber = 0;
-		double retrievedTransactionAmt = 0.0;
+		double retrievedTransactionAmt = 0.0;		
+		string retrievedTransactionType = "";	
 		string retrievedDate = "";
-		string retrievedTransactionType = "";		
 
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -454,9 +437,9 @@ public:
 		{
 			retrievedTransactionNumber = pStmt->GetColumnInt("transactionNumber");
 			retrievedAccountNumber = pStmt->GetColumnInt("accountNumber");
-			retrievedTransactionAmt = pStmt->GetColumnDouble("transactionAmount");
-			retrievedDate = pStmt->GetColumnString("date");
+			retrievedTransactionAmt = pStmt->GetColumnDouble("transactionAmount");			
 			retrievedTransactionType = pStmt->GetColumnString("transactionType");
+			retrievedDate = pStmt->GetColumnString("date");
 		}
 
 		// "Clean up"
