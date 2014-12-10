@@ -7,6 +7,7 @@ Transfer::Transfer(int transactionNum, int sourceAcctNum, int destinationAcctNum
 	this->_accountNumber = sourceAcctNum;
 	this->_destinationAccountNumber = destinationAcctNum;
 	this->_transactionAmount = transactionAmt;
+	this->_transactionType = "T";
 	this->_date = date;	
 }
 
@@ -20,6 +21,7 @@ Transfer::Transfer(int sourceAcctNum, int destinationAcctNum, double transaction
 	this->_accountNumber = sourceAcctNum;
 	this->_destinationAccountNumber = destinationAcctNum;
 	this->_transactionAmount = transactionAmt;
+	this->_transactionType = "T";
 	this->_date = "";
 }
 
@@ -32,9 +34,4 @@ Transfer::~Transfer()
 int Transfer::GetDestinationAccountNumber()
 {
 	return this->_destinationAccountNumber;
-}
-
-void Transfer::TransferFunds(char *source, char *destination)
-{
-
 }

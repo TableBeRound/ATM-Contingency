@@ -449,7 +449,7 @@ public:
 
 #pragma region Functions related to Transfer objects
 	
-	void createTransfer(int sourceAccountNumber, int destinationAccount, double transactionAmt, string transactionType)
+	void createTransfer(int sourceAccountNumber, int destinationAccount, double transactionAmt)
 	{
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -529,8 +529,7 @@ public:
 		// Check to see if any changes have been made to the database
 		// due to the SQL statement executed above.  Return the results
 		// as a boolean value.
-		int recordsDeleted = 0;
-		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
+		int recordsDeleted = pDatabase->GetTotalDatabaseChanges();
 		if (recordsDeleted)
 		{
 			// De-allocate memory used to store pointers

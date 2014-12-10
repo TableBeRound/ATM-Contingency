@@ -193,7 +193,7 @@ int main() {
 	
 #pragma endregion
 
-#pragma region Database Tests Related to Transaction Table
+#pragma region Database Tests Related to AccountTransaction Table
 	/*****************************
 	* Creation & Retrieval Tests *
 	******************************/
@@ -249,6 +249,61 @@ int main() {
 	cout << "\n\n";
 	*/
 	
+#pragma endregion
+
+#pragma region Database Tests Related to AccountTransfer Table
+	/*****************************
+	* Creation & Retrieval Tests *
+	******************************/
+	/*Customer *customer = db->getCustomer("lavelltj@vcu.edu");
+	Account *account = db->getAccount(customer->GetCustomerNumber());
+
+	int destAcct = 1;
+	double transAmt = 7.11;
+	db->createTransfer(account->GetAccountNumber(), destAcct, transAmt);
+
+	Transfer *transfer = db->getTransfer(2);
+
+	cout << "Transfer Number: " << transfer->GetTransactionNumber() << "\n"
+		<< "Source Account Number: " << transfer->GetAccountNumber() << "\n"
+		<< "Destination Account Number: " << transfer->GetDestinationAccountNumber() << "\n"
+		<< "Transfer Amount: " << transfer->GetTransactionAmount() << "\n"
+		<< "Transaction Date: " << transfer->GetDate();
+
+	cout << "\n\n";
+
+	system("pause");*/
+
+	/******************
+	 * Deletion Tests *
+	 ******************/
+	/*
+	int numOfTransferToBeDeleted = 2;
+	Transfer *transfer = db->getTransfer(numOfTransferToBeDeleted);
+	cout << "Transfer Number: " << transfer->GetTransactionNumber() << "\n"
+		<< "Source Account Number: " << transfer->GetAccountNumber() << "\n"
+		<< "Destination Account Number: " << transfer->GetDestinationAccountNumber() << "\n"
+		<< "Transfer Amount: " << transfer->GetTransactionAmount() << "\n"
+		<< "Transaction Date: " << transfer->GetDate();
+
+	cout << "\n\n";
+
+	if (db->deleteTransfer(numOfTransferToBeDeleted))
+		cout << "Transfer #" + std::to_string(transfer->GetTransactionNumber()) + " deleted.";
+	else
+		cout << "Transfer doesn't exist.";
+
+	cout << "\n\n";
+	
+	transfer = db->getTransfer(numOfTransferToBeDeleted);
+	cout << "Transfer Number: " << transfer->GetTransactionNumber() << "\n"
+		<< "Source Account Number: " << transfer->GetAccountNumber() << "\n"
+		<< "Destination Account Number: " << transfer->GetDestinationAccountNumber() << "\n"
+		<< "Transfer Amount: " << transfer->GetTransactionAmount() << "\n"
+		<< "Transaction Date: " << transfer->GetDate();
+
+	cout << "\n\n";
+	*/
 #pragma endregion
 
 	//system("pause");

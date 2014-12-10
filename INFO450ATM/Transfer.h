@@ -23,9 +23,6 @@ public:
 	~Transfer();
 
 	int GetDestinationAccountNumber();
-
-	void TransferFunds(char *source, 
-					   char *destination);
 };
 
 #endif // !TRANSFER_H
