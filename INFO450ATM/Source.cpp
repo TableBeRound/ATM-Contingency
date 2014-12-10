@@ -23,7 +23,7 @@ int main() {
 
 	do
 	{
-		if (atm->login())
+		if (atm->Login())
 			atm->MainMenu();
 
 		cout << "\n\nStrike the \" Y \" key to close the program. Press any other key to continue.";

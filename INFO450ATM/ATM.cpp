@@ -21,7 +21,7 @@ ATM::~ATM()
 {
 }
 
-bool ATM::login() {
+bool ATM::Login() {
 	// stores the email addresss and PIN entered by the user	
 
 	// prompts the User to enter their email
@@ -69,13 +69,13 @@ void ATM::MainMenu() {
 		switch (actionToBePerformed)
 		{
 		case 1:
-			performWithdrawal();
+			PerformWithdrawal();
 			break;
 		case 2:
-			performDeposit();
+			PerformDeposit();
 			break;
 		case 3:
-			performBalanceInquiry();
+			PerformBalanceInquiry();
 			break;
 		case 4:
 			//transfer();
@@ -94,7 +94,7 @@ void ATM::MainMenu() {
 }
 
 // This logic executes if the user selected to see their balance from the Main Menu
-void ATM::performBalanceInquiry() {
+void ATM::PerformBalanceInquiry() {
 
 	// Build a string to show the customer's name.
 	string customerName = customer->GetFirstName() + " " + customer->GetLastName();
@@ -104,7 +104,7 @@ void ATM::performBalanceInquiry() {
 }
 
 // This logic executes if the user selected to make a withdrawal from the Main Menu
-void ATM::performWithdrawal() 
+void ATM::PerformWithdrawal() 
 {
 	// Get the current balance of the account
 	double accountBalance = account->GetAccountBalance();
@@ -135,7 +135,7 @@ void ATM::performWithdrawal()
 }
 
 // This logic executes if the user selected to make a deposit from the Main Menu
-void ATM::performDeposit() 
+void ATM::PerformDeposit() 
 {
 	double accountBalance = account->GetAccountBalance();
 	// At this point, the user will be shown the transaction menu where they 
@@ -157,7 +157,7 @@ void ATM::performDeposit()
 }
 
 // This logic executes if the user selected to make a transfer from the Main Menu
-int ATM::performTransfer() {
+int ATM::PerformTransfer() {
 	// takes in the account the user would like to transfer money to and the amount to transfer
 	char accountToTransferTo[50] = "NULL";
 	int amountToTransfer = NULL;
@@ -187,14 +187,14 @@ int ATM::performTransfer() {
 }
 
 // This logic executes if the user selected to view their transaction history from the Main Menu
-void ATM::showTransactionHistory() 
+void ATM::ShowTransactionHistory() 
 {
 	
 }
 
 // logoutCustomer writes all the new transactions (if any) to the database
 // and performs any other house-cleaning routines.
-void ATM::logoutCustomer()
+void ATM::LogoutCustomer()
 {
 	// Logout procedure needs to be fleshed out
 }

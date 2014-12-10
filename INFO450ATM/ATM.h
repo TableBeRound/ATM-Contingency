@@ -26,15 +26,14 @@ public:
 	bool GetAtmShutdown();
 
 	//ATM Functions
-	bool login();
+	bool Login();
 	void MainMenu();
-	void performBalanceInquiry();
-	void performWithdrawal();
-	void performDeposit();
-	int performTransfer();
-	void showTransactionHistory();	
-	void logoutCustomer();
-	void shutdown();
+	void PerformBalanceInquiry();
+	void PerformWithdrawal();
+	void PerformDeposit();
+	int PerformTransfer();
+	void ShowTransactionHistory();	
+	void LogoutCustomer();
 	string GetDate();
 };
 
