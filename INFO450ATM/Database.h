@@ -323,7 +323,7 @@ public:
 	// currentBalance of the Account because doubles inherently provide for signed 
 	// and unsigned values.  Thus, we can pass a negative double to this funciton for
 	// withdrawals and a positive number for deposits.
-	bool updateBalance(int accountNumber, double transactionAmount)
+	void updateBalance(int accountNumber, double newBalance)
 	{
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -331,58 +331,58 @@ public:
 		SQLiteDatabase *pDatabase = this->connect();
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
-		/*************************************************
-		 * STEP 1: Retrieve the Account's currentBalance.
-		 *************************************************/ 
-		// Initialize variable to store the current balance of the account.
-		double currentBalance = 0.0;
+		///*************************************************
+		// * STEP 1: Retrieve the Account's currentBalance.
+		// *************************************************/ 
+		//// Initialize variable to store the current balance of the account.
+		//double currentBalance = 0.0;
 
-		// Get the value of the current balance using the accountNumber passed to the function.
-		pStmt->Sql("SELECT balance FROM Account WHERE accountNumber = ?;");
-		pStmt->BindInt(1, accountNumber);
+		//// Get the value of the current balance using the accountNumber passed to the function.
+		//pStmt->Sql("SELECT balance FROM Account WHERE accountNumber = ?;");
+		//pStmt->BindInt(1, accountNumber);
 
-		// Store the results of the SQL statement executed above in the variable initialized above.
-		while (pStmt->FetchRow())
-		{
-			currentBalance = pStmt->GetColumnDouble("balance");
-		}
+		//// Store the results of the SQL statement executed above in the variable initialized above.
+		//while (pStmt->FetchRow())
+		//{
+		//	currentBalance = pStmt->GetColumnDouble("balance");
+		//}
 
-		// "Post-Query Clean up" (It's a Kompex Wrapper thing)
-		pStmt->FreeQuery();
+		//// "Post-Query Clean up" (It's a Kompex Wrapper thing)
+		//pStmt->FreeQuery();
 
-		/*************************************************
-		* STEP 2: Calculate the Account's newBalance
-		*************************************************/		
-		double newBalance = currentBalance + transactionAmount; // <-- transactionAmount can be a positive or negative number
-		                                                        //     depending on whether it is a deposit or withdrawal!!!
+		///*************************************************
+		//* STEP 2: Calculate the Account's newBalance
+		//*************************************************/		
+		//double newBalance = currentBalance + transactionAmount; // <-- transactionAmount can be a positive or negative number
+		//                                                        //     depending on whether it is a deposit or withdrawal!!!
 
-		/*****************************************************************
-		* STEP 3: Update the Account with the value stored in newBalance.
-		******************************************************************/		
+		///*****************************************************************
+		//* STEP 3: Update the Account with the value stored in newBalance.
+		//******************************************************************/		
 		pStmt->Sql("UPDATE Account SET balance = ? WHERE accountNumber = ?;");
 		pStmt->BindDouble(1, newBalance);
-		pStmt->BindInt	(2, accountNumber);
+		pStmt->BindInt(2, accountNumber);
 		pStmt->ExecuteAndFree();
 
 		// Check to see if any changes have been made to the database
 		// due to the SQL statement executed above.  Return the results
 		// as a boolean value.
-		int recordsUpdated = 0;
-		recordsUpdated = pDatabase->GetTotalDatabaseChanges();
-		if (recordsUpdated)
-		{
-			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
-			return true;
-		}
-		else
-		{
-			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
-			return false;
-		}			
+		//int recordsUpdated = 0;
+		//recordsUpdated = pDatabase->GetTotalDatabaseChanges();
+		//if (recordsUpdated)
+		//{
+		//	// De-allocate memory used to store pointers
+		//	/*delete pDatabase;
+		//	delete pStmt;*/
+		//	return true;
+		//}
+		//else
+		//{
+		//	// De-allocate memory used to store pointers
+		//	/*delete pDatabase;
+		//	delete pStmt;*/
+		//	return false;
+		//}			
 	}
 #pragma endregion
 

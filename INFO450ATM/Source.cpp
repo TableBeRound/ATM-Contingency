@@ -24,9 +24,11 @@ int main() {
 	do
 	{
 		if (atm->Login())
+		{
 			atm->MainMenu();
+		}			
 
-		cout << "\n\nStrike the \" Y \" key to close the program. Press any other key to continue.";
+		cout << "\n\n\nStrike the \" Y \" key to close the program. Press any other key to continue.";
 		int c = _getch();
 		switch (c)
 		{
@@ -161,9 +163,9 @@ int main() {
 	cout << "\n\n";
 	*/
 
-	/************************
-	 * Update Balance Tests *
-	 ************************/
+	/****************************************************************************************************
+	 * Update Balance Tests  - NO LONGER WORKS BECAUSE "updateBalance()" doesn't return a boolean value *
+	 ****************************************************************************************************/
 	/*	
 	Customer *customer = db->getCustomer("dglidewell@vcu.edu");
 	Account *account = db->getAccount(customer->GetCustomerNumber());
@@ -174,8 +176,8 @@ int main() {
 
 	cout << "\n\n";
 
-	double depositAmount = 750;
-	if (db->updateBalance(account->GetAccountNumber(), depositAmount))
+	double newBalance = 750;
+	if (db->updateBalance(account->GetAccountNumber(), newBalance))
 	{
 		account = db->getAccount(customer->GetCustomerNumber());
 		cout << "Account Number: " << account->GetAccountNumber() << "\n"
@@ -188,8 +190,8 @@ int main() {
 	else
 	{
 		cout << "Transaction Unsuccessful\n\n";
-	}
-	*/
+	}*/
+	
 #pragma endregion
 
 #pragma region Database Tests Related to Transaction Table

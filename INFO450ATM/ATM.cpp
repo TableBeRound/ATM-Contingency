@@ -51,18 +51,21 @@ bool ATM::Login() {
 	// function call above.
 	if (customer->GetCustomerNumber() != 0)
 	{
+		// If the PIN entered by the user matches the one that is stored
+		// in the database, get the account information for that customer and 
+		// return "true" so that the MainMenu is called (see the Source.cpp file)
 		if (customer->GetPIN() == pin)
 		{		
 			account = db->getAccount(customer->GetCustomerNumber());
 			return true;
 		}
 		else
+			// Return false if the PINs do no match.
 			return false;
 	}
 	else
 		return false;
 #pragma endregion
-
 }
 
 // MainMenu method
@@ -99,7 +102,9 @@ void ATM::MainMenu() {
 			cout << "Perform Transaction History" << endl << endl;
 			system("pause");
 			break;
-		case 6: userLogout = true;			
+		case 6: 
+			LogoutCustomer();
+			userLogout = true;			
 			break;
 		}
 	} while (!userLogout);
@@ -157,7 +162,7 @@ void ATM::PerformDeposit()
 
 	// Create a new Transaction object and add it to the "batch" of transactions to process 
 	// when the user chooses to log out.
-	Transaction newDeposit = Transaction(account->GetAccountNumber(), amountToDeposit, "W", GetDate());
+	Transaction newDeposit = Transaction(account->GetAccountNumber(), amountToDeposit, "D", GetDate());
 	collectionOfTransactions.push_back(newDeposit);
 
 	// Add the amount of the new deposit to the account's balance
@@ -208,7 +213,19 @@ void ATM::ShowTransactionHistory()
 // and performs any other house-cleaning routines.
 void ATM::LogoutCustomer()
 {
-	// Logout procedure needs to be fleshed out
+	// Update the account information which is stored in the database to reflect 
+	// the account's new balance after all the transactions have taken place.
+	db->updateBalance(account->GetAccountNumber(), account->GetAccountBalance());
+
+	// Test Code to display the List of Transactions to the console:
+	cout << "\n\nTransaction Information\n";
+	cout << "Account Number: " + std::to_string(collectionOfTransactions[0].GetAccountNumber()) << endl;
+	cout << "Transaction Type: " + collectionOfTransactions[0].GetTransactionType() << endl;
+	cout << "Transaction Amount: " + std::to_string(collectionOfTransactions[0].GetTransactionAmount()) << endl;
+
+	system("pause");
+
+	collectionOfTransactions.clear();
 }
 
 // *************** The GetDate() function is not necessary *************************
