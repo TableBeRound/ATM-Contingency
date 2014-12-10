@@ -3,11 +3,9 @@
 #include <iomanip>
 #include "Windows.h"
 #include "Conio.h"
-#include "ATM.h" // <----------------------------THIS NEEDS TO DISAPPEAR!!!
 
 using namespace std;
 
-ATM *atm = new ATM(); // <----------------------------THIS NEEDS TO DISAPPEAR!!!
 // Default constructor
 UI::UI()
 {
@@ -392,7 +390,6 @@ void UI::PressAnyKeyToContinue()
 
 /**************** CODE TO CLEAR THE INPUT BUFFER ****************
 ****************************************************************/
-// may not be used
 void UI::ClearBuffer()
 {
 	cin.clear();

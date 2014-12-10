@@ -4,11 +4,24 @@
 
 using namespace std;
 
+// UI object used to interface with the customer
+// This is necesary to keep the business logic 
+// separate from the UI.
 UI *ui = new UI();
+
+// Here are the global Customer and Account objects for all ATM functions.
+// This made more sense to me rather than passing these objects
+// back and forth between the various functions.
 Customer *customer;
-// Account has been filled with dummy data while database is being worked on.
-Account *account = new Account(1, 2, 'C', 100.00);
+Account *account = new Account(1, 2, 'C', 100.00); //<---- Dummy data while database 
+												   //      is being worked on.
+
+// This database object is used to communicate with the embedded SQLite database.
 Database *db = new Database();
+
+// This vector is used to store all the transactions that the customer
+// performs while they are logged in.  Transactions and account updates 
+// are made once the user logs out.
 std::vector<Transaction> collectionOfTransactions;
 
 // default ATM Constructor
@@ -199,8 +212,8 @@ void ATM::LogoutCustomer()
 	// Logout procedure needs to be fleshed out
 }
 
-// Returns a timestamp for all database transactions
-string ATM::GetDate()
+// *************** The GetDate() function is not necessary *************************
+string ATM::GetDate() // <----- SQLite has a TIMESTAMP datatype!!!
 {
 	return " ";
 }
