@@ -10,6 +10,19 @@ Transfer::Transfer(int transactionNum, int sourceAcctNum, int destinationAcctNum
 	this->_date = date;	
 }
 
+// Alternative constructor for use while building a "batch" of Transaction objects.
+// We need an alternative, because we don't yet know the transaction number these
+// transactions will be given by the DBMS at the time that we create the transaction
+// in the ATM logic (performWithdrawal(), performDeposit() functions).
+Transfer::Transfer(int sourceAcctNum, int destinationAcctNum, double transactionAmt)
+{
+	this->_transactionNumber = 0;
+	this->_accountNumber = sourceAcctNum;
+	this->_destinationAccountNumber = destinationAcctNum;
+	this->_transactionAmount = transactionAmt;
+	this->_date = "";
+}
+
 
 Transfer::~Transfer()
 {

@@ -75,12 +75,14 @@ void ATM::MainMenu() {
 	bool userLogout = false;
 	
 	do{
-		// input from the user used to control the switch			
-		int actionToBePerformed = 0;
-		
+		// This variable stores the integer returned by the UI's
+		// ShowTransactionTypeMenu() function.  The integer is
+		// used to determine what ATM-related action to perform.
+		int actionToBePerformed = 0;		
 		actionToBePerformed = ui->ShowTransactionTypeMenu(customer->GetFirstName(), customer->GetLastName());
 
-		// calls the users desired interaction based on the user input
+		// Uses the result from above to call the function
+		// related to the user's desired transaction.
 		switch (actionToBePerformed)
 		{
 		case 1:
@@ -93,12 +95,12 @@ void ATM::MainMenu() {
 			PerformBalanceInquiry();
 			break;
 		case 4:
-			//transfer();
+			//PerformTransfer();
 			cout << "Perform Transfer" << endl << endl;
 			system("pause");
 			break;
 		case 5:
-			//history();
+			//ShowTransactionHistory();
 			cout << "Perform Transaction History" << endl << endl;
 			system("pause");
 			break;
@@ -132,7 +134,7 @@ void ATM::PerformWithdrawal()
 	double amountToWithdraw = ui->ShowTransactionAmountMenu("withdrawn");
 
 	// Check to see if the customer has the available funds to perform the withdrawal
-	if (accountBalance >= amountToWithdraw)
+	if (account->GetAccountBalance() >= amountToWithdraw)
 	{
 		// Create a new Transaction object and add it to the "batch" of transactions to process 
 		// when the user chooses to log out.
@@ -174,33 +176,39 @@ void ATM::PerformDeposit()
 }
 
 // This logic executes if the user selected to make a transfer from the Main Menu
-int ATM::PerformTransfer() {
-	// takes in the account the user would like to transfer money to and the amount to transfer
-	char accountToTransferTo[50] = "NULL";
-	int amountToTransfer = NULL;
+// A transfer is the movement of funds from one account to another.
+void ATM::PerformTransfer() {
 
-	// prints a preconstructed transaction amounts menu (forces increments of $20 for shallow prototype)
-	// has a clear screen function inside that clears everything that happened on the MainMenu
-	ui->ShowTransactionAmountMenu("transfered");
-	// takes in the amount the user would like to transfer
-	cin >> amountToTransfer;
+	// Variable declaration and initiation
+	double currentBalanceOfSourceAccount = account->GetAccountBalance();
+	int destinationAccountNumber = 0;
+	double amountToTransfer = 0.0;
 
-	ui->ClearBuffer();
+	// ******* UI Function to prompt user for destination account goes here! ***************
+	// destinationAccountNumber = ui->ShowDestinationAccountPrompt();
+	//**************************************************************************************
 
-	// asks the user for the email of the account to transfer money to
-	cout << "Please enter the Account you would like to transfer to: ";
-	// takes in the email of the account to transfer money to
-	cin >> accountToTransferTo;
-	
-	ui->ClearBuffer();
+	// Prints a preconstructed transaction amounts menu (forces increments of $20)
+	// and stores the result of the user's choice in the amountToTransfer variable.
+	amountToTransfer = ui->ShowTransactionAmountMenu("transferred");
 
-	// again for the shallow prototype, there will only be success, 
-	// so this screen will automatically be displayed next
-	ui->ShowTransactionSuccessMessage();
+	if (currentBalanceOfSourceAccount >= amountToTransfer)
+	{
+		// Create a new Transaction object and add it to the "batch" of transactions to process 
+		// when the user chooses to log out.
+		//Transfer newTransfer = Transfer(account->GetAccountNumber(), destinationAccountNumber, amountToTransfer);
+		//collectionOfTransactions.push_back(newTransfer);
 
-	// recalls MainMenu, meaning the screen is cleared of everything
-	// that happened during deposit
-	return 0;
+		// Add the amount of the new deposit to the account's balance
+		currentBalanceOfSourceAccount -= amountToTransfer;
+		account->SetAccountBalance(currentBalanceOfSourceAccount);
+
+		// Show the user that the transaction was a success.
+		ui->ShowTransactionSuccessMessage();
+	}
+	else
+		// If the user does not have sufficient funds to cover the withdrawal, display this error message.
+		ui->ShowErrorMessage("There are insufficient funds in this account to perform a withdrawal of that amount.");
 }
 
 // This logic executes if the user selected to view their transaction history from the Main Menu

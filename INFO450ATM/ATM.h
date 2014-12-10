@@ -31,7 +31,7 @@ public:
 	void PerformBalanceInquiry();
 	void PerformWithdrawal();
 	void PerformDeposit();
-	int PerformTransfer();
+	void PerformTransfer();
 	void ShowTransactionHistory();	
 	void LogoutCustomer();
 };

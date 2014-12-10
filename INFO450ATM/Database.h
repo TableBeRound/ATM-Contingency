@@ -45,7 +45,7 @@ public:
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");		
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");				
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, transactionType VARCHAR(1) NOT NULL, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransfer (transferNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date VARCHAR(10) NOT NULL)");
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransfer (transferNumber INTEGER NOT NULL PRIMARY KEY, sourceAccountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
 
 		// De-allocate memory used to store pointers
 		//delete pDatabase;
@@ -330,59 +330,11 @@ public:
 		// create a pointer to an SQLiteStatement object.		
 		SQLiteDatabase *pDatabase = this->connect();
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
-
-		///*************************************************
-		// * STEP 1: Retrieve the Account's currentBalance.
-		// *************************************************/ 
-		//// Initialize variable to store the current balance of the account.
-		//double currentBalance = 0.0;
-
-		//// Get the value of the current balance using the accountNumber passed to the function.
-		//pStmt->Sql("SELECT balance FROM Account WHERE accountNumber = ?;");
-		//pStmt->BindInt(1, accountNumber);
-
-		//// Store the results of the SQL statement executed above in the variable initialized above.
-		//while (pStmt->FetchRow())
-		//{
-		//	currentBalance = pStmt->GetColumnDouble("balance");
-		//}
-
-		//// "Post-Query Clean up" (It's a Kompex Wrapper thing)
-		//pStmt->FreeQuery();
-
-		///*************************************************
-		//* STEP 2: Calculate the Account's newBalance
-		//*************************************************/		
-		//double newBalance = currentBalance + transactionAmount; // <-- transactionAmount can be a positive or negative number
-		//                                                        //     depending on whether it is a deposit or withdrawal!!!
-
-		///*****************************************************************
-		//* STEP 3: Update the Account with the value stored in newBalance.
-		//******************************************************************/		
+	
 		pStmt->Sql("UPDATE Account SET balance = ? WHERE accountNumber = ?;");
 		pStmt->BindDouble(1, newBalance);
 		pStmt->BindInt(2, accountNumber);
 		pStmt->ExecuteAndFree();
-
-		// Check to see if any changes have been made to the database
-		// due to the SQL statement executed above.  Return the results
-		// as a boolean value.
-		//int recordsUpdated = 0;
-		//recordsUpdated = pDatabase->GetTotalDatabaseChanges();
-		//if (recordsUpdated)
-		//{
-		//	// De-allocate memory used to store pointers
-		//	/*delete pDatabase;
-		//	delete pStmt;*/
-		//	return true;
-		//}
-		//else
-		//{
-		//	// De-allocate memory used to store pointers
-		//	/*delete pDatabase;
-		//	delete pStmt;*/
-		//	return false;
-		//}			
 	}
 #pragma endregion
 
@@ -470,6 +422,108 @@ public:
 		// SQL Statement to delete the record
 		pStmt->Sql("DELETE FROM AccountTransaction WHERE transactionNumber = ?;");
 		pStmt->BindInt(1, transactionNumber);
+		pStmt->ExecuteAndFree();
+
+		// Check to see if any changes have been made to the database
+		// due to the SQL statement executed above.  Return the results
+		// as a boolean value.
+		int recordsDeleted = 0;
+		recordsDeleted = pDatabase->GetTotalDatabaseChanges();
+		if (recordsDeleted)
+		{
+			// De-allocate memory used to store pointers
+			/*delete pDatabase;
+			delete pStmt;*/
+			return true;
+		}
+		else
+		{
+			// De-allocate memory used to store pointers
+			/*delete pDatabase;
+			delete pStmt;*/
+			return false;
+		}
+	}
+
+#pragma endregion
+
+#pragma region Functions related to Transfer objects
+	
+	void createTransfer(int sourceAccountNumber, int destinationAccount, double transactionAmt, string transactionType)
+	{
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);  // Notice how the SQLiteStatement 
+		// pointer (pStmt) is "tied" to the 
+		// SQLiteDatabase object that pDatabase 
+		// points to.		
+		// Use the SQLiteStatement pointer (pStmt) created 
+		// above to send a SQL statement to the database.
+		pStmt->Sql("INSERT INTO AccountTransfer (sourceAccountNumber, destinationAccount, transactionAmount) VALUES(?, ?, ?);");
+		pStmt->BindInt(1, sourceAccountNumber);       // First question mark in the VALUES() clause above
+		pStmt->BindInt(2, destinationAccount);        // Second question mark in the VALUES() clause above
+		pStmt->BindDouble(3, transactionAmt);         // Third question mark in the VALUES() clause above		
+
+		// executes the INSERT statement and cleans-up automatically
+		pStmt->ExecuteAndFree();
+	}
+
+	Transfer *getTransfer(int transferNumber)
+	{
+		// Here are our variables which store the values which will be returned by 
+		// the database search (assuming the search was successful)
+		int retrievedTransferNumber = 0;
+		int retrievedSourceAccountNumber = 0;
+		int retrievedDestinationAccountNumber = 0;
+		double retrievedTransferAmt = 0.0;
+		string retrievedDate = "";
+
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		// Use the customerNumber and accountType passed to this method to query the database.
+		pStmt->Sql("SELECT * FROM AccountTransfer WHERE transferNumber = ?;");
+		pStmt->BindInt(1, transferNumber);
+
+		// Process the results of the query above - assigning the values of each
+		// column to the variables declared above.
+		while (pStmt->FetchRow())
+		{
+			retrievedTransferNumber = pStmt->GetColumnInt("transferNumber");
+			retrievedSourceAccountNumber = pStmt->GetColumnInt("sourceAccountNumber");
+			retrievedDestinationAccountNumber = pStmt->GetColumnInt("destinationAccount");
+			retrievedTransferAmt = pStmt->GetColumnDouble("transactionAmount");
+			retrievedDate = pStmt->GetColumnString("date");
+		}
+
+		// "Clean up"
+		pStmt->FreeQuery();
+
+		// De-allocate memory used to store pointers
+		/*delete pDatabase;
+		delete pStmt;*/
+
+		// Use the variables, which have been assigned values via the query above, 
+		// to create a Customer object to return.
+		return new Transfer(retrievedTransferNumber, retrievedSourceAccountNumber, retrievedDestinationAccountNumber, retrievedTransferAmt, retrievedDate);
+	}
+
+	bool deleteTransfer(int transferNumber)
+	{
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		// SQL Statement to delete the record
+		pStmt->Sql("DELETE FROM AccountTransfer WHERE transferNumber = ?;");
+		pStmt->BindInt(1, transferNumber);
 		pStmt->ExecuteAndFree();
 
 		// Check to see if any changes have been made to the database

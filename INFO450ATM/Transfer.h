@@ -19,6 +19,7 @@ class Transfer :
 
 public:
 	Transfer(int transactionNum, int sourceAcctNum, int destinationAcctNum, double transactionAmt, string date);
+	Transfer(int sourceAcctNum, int destinationAcctNum, double transactionAmt);
 	~Transfer();
 
 	int GetDestinationAccountNumber();

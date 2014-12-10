@@ -41,9 +41,9 @@ int main() {
 #pragma region Load the Database
 	//Database *db = new Database();
 
-	///*Load the Customer Table*/
+	/*Load the Customer Table*/
 	//Customer *customer;
-	//customer = db->createCustomer("Glidewell", "Danny", "dglidewell@vcu.edu", 1111);
+	//customer = db->createCustomer("Lavell", "Tucker", "lavelltj@vcu.edu", 2222);
 
 	//cout << "Customer Number: " << customer->GetCustomerNumber() << "\n"
 	//	<< "Customer First Name: " << customer->GetFirstName() << "\n"
@@ -205,7 +205,7 @@ int main() {
 	string transType = "D";
 	db->createTransaction(account->GetAccountNumber(), transAmt, transType);
 
-	Transaction *transaction = db->getTransaction(3);
+	Transaction *transaction = db->getTransaction(4);
 
 	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
 		<< "Account Number: " << transaction->GetAccountNumber() << "\n"
