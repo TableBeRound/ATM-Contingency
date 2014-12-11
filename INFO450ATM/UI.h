@@ -2,6 +2,8 @@
 #define UI_H
 
 #include <string>
+#include <vector>
+#include "Page.h"
 
 using namespace std;
 
@@ -15,10 +17,12 @@ using namespace std;
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 #define KEY_ENTER 13
+#define KEY_ESC 27
 
 // The Display object represents the "screen" of the UI
 class UI
 {
+
 public:
 	// Constructor & destructor
 	UI();
@@ -34,6 +38,7 @@ public:
 	void ShowAccountBalance(string acctNum, double acctBalance);
 	void ShowTransactionSuccessMessage();
 	void ShowErrorMessage(char *message);
+	void ShowTransactionHistory(vector<Page> transactionHistory);
 
 	// These functions are frequently used
 	// to manipulate output to the screen.

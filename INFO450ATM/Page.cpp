@@ -1,11 +1,8 @@
 #include "Page.h"
 
 
-Page::Page(string header, string footer, int maxNumberOfLines)
+Page::Page()
 {
-	this->header = header;
-	this->footer = footer;
-	this->maximumNumberOfLines = maximumNumberOfLines;
 }
 
 Page::~Page()
@@ -14,5 +11,30 @@ Page::~Page()
 
 void Page::AddLine(string lineText)
 {
-	collectionOfLines.push_back(lineText);
+	if (collectionOfLines.size() < (maximumNumberOfLines + 1))
+	{
+		collectionOfLines.push_back(lineText);
+	}	
+}
+
+string Page::GetLine(unsigned int lineNumber)
+{
+	if (lineNumber < collectionOfLines.size())
+	{
+		return collectionOfLines[lineNumber];
+	}
+	else
+	{
+		return "";
+	}
+}
+
+unsigned int Page::GetMaximumNumberOfLines()
+{
+	return this->maximumNumberOfLines;
+}
+
+unsigned int Page::GetNumberOfLines()
+{
+	return this->collectionOfLines.size();
 }

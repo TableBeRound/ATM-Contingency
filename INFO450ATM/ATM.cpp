@@ -32,6 +32,10 @@ std::vector<Transfer> collectionOfTransfers;
 // transfer from the currently logged-in customer.
 std::vector<Account *> collectionOfAccounts;
 
+// This vector is used to store Page objects which facilitate the
+// display of the transactionHistory of an account.
+std::vector<Page> transactionHistory;
+
 // default ATM Constructor
 ATM::ATM()
 {
@@ -105,13 +109,10 @@ void ATM::MainMenu() {
 			PerformBalanceInquiry();
 			break;
 		case 4:
-			//ui->ClearBuffer();
 			PerformTransfer();			
 			break;
 		case 5:
-			//ShowTransactionHistory();
-			cout << "Perform Transaction History" << endl << endl;
-			system("pause");
+			ShowTransactionHistory();
 			break;
 		case 6: 
 			LogoutCustomer();
@@ -251,7 +252,8 @@ void ATM::PerformTransfer() {
 // This logic executes if the user selected to view their transaction history from the Main Menu
 void ATM::ShowTransactionHistory() 
 {
-	
+	db->populateTransactionHistory(account->GetAccountNumber(), &transactionHistory);
+	ui->ShowTransactionHistory(transactionHistory);	
 }
 
 // logoutCustomer() writes all the new transactions (if any) to the database
@@ -289,8 +291,9 @@ void ATM::LogoutCustomer()
 	// to refelct the account's new balance after all the transactions have taken place.
 	db->updateBalance(account->GetAccountNumber(), account->GetAccountBalance());
 
-	// Clear out the vectors keeping track of the transactions, transfers, and accounts.
+	// Clear out the vectors keeping track of the transactions, transfers, accounts, and pages of account history.
 	collectionOfTransactions.clear();
 	collectionOfTransfers.clear();
 	collectionOfAccounts.clear();
+	transactionHistory.clear();
 }

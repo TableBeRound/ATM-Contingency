@@ -17,35 +17,35 @@
 using namespace std;
 
 int main() {
-	//// Boolean value for determining when to shutdown the ATM
-	//bool atmShutdown = false;
+	// Boolean value for determining when to shutdown the ATM
+	bool atmShutdown = false;
 
-	//ATM *atm = new ATM();
+	ATM *atm = new ATM();
 
-	//do
-	//{
-	//	if (atm->Login())
-	//	{
-	//		atm->MainMenu();
-	//	
-	//	}
-	//	// Prompt the user whether they would like to close the program
-	//	cout << "\n\n\nStrike the \" Y \" key to close the program. Press any other key to continue.";
+	do
+	{
+		if (atm->Login())
+		{
+			atm->MainMenu();
+		
+		}
+		// Prompt the user whether they would like to close the program
+		cout << "\n\n\nStrike the \" Y \" key to close the program. Press any other key to continue.";
 
-	//	// Get the integer value corresponding to the key that they struck
-	//	int key = _getch();
+		// Get the integer value corresponding to the key that they struck
+		int key = _getch();
 
-	//	// If the user has struck the "Y" key, they intend on closing the program.
-	//	switch (key)
-	//	{		
-	//	case KEY_Y:
-	//		atmShutdown = true;
-	//		break;
-	//	}			
-	//} while (!atmShutdown);		
+		// If the user has struck the "Y" key, they intend on closing the program.
+		switch (key)
+		{		
+		case KEY_Y:
+			atmShutdown = true;
+			break;
+		}			
+	} while (!atmShutdown);		
 
-	////ATM shutdown procedure should go here!!!
-	//delete atm;
+	//ATM shutdown procedure should go here!!!
+	delete atm;
 
 #pragma region Load the Database
 	//Database *db = new Database();
@@ -94,7 +94,7 @@ int main() {
 #pragma endregion	
 
 #pragma region Dannys Database Tests
-	Database *db = new Database();
+	//Database *db = new Database();
 
 #pragma region Database Tests Related to Customer Table
 	/*
@@ -316,8 +316,6 @@ int main() {
 #pragma endregion
 
 #pragma region Database Tests Related to Transaction History
-db->printTxHxToConsole(1);
-system("pause");
 
 #pragma endregion
 

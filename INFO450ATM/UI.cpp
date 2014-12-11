@@ -362,6 +362,46 @@ void UI::ShowErrorMessage(char *message)
 	this->PressAnyKeyToContinue();
 }
 
+void UI::ShowTransactionHistory(vector<Page> transactionHistory)
+{
+	unsigned int currentPage = 0;
+	int keyboardHit = 0;
+
+	while (keyboardHit != KEY_ESC)
+	{
+		this->ClearScreen();
+
+		cout << "Transaction History" << endl << endl;
+
+		for (unsigned int i = 0; i < transactionHistory[currentPage].GetMaximumNumberOfLines(); i++)
+		{
+			cout << transactionHistory[currentPage].GetLine(i) << endl;
+		}
+
+		cout << endl << endl << endl;
+
+		cout << "<--- Previous Page (Left Arrow)\t\t\tNext Page (Right Arrow) ---> " << endl << endl;
+		cout << "Press Escape key to return to Main Menu";
+
+		keyboardHit = _getch();
+		switch (keyboardHit)
+		{
+		case KEY_LEFT:
+			if (currentPage > 0)
+			{
+				currentPage--;
+			}
+			break;
+		case KEY_RIGHT:
+			if (currentPage < (transactionHistory.size() - 1))
+			{
+				currentPage++;
+			}
+		}
+	}
+	
+}
+
 // Clear the screen - THIS CODE IS NOT MY OWN.
 // I created the ClearScreen function using 
 // code from http://www.cplusplus.com/articles/4z18T05o/

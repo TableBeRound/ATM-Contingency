@@ -10,16 +10,17 @@ using namespace std;
 class Page
 {
 private:
-	string header = "";
-	string footer = "";
-	int maximumNumberOfLines = 0;
+	unsigned int maximumNumberOfLines = 10;
 	vector<string> collectionOfLines;
 
 public:
-	Page(string header, string footer, int maxNumberOfLines);
+	Page();
 	~Page();
 
 	void AddLine(string lineText);
+	unsigned int GetMaximumNumberOfLines();
+	string GetLine(unsigned int lineNumber);
+	unsigned int GetNumberOfLines();
 };
 
 #endif

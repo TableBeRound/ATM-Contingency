@@ -586,27 +586,9 @@ public:
 #pragma endregion
 
 #pragma region Functions related to Transaction History
-	vector<Page *> getTransactionHistory(int accountNumber)
+	void populateTransactionHistory(int accountNumber, vector<Page> *transactionHistory)
 	{
-		vector<Page *> transactionHistory;
 
-		// Perform database lookup which returns all records in the AccountTransaction table
-		// which correspond to the account number passed to this function.
-
-		// Enumerate through the list of returned records.  
-		// Assign each record to a page. Each page will have a maximum number of lines available.
-		// Once the page has reached capacity, add the page to the transaction History.
-		//      Keep this up, creating new pages until all the records have been assigned to a page.
-
-		// Once all records have been assigned to a page, and each page has been added to the TxHx, return TxHx.
-		return transactionHistory;
-	}
-
-	void printTxHxToConsole(int accountNumber)
-	{
-		// First create a pointer to a SQLiteDatabase using 
-		// the connect() function defined above and then
-		// create a pointer to an SQLiteStatement object.		
 		SQLiteDatabase *pDatabase = this->connect();
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
@@ -616,6 +598,7 @@ public:
 		string retrievedTransactionType = "";
 		string retrievedDate = "";
 
+		vector <string> linesToPage;
 
 		// Use the customerNumber and accountType passed to this method to query the database.
 		pStmt->Sql("SELECT * FROM AccountTransaction WHERE accountNumber = ?;");
@@ -631,14 +614,39 @@ public:
 			retrievedTransactionType = pStmt->GetColumnString("transactionType");
 			retrievedDate = pStmt->GetColumnString("date");
 
-			cout << "Transaction Number: " + std::to_string(retrievedTransactionNumber) << endl
-				<< "Transaction Amount: " + std::to_string(retrievedTransactionAmt) << endl
-				<< "Transaction Type: " + retrievedTransactionType << endl
-				<< "Transaction Date: " + retrievedDate << endl << endl;
+			string additionalLine = std::to_string(retrievedTransactionNumber) + " | " +
+				std::to_string(retrievedAccountNumber) + " | " +
+				std::to_string(retrievedTransactionAmt) + " | " +
+				retrievedTransactionType + " | " +
+				retrievedDate;
+
+			linesToPage.push_back(additionalLine);
+		}
+
+		// This variable stores the number of lines (transactions)
+		// which have been written.
+		unsigned int numberOfLinesWritten = 0;
+
+		// As long as there are still lines that need to be written, loop
+		while (numberOfLinesWritten < linesToPage.size())
+		{
+			// Create a new page with room for 10 total lines.
+			Page page;
+
+			// While there is still room to write on the page, add an additional line from the vector
+			// made above.  Be sure to increment the numberOfLinesWritten as we add to each page.
+			for (unsigned int i = 0; i < page.GetMaximumNumberOfLines() && numberOfLinesWritten < linesToPage.size(); i++, numberOfLinesWritten++)
+			{
+				page.AddLine(linesToPage[numberOfLinesWritten]);
+			}
+
+			// Once the maximum number of lines has been reached for the page, add the page to the 
+			// transactionHistory vector.
+			transactionHistory->push_back(page);
 		}
 
 		// "Clean up"
-		pStmt->FreeQuery();
+		pStmt->FreeQuery();		
 	}
 #pragma endregion
 };
