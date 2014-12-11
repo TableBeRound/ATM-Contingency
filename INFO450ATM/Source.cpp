@@ -38,7 +38,8 @@ int main() {
 		}			
 	} while (!atmShutdown);		
 
-	//delete atm;
+	//ATM shutdown procedure should go here!!!
+	delete atm;
 
 #pragma region Load the Database
 	//Database *db = new Database();
@@ -207,7 +208,7 @@ int main() {
 	string transType = "D";
 	db->createTransaction(account->GetAccountNumber(), transAmt, transType);
 
-	Transaction *transaction = db->getTransaction(4);
+	Transaction *transaction = db->getTransaction(10);
 
 	cout << "Transaction Number: " << transaction->GetTransactionNumber() << "\n"
 		<< "Account Number: " << transaction->GetAccountNumber() << "\n"
@@ -264,7 +265,7 @@ int main() {
 	double transAmt = 7.11;
 	db->createTransfer(account->GetAccountNumber(), destAcct, transAmt);
 
-	Transfer *transfer = db->getTransfer(2);
+	Transfer *transfer = db->getTransfer(4);
 
 	cout << "Transfer Number: " << transfer->GetTransactionNumber() << "\n"
 		<< "Source Account Number: " << transfer->GetAccountNumber() << "\n"
