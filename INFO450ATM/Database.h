@@ -632,7 +632,7 @@ public:
 			retrievedDate = pStmt->GetColumnString("date");
 
 			cout << "Transaction Number: " + std::to_string(retrievedTransactionNumber) << endl
-				<< "Transaction Amount: " + std::to_string(retrievedAccountNumber) << endl
+				<< "Transaction Amount: " + std::to_string(retrievedTransactionAmt) << endl
 				<< "Transaction Type: " + retrievedTransactionType << endl
 				<< "Transaction Date: " + retrievedDate << endl << endl;
 		}

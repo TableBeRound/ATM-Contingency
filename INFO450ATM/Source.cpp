@@ -318,6 +318,7 @@ int main() {
 #pragma region Database Tests Related to Transaction History
 db->printTxHxToConsole(1);
 system("pause");
+
 #pragma endregion
 
 	//system("pause");
