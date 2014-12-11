@@ -38,6 +38,8 @@ int main() {
 		}			
 	} while (!atmShutdown);		
 
+	//delete atm;
+
 #pragma region Load the Database
 	//Database *db = new Database();
 

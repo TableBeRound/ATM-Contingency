@@ -294,6 +294,36 @@ double UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 	return transactionAmount;
 }
 
+// Display an area for the customer to input the destination account number for making a transfer
+int UI::ShowDestinationAccountPrompt()
+{
+	int destinationAccountNumber = 0;
+	bool inputValidated = false;
+
+	while ((!inputValidated) || (destinationAccountNumber == 0))
+	{
+		this->ClearScreen();
+		cout << "Please enter the account number you would like to transfer to: ";
+		cin >> destinationAccountNumber;
+		this->ClearBuffer();
+		cout << endl << endl << "You entered " + std::to_string(destinationAccountNumber) << endl << endl;
+		cout << "Is this correct? (Press Y for \"Yes\" and N for \"No\")";
+		int c = _getch();
+		switch (c)
+		{
+		// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
+		case 121:
+			inputValidated = true;
+			break;
+		default:
+			inputValidated = false;
+			break;
+		}
+	}
+		
+	return destinationAccountNumber;
+}
+
 // Display the menu of possible transactions amounts to the user.
 void UI::ShowAccountBalance(string acctNum, double acctBalance)
 {

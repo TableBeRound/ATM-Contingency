@@ -221,18 +221,16 @@ public:
 		* then executed with either the Execute() or ExecuteAndFree() functions.
 		***************************************************************************************/
 
-		char accType = accountType[0];
-
 		// De-allocate memory used to store pointers
 		/*delete pDatabase;
 		delete pStmt;*/
 
 		// return the account to the calling function
-		return new Account(accountNumber, customerNumber, accType, initialBalance);
+		return new Account(accountNumber, customerNumber, accountType, initialBalance);
 	}
 	
-	// Retrieve Account Function:
-	Account *getAccount(int customerNumber, string accountType = "C")  // <-- Default accountType is Checking or "C"
+	// Function used to retrieve account info using the customer number
+	Account *getAccount(int customerNumber, string accountType)  // <-- Default accountType is Checking or "C"
 	{
 		// Here are our variables which store the values which will be returned by 
 		// the database search (assuming the search was successful)
@@ -265,10 +263,47 @@ public:
 		// "Clean up"
 		pStmt->FreeQuery();
 
-		// This is a little work-around to make the Account constructor and the result from the 
-		// "GetColumnString" function from Kompex's SQLiteStatement "play nice".  GetColumnString
-		// returns a string, but the Account object's constructor needs a character for accountType.
-		char retAccType = retrievedAccountType[0];
+		// De-allocate memory used to store pointers
+		/*delete pDatabase;
+		delete pStmt;*/
+
+		// Use the variables, which have been assigned values via the query above, 
+		// to create a Customer object to return.
+		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retrievedAccountType, retrievedBalance);
+	}
+
+	// Another function used to retrieve account info, but using the account number instead
+	Account *getAccount(int accountNumber)  // <-- Default accountType is Checking or "C"
+	{
+		// Here are our variables which store the values which will be returned by 
+		// the database search (assuming the search was successful)
+		int retrievedAccountNumber = 0;
+		int retrievedCustomerNumber = 0;
+		string retrievedAccountType = "";
+		double retrievedBalance = 0.0;
+
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		// Use the customerNumber and accountType passed to this method to query the database.
+		pStmt->Sql("SELECT * FROM Account WHERE accountNumber = ?;");
+		pStmt->BindInt(1, accountNumber);
+
+		// Process the results of the query above - assigning the values of each
+		// column to the variables declared above.
+		while (pStmt->FetchRow())
+		{
+			retrievedAccountNumber = pStmt->GetColumnInt("accountNumber");
+			retrievedCustomerNumber = pStmt->GetColumnInt("customerNumber");
+			retrievedAccountType = pStmt->GetColumnString("accountType");
+			retrievedBalance = pStmt->GetColumnDouble("balance");
+		}
+
+		// "Clean up"
+		pStmt->FreeQuery();
 
 		// De-allocate memory used to store pointers
 		/*delete pDatabase;
@@ -276,7 +311,7 @@ public:
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
-		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retAccType, retrievedBalance);
+		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retrievedAccountType, retrievedBalance);
 	}
 
 	// Delete Account Function:

@@ -30,6 +30,7 @@ public:
 	int ShowPINPrompt();
 	int ShowTransactionTypeMenu(string custFirstName, string custLastname);
 	double ShowTransactionAmountMenu(char *actionToBePerformed);
+	int ShowDestinationAccountPrompt();
 	void ShowAccountBalance(string acctNum, double acctBalance);
 	void ShowTransactionSuccessMessage();
 	void ShowErrorMessage(char *message);

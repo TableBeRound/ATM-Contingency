@@ -1,6 +1,10 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
+#include <string>
+
+using namespace std;
+
 #pragma once
 
 class Account
@@ -15,16 +19,16 @@ class Account
 	// I added this attribute in case the ATM expands 
 	// its functionality to accomodate more than just 
 	// checking accounts.
-	char _accountType; 
+	string _accountType; 
 	double _balance;
 
 public:	
-	Account(int accountNumber, int customerNumber, char accountType, double balance);
+	Account(int accountNumber, int customerNumber, string accountType, double balance);
 	~Account();
 
 	int GetAccountNumber();
 	int GetCustomerNumber();
-	char GetAccountType();
+	string GetAccountType();
 	double GetAccountBalance();
 	void SetAccountBalance(double newAccountBalance);
 	void CloseAccount();

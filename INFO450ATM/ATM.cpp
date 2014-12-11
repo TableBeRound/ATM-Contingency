@@ -19,9 +19,18 @@ Account *account;
 Database *db = new Database();
 
 // This vector is used to store all the transactions that the customer
-// performs while they are logged in.  Transactions and account updates 
-// are made once the user logs out.
+// performs while they are logged in.  Updates to the AccountTransaction
+// table are made once the user logs out.
 std::vector<Transaction> collectionOfTransactions;
+
+// This vector is used to store all the transfers that the customer
+// performs while they are logged in.  Updates to the AccountTransfer
+// table are made once the user logs out.
+std::vector<Transfer> collectionOfTransfers;
+
+// This vector is used to store those accounts which are sent a 
+// transfer from the currently logged-in customer.
+std::vector<Account *> collectionOfAccounts;
 
 // default ATM Constructor
 ATM::ATM()
@@ -44,11 +53,11 @@ bool ATM::Login() {
 	pin = ui->ShowPINPrompt();
 	ui->ClearBuffer();
 
-#pragma region Authentication logic
+	// Get the customer data using the email address provided
 	customer = db->getCustomer(email);
 
 	// Test to see if a valid Customer was returned by the getCustomer()
-	// function call above.
+	// function call above. A customer number of 0 is not possible...
 	if (customer->GetCustomerNumber() != 0)
 	{
 		// If the PIN entered by the user matches the one that is stored
@@ -56,7 +65,10 @@ bool ATM::Login() {
 		// return "true" so that the MainMenu is called (see the Source.cpp file)
 		if (customer->GetPIN() == pin)
 		{		
-			account = db->getAccount(customer->GetCustomerNumber());
+			// We've hard-coded a "C" here because we built the function with 
+			// the idea that in the future customers could have more than one
+			// type of account.
+			account = db->getAccount(customer->GetCustomerNumber(), "C");
 			return true;
 		}
 		else
@@ -65,11 +77,9 @@ bool ATM::Login() {
 	}
 	else
 		return false;
-#pragma endregion
 }
 
-// MainMenu method
-// uses a switch to determine what the user would like to do during this interaction.
+// The Main Menu uses a switch to determine what the user would like to do during this interaction.
 void ATM::MainMenu() {
 
 	bool userLogout = false;
@@ -95,9 +105,8 @@ void ATM::MainMenu() {
 			PerformBalanceInquiry();
 			break;
 		case 4:
-			//PerformTransfer();
-			cout << "Perform Transfer" << endl << endl;
-			system("pause");
+			//ui->ClearBuffer();
+			PerformTransfer();			
 			break;
 		case 5:
 			//ShowTransactionHistory();
@@ -150,7 +159,7 @@ void ATM::PerformWithdrawal()
 	}
 	else
 		// If the user does not have sufficient funds to cover the withdrawal, display this error message.
-		ui->ShowErrorMessage("There are insufficient funds in this account to perform a withdrawal of that amount.");
+		ui->ShowErrorMessage("Insufficient funds in this account!");
 }
 
 // This logic executes if the user selected to make a deposit from the Main Menu
@@ -184,31 +193,59 @@ void ATM::PerformTransfer() {
 	int destinationAccountNumber = 0;
 	double amountToTransfer = 0.0;
 
-	// ******* UI Function to prompt user for destination account goes here! ***************
-	// destinationAccountNumber = ui->ShowDestinationAccountPrompt();
-	//**************************************************************************************
-
-	// Prints a preconstructed transaction amounts menu (forces increments of $20)
-	// and stores the result of the user's choice in the amountToTransfer variable.
-	amountToTransfer = ui->ShowTransactionAmountMenu("transferred");
-
-	if (currentBalanceOfSourceAccount >= amountToTransfer)
+	// Get the number for the account which will be recieving the transfer and
+	// use that number to retrieve that account's information - building an
+	// Account object named destinationAccount.
+	destinationAccountNumber = ui->ShowDestinationAccountPrompt();
+	Account *destinationAccount = db->getAccount(destinationAccountNumber);
+	
+	if (destinationAccount->GetAccountNumber() != 0)
 	{
-		// Create a new Transaction object and add it to the "batch" of transactions to process 
-		// when the user chooses to log out.
-		//Transfer newTransfer = Transfer(account->GetAccountNumber(), destinationAccountNumber, amountToTransfer);
-		//collectionOfTransactions.push_back(newTransfer);
+		// Prints a preconstructed transaction amounts menu (forces increments of $20)
+		// and stores the result of the user's choice in the amountToTransfer variable.
+		amountToTransfer = ui->ShowTransactionAmountMenu("transferred");
 
-		// Add the amount of the new deposit to the account's balance
-		currentBalanceOfSourceAccount -= amountToTransfer;
-		account->SetAccountBalance(currentBalanceOfSourceAccount);
+		if (currentBalanceOfSourceAccount >= amountToTransfer)
+		{
+			// Create a new Transfer object and add it to the "batch" of transfers to process 
+			// when the user chooses to log out.
+			Transfer newTransfer = Transfer(account->GetAccountNumber(), destinationAccountNumber, amountToTransfer);
+			collectionOfTransfers.push_back(newTransfer);
 
-		// Show the user that the transaction was a success.
-		ui->ShowTransactionSuccessMessage();
+			// Subtract the amount of the new transfer from the "source" account's balance
+			currentBalanceOfSourceAccount -= amountToTransfer;
+			account->SetAccountBalance(currentBalanceOfSourceAccount);
+
+			/*ui->ClearScreen();
+			cout << "Source Acct Info:\n\n"
+				<< "Acct Number: " + std::to_string(account->GetAccountNumber()) << endl
+				<< "Acct Balance: " + std::to_string(account->GetAccountBalance());
+			system("pause");*/
+
+			// And add the amount of the new transfer to the "destination" account's balance
+			double BalOfDestAcct = destinationAccount->GetAccountBalance();
+			BalOfDestAcct += amountToTransfer;
+			destinationAccount->SetAccountBalance(BalOfDestAcct);
+
+			// Add the destinationAccount to the list of accounts to update when the user logs out
+			collectionOfAccounts.push_back(destinationAccount);
+
+			/*cout << "Destination Acct Info:\n\n"
+				<< "Acct Number: " + std::to_string(destinationAccount->GetAccountNumber()) << endl
+				<< "Acct Balance: " + std::to_string(destinationAccount->GetAccountBalance());
+			system("pause");*/
+
+			// Show the user that the transaction was a success.
+			ui->ShowTransactionSuccessMessage();
+		}
+		else
+			// If the user does not have sufficient funds to cover the withdrawal, display this error message.
+			ui->ShowErrorMessage("Insufficient funds in this account!");
 	}
 	else
-		// If the user does not have sufficient funds to cover the withdrawal, display this error message.
-		ui->ShowErrorMessage("There are insufficient funds in this account to perform a withdrawal of that amount.");
+	{
+		ui->ShowErrorMessage("That is not a valid account number.");
+	}	
 }
 
 // This logic executes if the user selected to view their transaction history from the Main Menu
@@ -231,10 +268,29 @@ void ATM::LogoutCustomer()
 							  collectionOfTransactions[i].GetTransactionType());
 	}	
 
-	// Update the account information which is stored in the database to reflect 
-	// the account's new balance after all the transactions have taken place.
+	// Move through the collection of Transfers and write each one to the database.
+	// This could be more efficient if we employed a batch process rather than writing
+	// each transaction one at a time.
+	for (unsigned int i = 0; i < collectionOfTransfers.size(); i++)
+	{
+		db->createTransfer(collectionOfTransfers[i].GetAccountNumber(),
+			collectionOfTransfers[i].GetDestinationAccountNumber(),
+			collectionOfTransfers[i].GetTransactionAmount());
+	}
+
+	// Move through the collection of Accounts which have received transfers from this 
+	// customer and update each of their balances.
+	for (unsigned int i = 0; i < collectionOfAccounts.size(); i++)
+	{
+		db->updateBalance(collectionOfAccounts[i]->GetAccountNumber(), collectionOfAccounts[i]->GetAccountBalance());
+	}
+
+	// Update the currently logged-in user's account information stored in the database
+	// to refelct the account's new balance after all the transactions have taken place.
 	db->updateBalance(account->GetAccountNumber(), account->GetAccountBalance());
 
-	// Clear out the vector keeping track of the customer's transactions
+	// Clear out the vectors keeping track of the transactions, transfers, and accounts.
 	collectionOfTransactions.clear();
+	collectionOfTransfers.clear();
+	collectionOfAccounts.clear();
 }

@@ -1,7 +1,7 @@
 #include "Account.h"
 
 #pragma region Constructor & Destructor
-Account::Account(int accountNumber, int customerNumber, char accountType, double balance)
+Account::Account(int accountNumber, int customerNumber, string accountType, double balance)
 {
 	this->_accountNumber = accountNumber;
 	this->_customerNumber = customerNumber;
@@ -24,7 +24,7 @@ int Account::GetCustomerNumber()
 	return this->_customerNumber;
 }
 
-char Account::GetAccountType()
+string Account::GetAccountType()
 {
 	return this->_accountType;
 }
