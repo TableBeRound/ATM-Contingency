@@ -601,6 +601,45 @@ public:
 		// Once all records have been assigned to a page, and each page has been added to the TxHx, return TxHx.
 		return transactionHistory;
 	}
+
+	void printTxHxToConsole(int accountNumber)
+	{
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		int retrievedTransactionNumber = 0;
+		int retrievedAccountNumber = 0;
+		double retrievedTransactionAmt = 0.0;
+		string retrievedTransactionType = "";
+		string retrievedDate = "";
+
+
+		// Use the customerNumber and accountType passed to this method to query the database.
+		pStmt->Sql("SELECT * FROM AccountTransaction WHERE accountNumber = ?;");
+		pStmt->BindInt(1, accountNumber);
+
+		// Process the results of the query above - assigning the values of each
+		// column to the variables declared above.
+		while (pStmt->FetchRow())
+		{
+			retrievedTransactionNumber = pStmt->GetColumnInt("transactionNumber");
+			retrievedAccountNumber = pStmt->GetColumnInt("accountNumber");
+			retrievedTransactionAmt = pStmt->GetColumnDouble("transactionAmount");
+			retrievedTransactionType = pStmt->GetColumnString("transactionType");
+			retrievedDate = pStmt->GetColumnString("date");
+
+			cout << "Transaction Number: " + std::to_string(retrievedTransactionNumber) << endl
+				<< "Transaction Amount: " + std::to_string(retrievedAccountNumber) << endl
+				<< "Transaction Type: " + retrievedTransactionType << endl
+				<< "Transaction Date: " + retrievedDate << endl << endl;
+		}
+
+		// "Clean up"
+		pStmt->FreeQuery();
+	}
 #pragma endregion
 };
 
