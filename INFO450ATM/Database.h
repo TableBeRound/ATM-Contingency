@@ -597,7 +597,9 @@ public:
 		// Assign each record to a page. Each page will have a maximum number of lines available.
 		// Once the page has reached capacity, add the page to the transaction History.
 		//      Keep this up, creating new pages until all the records have been assigned to a page.
+
 		// Once all records have been assigned to a page, and each page has been added to the TxHx, return TxHx.
+		return transactionHistory;
 	}
 #pragma endregion
 };
