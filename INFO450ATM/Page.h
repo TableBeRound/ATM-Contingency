@@ -9,12 +9,13 @@ using namespace std;
 #pragma once
 class Page
 {
-public:
+private:
 	string header = "";
 	string footer = "";
 	int maximumNumberOfLines = 0;
 	vector<string> collectionOfLines;
 
+public:
 	Page(string header, string footer, int maxNumberOfLines);
 	~Page();
 
