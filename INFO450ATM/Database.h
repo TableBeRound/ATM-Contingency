@@ -592,8 +592,7 @@ public:
 		SQLiteDatabase *pDatabase = this->connect();
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
 
-		int retrievedTransactionNumber = 0;
-		int retrievedAccountNumber = 0;
+		int retrievedTransactionNumber = 0;		
 		double retrievedTransactionAmt = 0.0;
 		string retrievedTransactionType = "";
 		string retrievedDate = "";
@@ -609,14 +608,33 @@ public:
 		while (pStmt->FetchRow())
 		{
 			retrievedTransactionNumber = pStmt->GetColumnInt("transactionNumber");
-			retrievedAccountNumber = pStmt->GetColumnInt("accountNumber");
 			retrievedTransactionAmt = pStmt->GetColumnDouble("transactionAmount");
 			retrievedTransactionType = pStmt->GetColumnString("transactionType");
 			retrievedDate = pStmt->GetColumnString("date");
+			
+			int sizeOfTransactionNumber = std::to_string(retrievedTransactionNumber).length();
+			string transactionNumColumnPadding = "";
 
-			string additionalLine = std::to_string(retrievedTransactionNumber) + " | " +
-				std::to_string(retrievedAccountNumber) + " | " +
-				std::to_string(retrievedTransactionAmt) + " | " +
+			for (sizeOfTransactionNumber; sizeOfTransactionNumber < 8; sizeOfTransactionNumber++)
+			{
+				transactionNumColumnPadding += " ";
+			}
+
+			string retTransAmt = std::to_string(retrievedTransactionAmt);
+			size_t dotIndex = retTransAmt.find(".");
+			retTransAmt = retTransAmt.substr(0, dotIndex + 3);
+			int sizeOfTransactionAmt = retTransAmt.length();
+			string transactionAmtColumnPadding = "";
+
+			for (sizeOfTransactionAmt; sizeOfTransactionAmt < 8; sizeOfTransactionAmt++)
+			{
+				transactionAmtColumnPadding += " ";
+			}
+
+			string additionalLine = "   " + std::to_string(retrievedTransactionNumber) + 
+				transactionNumColumnPadding + " |  $" +
+				retTransAmt + 
+				transactionAmtColumnPadding + " | " +
 				retrievedTransactionType + " | " +
 				retrievedDate;
 
