@@ -1,8 +1,6 @@
 // Danny Glidewell, Tucker Lavell, Anthony Tran, Joshua Blanton, Ian Renninger
 // TR 5:30-6:45
 // Assignment: ATM Revisited
-// This program will simulate a text based version of an ATM interface and interaction
-// for the Shallow prototype of the ATM, there are only successful interactions with this ATM
 
 #include <iostream>
 #include <cmath>
@@ -13,11 +11,15 @@
 #include "Database.h"
 #include "Customer.h"
 
+// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
+#define KEY_Y 121 // This is used for determining when to close the program.
+
 using namespace std;
 
 int main() {
 	// Boolean value for determining when to shutdown the ATM
 	bool atmShutdown = false;
+
 	ATM *atm = new ATM();
 
 	do
@@ -25,14 +27,18 @@ int main() {
 		if (atm->Login())
 		{
 			atm->MainMenu();
-		}			
-
+		
+		}
+		// Prompt the user whether they would like to close the program
 		cout << "\n\n\nStrike the \" Y \" key to close the program. Press any other key to continue.";
-		int c = _getch();
-		switch (c)
-		{
-		// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
-		case 121:
+
+		// Get the integer value corresponding to the key that they struck
+		int key = _getch();
+
+		// If the user has struck the "Y" key, they intend on closing the program.
+		switch (key)
+		{		
+		case KEY_Y:
 			atmShutdown = true;
 			break;
 		}			

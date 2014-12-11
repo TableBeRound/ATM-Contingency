@@ -12,10 +12,12 @@
 
 #include <iostream>
 #include <exception>
+#include <vector>
 #include "Account.h"
 #include "Customer.h"
 #include "Transaction.h"
 #include "Transfer.h"
+#include "Page.h"
 
 using namespace Kompex;
 using namespace std;
@@ -581,6 +583,22 @@ public:
 		}
 	}
 
+#pragma endregion
+
+#pragma region Functions related to Transaction History
+	vector<Page *> getTransactionHistory(int accountNumber)
+	{
+		vector<Page *> transactionHistory;
+
+		// Perform database lookup which returns all records in the AccountTransaction table
+		// which correspond to the account number passed to this function.
+
+		// Enumerate through the list of returned records.  
+		// Assign each record to a page. Each page will have a maximum number of lines available.
+		// Once the page has reached capacity, add the page to the transaction History.
+		//      Keep this up, creating new pages until all the records have been assigned to a page.
+		// Once all records have been assigned to a page, and each page has been added to the TxHx, return TxHx.
+	}
 #pragma endregion
 };
 
