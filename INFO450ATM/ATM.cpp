@@ -161,14 +161,12 @@ void ATM::PerformWithdrawal()
 	// Check to see if the customer has the available funds to perform the withdrawal
 	if (amountToWithdraw != 0 && account->GetAccountBalance() >= amountToWithdraw)
 	{
-		// Create a new Transaction object and add it to the "batch" of transactions to process 
-		// when the user chooses to log out.
-		Transaction newWithdrawal = Transaction(account->GetAccountNumber(), amountToWithdraw, "W");
-		collectionOfTransactions.push_back(newWithdrawal);
-
-		// Add the amount of the new deposit to the account's balance
+		// Subtract the amount of the withdrawal from the account's balance
 		accountBalance -= amountToWithdraw;
 		account->SetAccountBalance(accountBalance);		
+
+		// Record the transaction in the database.
+		db->createTransaction(account->GetAccountNumber(), amountToWithdraw, "W");
 		ui->ShowTransactionSuccessMessage();
 	}
 	else if (amountToWithdraw != 0 && account->GetAccountBalance() < amountToWithdraw)
@@ -189,14 +187,12 @@ void ATM::PerformDeposit()
 
 	if (amountToDeposit != 0)
 	{
-		// Create a new Transaction object and add it to the "batch" of transactions to process 
-		// when the user chooses to log out.
-		Transaction newDeposit = Transaction(account->GetAccountNumber(), amountToDeposit, "D");
-		collectionOfTransactions.push_back(newDeposit);
-
 		// Add the amount of the new deposit to the account's balance
 		accountBalance += amountToDeposit;
 		account->SetAccountBalance(accountBalance);
+
+		// Record the transaction in the database.
+		db->createTransaction(account->GetAccountNumber(), amountToDeposit, "D");
 		ui->ShowTransactionSuccessMessage();
 	}	
 }
@@ -224,35 +220,22 @@ void ATM::PerformTransfer() {
 
 		if (currentBalanceOfSourceAccount >= amountToTransfer)
 		{
-			// Create a new Transfer object and add it to the "batch" of transfers to process 
-			// when the user chooses to log out.
-			Transfer newTransfer = Transfer(account->GetAccountNumber(), destinationAccountNumber, amountToTransfer);
-			collectionOfTransfers.push_back(newTransfer);
-
 			// Subtract the amount of the new transfer from the "source" account's balance
 			currentBalanceOfSourceAccount -= amountToTransfer;
 			account->SetAccountBalance(currentBalanceOfSourceAccount);
-
-			/*ui->ClearScreen();
-			cout << "Source Acct Info:\n\n"
-				<< "Acct Number: " + std::to_string(account->GetAccountNumber()) << endl
-				<< "Acct Balance: " + std::to_string(account->GetAccountBalance());
-			system("pause");*/
-
+						
 			// And add the amount of the new transfer to the "destination" account's balance
 			double BalOfDestAcct = destinationAccount->GetAccountBalance();
 			BalOfDestAcct += amountToTransfer;
 			destinationAccount->SetAccountBalance(BalOfDestAcct);
+						
+			// Update the Destination Account's Balance
+			db->updateBalance(destinationAccount->GetAccountNumber(), destinationAccount->GetAccountBalance());
 
-			// Add the destinationAccount to the list of accounts to update when the user logs out
-			collectionOfAccounts.push_back(destinationAccount);
+			// Update the Transfer Table in the database
+			db->createTransfer(account->GetAccountNumber(), destinationAccount->GetAccountNumber(), amountToTransfer);
 
-			/*cout << "Destination Acct Info:\n\n"
-				<< "Acct Number: " + std::to_string(destinationAccount->GetAccountNumber()) << endl
-				<< "Acct Balance: " + std::to_string(destinationAccount->GetAccountBalance());
-			system("pause");*/
-
-			// Show the user that the transaction was a success.
+			// Show that the transaction was a success
 			ui->ShowTransactionSuccessMessage();
 		}
 		else
@@ -277,40 +260,10 @@ void ATM::ShowTransactionHistory()
 // and performs any other house-cleaning routines.
 void ATM::LogoutCustomer()
 {
-	// Move through the collection of Transactions and write each one to the database.
-	// This could be more efficient if we employed a batch process rather than writing
-	// each transaction one at a time.
-	for (unsigned int i = 0; i < collectionOfTransactions.size(); i++)
-	{
-		db->createTransaction(collectionOfTransactions[i].GetAccountNumber(),
-							  collectionOfTransactions[i].GetTransactionAmount(),
-							  collectionOfTransactions[i].GetTransactionType());
-	}	
-
-	// Move through the collection of Transfers and write each one to the database.
-	// This could be more efficient if we employed a batch process rather than writing
-	// each transaction one at a time.
-	for (unsigned int i = 0; i < collectionOfTransfers.size(); i++)
-	{
-		db->createTransfer(collectionOfTransfers[i].GetAccountNumber(),
-			collectionOfTransfers[i].GetDestinationAccountNumber(),
-			collectionOfTransfers[i].GetTransactionAmount());
-	}
-
-	// Move through the collection of Accounts which have received transfers from this 
-	// customer and update each of their balances.
-	for (unsigned int i = 0; i < collectionOfAccounts.size(); i++)
-	{
-		db->updateBalance(collectionOfAccounts[i]->GetAccountNumber(), collectionOfAccounts[i]->GetAccountBalance());
-	}
-
 	// Update the currently logged-in user's account information stored in the database
 	// to refelct the account's new balance after all the transactions have taken place.
 	db->updateBalance(account->GetAccountNumber(), account->GetAccountBalance());
 
-	// Clear out the vectors keeping track of the transactions, transfers, accounts, and pages of account history.
-	collectionOfTransactions.clear();
-	collectionOfTransfers.clear();
-	collectionOfAccounts.clear();
+	// Clear out the vector keeping track of the "pages" of the account history.	
 	transactionHistory.clear();
 }
