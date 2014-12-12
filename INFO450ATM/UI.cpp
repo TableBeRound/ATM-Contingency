@@ -531,20 +531,30 @@ void UI::ShowTransactionHistory(vector<Page> transactionHistory, string firstNam
 		cout << "\t     Number  |    Amount    | Type |         Date" << endl;
 		cout << "\t    -----------------------------------------------------" << endl;
 
-		for (unsigned int i = 0; i < transactionHistory[currentPage].GetNumberOfLines(); i++)
+		if (transactionHistory.size() > 0)
 		{
-			cout << transactionHistory[currentPage].GetLine(i) << endl;
+			for (unsigned int i = 0; i < transactionHistory[currentPage].GetNumberOfLines(); i++)
+			{
+				cout << transactionHistory[currentPage].GetLine(i) << endl;
+			}
+
+			if (transactionHistory[currentPage].GetNumberOfLines() < transactionHistory[currentPage].GetMaximumNumberOfLines())
+			{
+				unsigned int numberOfBlankLines = transactionHistory[currentPage].GetMaximumNumberOfLines() - transactionHistory[currentPage].GetNumberOfLines();
+
+				for (unsigned int i = 0; i < numberOfBlankLines; i++)
+				{
+					cout << endl;
+				}
+			}
 		}
-
-		if (transactionHistory[currentPage].GetNumberOfLines() < transactionHistory[currentPage].GetMaximumNumberOfLines())
+		else
 		{
-			unsigned int numberOfBlankLines = transactionHistory[currentPage].GetMaximumNumberOfLines() - transactionHistory[currentPage].GetNumberOfLines();
-
-			for (unsigned int i = 0; i < numberOfBlankLines; i++)
+			for (unsigned int i = 0; i < 10; i++)
 			{
 				cout << endl;
-			}			
-		}
+			}
+		}		
 
 		cout << endl << endl << endl << endl;
 
