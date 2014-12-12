@@ -35,6 +35,10 @@ public:
 	string GetFirstName();
 	string GetLastName();
 	int GetPIN();
+	void SetFirstName(string fname);
+	void SetLastName(string lname);
+	void SetEmailAddress(string email);
+	void SetPIN(int pin);
 
 	// I can't decide if some of these functions are behaviors  
 	// of the Account class or the Customer class...

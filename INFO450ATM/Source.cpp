@@ -11,9 +11,6 @@
 #include "Database.h"
 #include "Customer.h"
 
-// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
-#define KEY_Y 121 // This is used for determining when to close the program.
-
 using namespace std;
 
 int main() {
@@ -30,8 +27,8 @@ int main() {
 		
 		}
 		// Prompt the user whether they would like to close the program
-		cout << "\n\n\n\n\n\n\t\t  Strike the \" Y \" key to close the program." << endl << endl
-			<< "\t\t       Press any other key to continue.";
+		cout << "\n\n\n\n\n\n\t\t       Press any other key to continue." << endl << endl
+			<< "\t\t Strike the \" Esc \" key to close the program.";
 
 		// Get the integer value corresponding to the key that they struck
 		int key = _getch();
@@ -39,7 +36,7 @@ int main() {
 		// If the user has struck the "Y" key, they intend on closing the program.
 		switch (key)
 		{		
-		case KEY_Y:
+		case 27: // 27 is the integer returned by the Escape key
 			atmShutdown = true;
 			break;
 		}			

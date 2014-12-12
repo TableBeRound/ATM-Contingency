@@ -44,18 +44,22 @@ int Customer::GetPIN()
 	return this->_PIN;
 }
 
-void Customer::OpenNewAccount(){
-
+void Customer::SetFirstName(string fname)
+{
+	this->_custFirstName = fname;
 }
 
-void Customer::ViewListOfAccounts(){
-
+void Customer::SetLastName(string lname)
+{
+	this->_custLastName = lname;
 }
 
-void Customer::MakeDeposit(float depositAmount){
-
+void Customer::SetEmailAddress(string email)
+{
+	this->_emailAddress = email;
 }
 
-void Customer::MakeWithdrawal(float withdrawalAmount){
-
+void Customer::SetPIN(int pin)
+{
+	this->_PIN = pin;
 }

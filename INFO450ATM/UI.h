@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "Page.h"
+#include "Customer.h"
 
 using namespace std;
 
@@ -30,6 +31,8 @@ public:
 
 	// All of these functions print things to the screen.
 	// The function names are pretty self-explanatory.
+	bool ShowReturningCustomerNewCustomerPrompt();
+	void ShowCreateNewCustomerProfileForm(Customer *cust);
 	string ShowLoginPrompt();
 	int ShowPINPrompt();
 	int ShowTransactionTypeMenu(string custFirstName, string custLastname);

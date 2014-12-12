@@ -27,6 +27,7 @@ public:
 
 	//ATM Functions
 	bool Login();
+	void CreateNewCustomer();
 	void MainMenu();
 	void PerformBalanceInquiry();
 	void PerformWithdrawal();

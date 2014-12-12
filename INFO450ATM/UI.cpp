@@ -16,6 +16,75 @@ UI::~UI()
 {
 }
 
+// Display returning customer/new customer prompt
+bool UI::ShowReturningCustomerNewCustomerPrompt()
+{
+	string select1 = "*";
+	string select2 = " ";
+	int keyboardHit = 0;
+
+	while (keyboardHit != KEY_ENTER)
+	{
+		this->ClearScreen();
+		cout << endl
+			<< "\t\t\t***********************" << endl
+			<< "\t\t\t* Welcome to DAT Bank *" << endl
+			<< "\t\t\t***********************" << endl
+			<< endl
+			<< endl
+			<< " Are you a returning customer?" << endl
+			<< endl
+			<< "\t[" << select1 << "] 1) Returning customer" << endl   //<---- Choice #1
+			<< "\t[" << select2 << "] 2) New customer" << endl;        //<---- Choice #2
+
+		// Get keyboard input from the customer
+		keyboardHit = _getch();
+
+		// This switch moves the asterisk amongst the menu
+		// items depending on what key has been hit
+		switch (keyboardHit)
+		{
+		case KEY_DOWN:
+			if (select1 == "*")
+			{
+				select1 = " ";
+				select2 = "*";
+			}
+			else if (select2 == "*")
+			{
+				select2 = " ";
+				select1 = "*";
+			}			
+			break;
+
+		case KEY_UP:
+			if (select1 == "*")
+			{
+				select1 = " ";
+				select2 = "*";
+			}
+			else if (select2 == "*")
+			{
+				select2 = " ";
+				select1 = "*";
+			}
+			break;
+		}
+	}
+
+	// After the Enter Key has been pressed, determine
+	// what selection was made by which variable has 
+	// the asterisk assigned to it.
+	if (select1 == "*")
+	{
+		return true;
+	}
+	else 
+	{
+		return false;
+	}		
+}
+
 // Display standard login to the user
 string UI::ShowLoginPrompt()
 {
@@ -30,8 +99,73 @@ string UI::ShowLoginPrompt()
 		<< endl
 		<< " Please enter your email: ";
 	cin >> emailInput;
+	this->ClearBuffer();
 
 	return emailInput;
+}
+
+void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
+{
+	bool inputValid = false;
+	int keyboardHit = 0;
+	string firstName= "";
+	string lastName = "";
+	string emailAddress = "";
+	int pin = 0;
+
+	while (!inputValid)
+	{
+		this->ClearScreen();
+		cout << endl << "\t\t\t  Create a New Customer Account"
+			<< endl << endl << endl << endl
+			<< "  Please enter your information below." << endl << endl << endl
+			<< "     First Name: ";
+		cin >> firstName;
+		this->ClearBuffer();
+		cout << "     Last Name: ";
+		cin >> lastName;
+		this->ClearBuffer();
+		cout << "     Email Address: ";
+		cin >> emailAddress;
+		this->ClearBuffer();
+		cout << "     PIN: ";
+		cin >> pin;
+		this->ClearBuffer();
+		cout << endl << endl << endl 
+			<< "  Please review the information entered above." << endl		    
+			<< endl << endl << endl
+			<< "  Is this information correct? (Press \"Y\" for Yes and \"N\" for No)" << endl << endl
+			<< endl << endl
+			<< "  Press the Escape key to cancel.";
+		keyboardHit = _getch();
+		switch (keyboardHit)
+		{
+			// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
+		case 121:
+			inputValid = true;
+			break;
+		case KEY_ESC:
+			inputValid = true;
+			break;
+		default:
+			inputValid = false;
+			break;
+		}
+	}
+	if (keyboardHit == KEY_ESC)
+	{
+		this->ClearScreen();
+		cout << "\n\n\n\n\t\t\t Account Creation Cancelled!\n\n";
+	}
+	else
+	{
+		cust->SetFirstName(firstName);
+		cust->SetLastName(lastName);
+		cust->SetEmailAddress(emailAddress);
+		cust->SetPIN(pin);
+		this->ClearScreen();		
+		cout << "\n\n\n\n\t\t\t Account Creation Successful!\n\n";
+	}
 }
 
 // Prompt the user to enter a PIN
@@ -42,6 +176,7 @@ int UI::ShowPINPrompt()
 	cout << endl << endl
 		<< " Please enter PIN: ";
 	cin >> pinInput;
+	this->ClearBuffer();
 
 	return pinInput;
 }

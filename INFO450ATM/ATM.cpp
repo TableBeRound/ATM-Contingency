@@ -12,7 +12,7 @@ UI *ui = new UI();
 // Here are the global Customer and Account objects for all ATM functions.
 // This made more sense to me rather than passing these objects
 // back and forth between the various functions.
-Customer *customer;
+Customer *customer = new Customer();
 Account *account;
 
 // This database object is used to communicate with the embedded SQLite database.
@@ -47,40 +47,55 @@ ATM::~ATM()
 }
 
 bool ATM::Login() {
-	// stores the email addresss and PIN entered by the user	
 
-	// prompts the User to enter their email
-	email = ui->ShowLoginPrompt();
-	ui->ClearBuffer();
+	bool returningCustomer = ui->ShowReturningCustomerNewCustomerPrompt();
 
-	// prompts the user to enter their PIN, without clearing the LoginPrompt
-	pin = ui->ShowPINPrompt();
-	ui->ClearBuffer();
-
-	// Get the customer data using the email address provided
-	customer = db->getCustomer(email);
-
-	// Test to see if a valid Customer was returned by the getCustomer()
-	// function call above. A customer number of 0 is not possible...
-	if (customer->GetCustomerNumber() != 0)
+	if (returningCustomer)
 	{
-		// If the PIN entered by the user matches the one that is stored
-		// in the database, get the account information for that customer and 
-		// return "true" so that the MainMenu is called (see the Source.cpp file)
-		if (customer->GetPIN() == pin)
-		{		
-			// We've hard-coded a "C" here because we built the function with 
-			// the idea that in the future customers could have more than one
-			// type of account.
-			account = db->getAccount(customer->GetCustomerNumber(), "C");
-			return true;
+		// prompts the User to enter their email
+		email = ui->ShowLoginPrompt();
+
+		// prompts the user to enter their PIN, without clearing the LoginPrompt
+		pin = ui->ShowPINPrompt();
+
+		// Get the customer data from the database using the email address provided
+		customer = db->getCustomer(email);
+
+		// Test to see if a valid Customer was returned by the getCustomer()
+		// function call above. A customer number of 0 is not possible...
+		if (customer->GetCustomerNumber() != 0)
+		{
+			// If the PIN entered by the user matches the one that is stored
+			// in the database, get the account information for that customer and 
+			// return "true" so that the MainMenu is called (see the Source.cpp file)
+			if (customer->GetPIN() == pin)
+			{
+				// We've hard-coded a "C" here because we built the function with 
+				// the idea that in the future customers could have more than one
+				// type of account.
+				account = db->getAccount(customer->GetCustomerNumber(), "C");
+				return true;
+			}
+			else
+				// Return false if the PINs do no match.
+				return false;
 		}
 		else
-			// Return false if the PINs do no match.
 			return false;
 	}
 	else
+	{
+		CreateNewCustomer();
 		return false;
+	}
+}
+
+void ATM::CreateNewCustomer()
+{
+	ui->ShowCreateNewCustomerProfileForm(customer);
+	db->createCustomer(customer->GetLastName(), customer->GetFirstName(), customer->GetEmailAddress(), customer->GetPIN());
+	customer = db->getCustomer(customer->GetEmailAddress());
+	db->createAccount(customer->GetCustomerNumber(), "C");
 }
 
 // The Main Menu uses a switch to determine what the user would like to do during this interaction.
