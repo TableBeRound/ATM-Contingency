@@ -27,9 +27,9 @@ bool UI::ShowReturningCustomerNewCustomerPrompt()
 	{
 		this->ClearScreen();
 		cout << endl
-			<< "\t\t\t***********************" << endl
-			<< "\t\t\t* Welcome to DAT Bank *" << endl
-			<< "\t\t\t***********************" << endl
+			<< "\t\t\t    ***********************" << endl
+			<< "\t\t\t    * Welcome to DAT Bank *" << endl
+			<< "\t\t\t    ***********************" << endl
 			<< endl
 			<< endl
 			<< " Are you a returning customer?" << endl
@@ -92,9 +92,9 @@ string UI::ShowLoginPrompt()
 
 	this->ClearScreen();
 	cout << endl
-		<< "\t\t\t***********************" << endl
-		<< "\t\t\t* Welcome to DAT Bank *" << endl
-		<< "\t\t\t***********************" << endl
+		<< "\t\t\t    ***********************" << endl
+		<< "\t\t\t    * Welcome to DAT Bank *" << endl
+		<< "\t\t\t    ***********************" << endl
 		<< endl
 		<< endl
 		<< " Please enter your email: ";
