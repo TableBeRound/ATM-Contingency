@@ -342,7 +342,7 @@ int UI::ShowDestinationAccountPrompt()
 }
 
 // Display the menu of possible transactions amounts to the user.
-void UI::ShowAccountBalance(string custName, double acctBalance)
+void UI::ShowAccountBalance(string custName, int acctNum, double acctBalance)
 {
 	this->ClearScreen();
 	cout << endl
@@ -351,7 +351,7 @@ void UI::ShowAccountBalance(string custName, double acctBalance)
 		<< "\t\t\t\t*******************" << endl
 		<< endl << endl << endl
 		<< " " + custName << endl << endl
-		<< "    Checking Account: $" << std::fixed << std::setprecision(2) << acctBalance
+		<< "     Account #" + std::to_string(acctNum) + " (Checking): $" << std::fixed << std::setprecision(2) << acctBalance
 		<< endl << endl << endl << endl << endl
 		<< endl << endl << endl << endl << endl
 		<< endl << endl << endl;

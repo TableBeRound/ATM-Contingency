@@ -129,7 +129,7 @@ void ATM::PerformBalanceInquiry() {
 	string customerName = customer->GetFirstName() + " " + customer->GetLastName();
 
 	// Show the current balance of the account.
-	ui->ShowAccountBalance(customerName, account->GetAccountBalance());
+	ui->ShowAccountBalance(customerName, account->GetAccountNumber(), account->GetAccountBalance());
 }
 
 // This logic executes if the user selected to make a withdrawal from the Main Menu

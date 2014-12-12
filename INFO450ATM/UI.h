@@ -35,7 +35,7 @@ public:
 	int ShowTransactionTypeMenu(string custFirstName, string custLastname);
 	double ShowTransactionAmountMenu(char *actionToBePerformed);
 	int ShowDestinationAccountPrompt();
-	void ShowAccountBalance(string custName, double acctBalance);
+	void ShowAccountBalance(string custName, int acctNum, double acctBalance);
 	void ShowTransactionSuccessMessage();
 	void ShowErrorMessage(char *message);
 	void ShowTransactionHistory(vector<Page> transactionHistory, string firstName, string lastName);
