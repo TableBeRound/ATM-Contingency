@@ -24,6 +24,8 @@ using namespace std;
 
 class Database
 {
+	// Private functions for the Database object to use to create
+	// Pointers to SQLiteDatabase and SQLiteStatement objects.
 	SQLiteDatabase *connect() {
 		return new SQLiteDatabase("test.db", SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, 0);
 	}
@@ -50,8 +52,8 @@ public:
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransfer (transferNumber INTEGER NOT NULL PRIMARY KEY, sourceAccountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
 
 		// De-allocate memory used to store pointers
-		//delete pDatabase;
-		//delete pStmt;
+		delete pDatabase;
+		delete pStmt;
 	}
 
 	// Destructor
@@ -89,6 +91,7 @@ public:
 		pStmt->Sql("SELECT last_insert_rowid();");
 		pStmt->Execute();
 		int customerNumber = pStmt->GetColumnInt(0); // get the int value at the zeroth column 
+		pStmt->FreeQuery();
 
 		/*************************************************************************************** 
 		 * Notice how each pStmt is first "loaded" with an SQL statement via the Sql() function
@@ -96,8 +99,8 @@ public:
 		 ***************************************************************************************/
 
 		// De-allocate memory used to store pointers
-		//delete pDatabase;
-		//delete pStmt;
+		delete pDatabase;
+		delete pStmt;
 
 		// return the customer to the calling function
 		return new Customer(customerNumber, lastName, firstName, emailAddress, pin);
@@ -139,9 +142,10 @@ public:
 
 		// "Clean up"
 		pStmt->FreeQuery();
+
 		// De-allocate memory used to store pointers
-		//delete pDatabase;
-		//delete pStmt;
+		delete pDatabase;
+		delete pStmt;
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
@@ -173,15 +177,15 @@ public:
 		if (recordsDeleted)
 		{
 			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
+			delete pDatabase;
+			delete pStmt;
 			return true;
 		}			
 		else
 		{
 			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
+			delete pDatabase;
+			delete pStmt;
 			return false;
 		}
 	}
@@ -224,8 +228,8 @@ public:
 		***************************************************************************************/
 
 		// De-allocate memory used to store pointers
-		/*delete pDatabase;
-		delete pStmt;*/
+		delete pDatabase;
+		delete pStmt;
 
 		// return the account to the calling function
 		return new Account(accountNumber, customerNumber, accountType, initialBalance);
@@ -266,8 +270,8 @@ public:
 		pStmt->FreeQuery();
 
 		// De-allocate memory used to store pointers
-		/*delete pDatabase;
-		delete pStmt;*/
+		delete pDatabase;
+		delete pStmt;
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
@@ -308,8 +312,8 @@ public:
 		pStmt->FreeQuery();
 
 		// De-allocate memory used to store pointers
-		/*delete pDatabase;
-		delete pStmt;*/
+		delete pDatabase;
+		delete pStmt;
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
@@ -341,15 +345,15 @@ public:
 		if (recordsDeleted)
 		{
 			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
+			delete pDatabase;
+			delete pStmt;
 			return true;
 		}
 		else
 		{
 			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
+			delete pDatabase;
+			delete pStmt;
 			return false;
 		}
 	}
@@ -372,6 +376,10 @@ public:
 		pStmt->BindDouble(1, newBalance);
 		pStmt->BindInt(2, accountNumber);
 		pStmt->ExecuteAndFree();
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
 	}
 #pragma endregion
 
@@ -398,6 +406,10 @@ public:
 
 		// executes the INSERT statement and cleans-up automatically
 		pStmt->ExecuteAndFree();
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
 	}
 
 	Transaction *getTransaction(int transactionNumber)
@@ -435,8 +447,8 @@ public:
 		pStmt->FreeQuery();		
 
 		// De-allocate memory used to store pointers
-		/*delete pDatabase;
-		delete pStmt;*/
+		delete pDatabase;
+		delete pStmt;
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
@@ -469,15 +481,15 @@ public:
 		if (recordsDeleted)
 		{
 			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
+			delete pDatabase;
+			delete pStmt;
 			return true;
 		}
 		else
 		{
 			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
+			delete pDatabase;
+			delete pStmt;
 			return false;
 		}
 	}
@@ -505,6 +517,10 @@ public:
 
 		// executes the INSERT statement and cleans-up automatically
 		pStmt->ExecuteAndFree();
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
 	}
 
 	Transfer *getTransfer(int transferNumber)
@@ -542,8 +558,8 @@ public:
 		pStmt->FreeQuery();
 
 		// De-allocate memory used to store pointers
-		/*delete pDatabase;
-		delete pStmt;*/
+		delete pDatabase;
+		delete pStmt;
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
@@ -570,15 +586,15 @@ public:
 		if (recordsDeleted)
 		{
 			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
+			delete pDatabase;
+			delete pStmt;
 			return true;
 		}
 		else
 		{
 			// De-allocate memory used to store pointers
-			/*delete pDatabase;
-			delete pStmt;*/
+			delete pDatabase;
+			delete pStmt;
 			return false;
 		}
 	}
@@ -664,7 +680,11 @@ public:
 		}
 
 		// "Clean up"
-		pStmt->FreeQuery();		
+		pStmt->FreeQuery();	
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
 	}
 #pragma endregion
 };

@@ -253,3 +253,11 @@ void ATM::LogoutCustomer()
 	// Clear out the vector keeping track of the "pages" of the account history.	
 	transactionHistory.clear();
 }
+
+void ATM::ShutdownATM()
+{
+	delete customer;
+	delete account;
+	delete ui;
+	delete db;
+}

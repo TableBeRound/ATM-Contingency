@@ -42,7 +42,7 @@ int main() {
 		}			
 	} while (!atmShutdown);		
 
-	//ATM shutdown procedure should go here!!!
+	atm->ShutdownATM();
 	delete atm;
 
 #pragma region Load the Database
