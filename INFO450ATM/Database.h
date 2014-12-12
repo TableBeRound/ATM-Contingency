@@ -279,51 +279,7 @@ public:
 		// to create a Customer object to return.
 		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retrievedAccountType, retrievedBalance, retrievedStatus);
 	}
-
-	// Another function used to retrieve account info, but using the account number instead
-	Account *getAccount(int accountNumber)  // <-- Default accountType is Checking or "C"
-	{
-		// Here are our variables which store the values which will be returned by 
-		// the database search (assuming the search was successful)
-		int retrievedAccountNumber = 0;
-		int retrievedCustomerNumber = 0;
-		string retrievedAccountType = "";
-		double retrievedBalance = 0.0;
-		string retrievedStatus = "";
-
-		// First create a pointer to a SQLiteDatabase using 
-		// the connect() function defined above and then
-		// create a pointer to an SQLiteStatement object.		
-		SQLiteDatabase *pDatabase = this->connect();
-		SQLiteStatement *pStmt = this->createStatement(pDatabase);
-
-		// Use the customerNumber and accountType passed to this method to query the database.
-		pStmt->Sql("SELECT * FROM Account WHERE accountNumber = ?;");
-		pStmt->BindInt(1, accountNumber);
-
-		// Process the results of the query above - assigning the values of each
-		// column to the variables declared above.
-		while (pStmt->FetchRow())
-		{
-			retrievedAccountNumber = pStmt->GetColumnInt("accountNumber");
-			retrievedCustomerNumber = pStmt->GetColumnInt("customerNumber");
-			retrievedAccountType = pStmt->GetColumnString("accountType");
-			retrievedBalance = pStmt->GetColumnDouble("balance");
-			retrievedStatus = pStmt->GetColumnString("status");
-		}
-
-		// "Clean up"
-		pStmt->FreeQuery();
-
-		// De-allocate memory used to store pointers
-		delete pDatabase;
-		delete pStmt;
-
-		// Use the variables, which have been assigned values via the query above, 
-		// to create a Customer object to return.
-		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retrievedAccountType, retrievedBalance, retrievedStatus);
-	}
-
+	
 	// Delete Account Function:
 	// I should consider making a more abstract method called 
 	// "deleteRow" whereby one can specify the table name and
