@@ -436,23 +436,23 @@ double UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 }
 
 // Display an area for the customer to input the destination account number for making a transfer
-int UI::ShowDestinationAccountPrompt()
+string UI::ShowDestinationAccountPrompt()
 {
-	int destinationAccountNumber = 0;
-	bool inputValidated = false;
+	string email = "";
+	bool inputValid = false;
 	int keyboardHit = 0;
 
-	while (((!inputValidated) || (destinationAccountNumber == 0)) && keyboardHit != KEY_ESC)
+	while (!inputValid && keyboardHit != KEY_ESC)
 	{
 		this->ClearScreen();
 		cout << endl << "\t\t\t  Transfer Funds to Another Account"
 			<< endl  << endl << endl << endl
-	        << "  Please enter the account number you would like to transfer to." << endl << endl << endl
+	        << "  Please enter the EMAIL ADDRESS of the account you would like to transfer to." << endl << endl << endl
 			<< "  Destination Account: ";
-		cin >> destinationAccountNumber;
+		cin >> email;
 		this->ClearBuffer();
 		cout << endl << endl << endl << endl
-			<< "\t\t\t\t  You entered " + std::to_string(destinationAccountNumber) 
+			<< "\t  You entered: " + email 
 			<< endl << endl << endl << endl << endl << endl;
 		cout << "  Is this correct? (Press Y for \"Yes\" and N for \"No\")" << endl << endl
 			<< endl << endl  
@@ -462,18 +462,19 @@ int UI::ShowDestinationAccountPrompt()
 		{
 		// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
 		case 121:
-			inputValidated = true;
+			inputValid = true;
 			break;
 		case KEY_ESC:
-			destinationAccountNumber = -1;
+			inputValid = true;
+			email = "EscKeyPresedInShowDestAcctPrompt";
 			break;
 		default:
-			inputValidated = false;
+			inputValid = false;
 			break;
 		}
 	}
 		
-	return destinationAccountNumber;
+	return email;
 }
 
 // Display the menu of possible transactions amounts to the user.

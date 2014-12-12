@@ -189,17 +189,18 @@ void ATM::PerformTransfer() {
 
 	// Variable declaration and initiation
 	double currentBalanceOfSourceAccount = account->GetAccountBalance();
-	int destinationAccountNumber = 0;
+	string destCustomerEmail = "";
 	double amountToTransfer = 0.0;
 
 	// Get the number for the account which will be recieving the transfer and
 	// use that number to retrieve that account's information - building an
 	// Account object named destinationAccount.
-	destinationAccountNumber = ui->ShowDestinationAccountPrompt();
-	Account *destinationAccount = db->getAccount(destinationAccountNumber);
-	
-	if (destinationAccount->GetAccountNumber() != 0)
+	destCustomerEmail = ui->ShowDestinationAccountPrompt();
+	Customer *destinationCustomer = db->getCustomer(destCustomerEmail);
+		
+	if ((destinationCustomer->GetCustomerNumber() != 0) && (destCustomerEmail != "EscKeyPresedInShowDestAcctPrompt") && (destCustomerEmail != customer->GetEmailAddress()))
 	{
+		Account *destinationAccount = db->getAccount(destinationCustomer->GetCustomerNumber(), "C");
 		// Prints a preconstructed transaction amounts menu (forces increments of $20)
 		// and stores the result of the user's choice in the amountToTransfer variable.
 		amountToTransfer = ui->ShowTransactionAmountMenu("transferred");
@@ -223,15 +224,23 @@ void ATM::PerformTransfer() {
 
 			// Show that the transaction was a success
 			ui->ShowTransactionSuccessMessage();
+
+			delete destinationAccount;
 		}
 		else
 			// If the user does not have sufficient funds to cover the withdrawal, display this error message.
 			ui->ShowErrorMessage("Insufficient funds in this account!");
 	}
-	else if (destinationAccountNumber != -1)
+	else if (destinationCustomer->GetCustomerNumber() == 0 && destCustomerEmail != "EscKeyPresedInShowDestAcctPrompt")
 	{
-		ui->ShowErrorMessage("That is not a valid account number.");
+		ui->ShowErrorMessage("No account exists for that email address.");
 	}	
+	else if (destCustomerEmail == customer->GetEmailAddress())
+	{
+		ui->ShowErrorMessage("Cannot transfer to an account while it is being used.");
+	}
+
+	delete destinationCustomer;
 }
 
 // This logic executes if the user selected to view their transaction history from the Main Menu

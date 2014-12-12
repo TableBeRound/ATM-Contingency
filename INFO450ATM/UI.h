@@ -37,7 +37,7 @@ public:
 	int ShowPINPrompt();
 	int ShowTransactionTypeMenu(string custFirstName, string custLastname);
 	double ShowTransactionAmountMenu(char *actionToBePerformed);
-	int ShowDestinationAccountPrompt();
+	string ShowDestinationAccountPrompt();
 	void ShowAccountBalance(string custName, int acctNum, double acctBalance);
 	void ShowTransactionSuccessMessage();
 	void ShowErrorMessage(char *message);
