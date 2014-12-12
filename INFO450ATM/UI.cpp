@@ -28,7 +28,7 @@ string UI::ShowLoginPrompt()
 		<< "\t\t\t***********************" << endl
 		<< endl
 		<< endl
-		<< "Please enter your email: ";
+		<< " Please enter your email: ";
 	cin >> emailInput;
 
 	return emailInput;
@@ -40,7 +40,7 @@ int UI::ShowPINPrompt()
 	int pinInput = NULL;
 
 	cout << endl << endl
-		<< "Please enter PIN: ";
+		<< " Please enter PIN: ";
 	cin >> pinInput;
 
 	return pinInput;
@@ -67,12 +67,12 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			<< endl << endl
 			<< "Please use the UP/DOWN arrow keys to make a selection (1-6):" << endl
 			<< endl
-			<< "\t[" << select1 << "]1) Make a withdrawal" << endl      //<---- Choice #1
-			<< "\t[" << select2 << "]2) Make a deposit" << endl         //<---- Choice #2
-			<< "\t[" << select3 << "]3) Check account balance" << endl  //<---- Choice #3
-			<< "\t[" << select4 << "]4) Make a transfer" << endl		 //<---- Choice #4
-			<< "\t[" << select5 << "]5) See Account History" << endl	 //<---- Choice #5
-			<< "\t[" << select6 << "]6) Logout" << endl                 //<---- Choice #6
+			<< "\t[" << select1 << "] 1) Make a withdrawal" << endl      //<---- Choice #1
+			<< "\t[" << select2 << "] 2) Make a deposit" << endl         //<---- Choice #2
+			<< "\t[" << select3 << "] 3) Check account balance" << endl  //<---- Choice #3
+			<< "\t[" << select4 << "] 4) Make a transfer" << endl		 //<---- Choice #4
+			<< "\t[" << select5 << "] 5) See Account History" << endl	 //<---- Choice #5
+			<< "\t[" << select6 << "] 6) Logout" << endl                 //<---- Choice #6
 			<< endl;
 
 		// Get keyboard input from the customer
@@ -191,10 +191,10 @@ double UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 	char amount3 = ' ';
 	char amount4 = ' ';
 	char amount5 = ' ';
-	double transactionAmount = NULL;
+	double transactionAmount = 0;
 	int keyboardHit = NULL;
 
-	while (keyboardHit != KEY_ENTER)
+	while (keyboardHit != KEY_ENTER && keyboardHit != KEY_ESC)
 	{
 		this->ClearScreen();
 		cout << endl
@@ -202,12 +202,13 @@ double UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 			<< endl << endl
 			<< "Please use the UP/DOWN arrow keys to make a selection (1-6):" << endl
 			<< endl
-			<< "\t[" << amount1 << "]1) $20" << endl      //<---- Choice #1
-			<< "\t[" << amount2 << "]2) $40" << endl      //<---- Choice #2
-			<< "\t[" << amount3 << "]3) $60" << endl      //<---- Choice #3
-			<< "\t[" << amount4 << "]4) $80" << endl      //<---- Choice #4
-			<< "\t[" << amount5 << "]5) $100" << endl	  //<---- Choice #5			
-			<< endl;
+			<< "\t[" << amount1 << "] 1) $20" << endl      //<---- Choice #1
+			<< "\t[" << amount2 << "] 2) $40" << endl      //<---- Choice #2
+			<< "\t[" << amount3 << "] 3) $60" << endl      //<---- Choice #3
+			<< "\t[" << amount4 << "] 4) $80" << endl      //<---- Choice #4
+			<< "\t[" << amount5 << "] 5) $100" << endl	  //<---- Choice #5			
+			<< endl << endl << endl
+			<< "Press Escape to return to the Main Menu.";
 
 		keyboardHit = _getch();
 
@@ -270,27 +271,30 @@ double UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 		}
 	}
 
-	if (amount1 == '*')
+	if (keyboardHit == KEY_ENTER)
 	{
-		transactionAmount = 20;
+		if (amount1 == '*')
+		{
+			transactionAmount = 20;
+		}
+		else if (amount2 == '*')
+		{
+			transactionAmount = 40;
+		}
+		else if (amount3 == '*')
+		{
+			transactionAmount = 60;
+		}
+		else if (amount4 == '*')
+		{
+			transactionAmount = 80;
+		}
+		else if (amount5 == '*')
+		{
+			transactionAmount = 100;
+		}
 	}
-	else if (amount2 == '*')
-	{
-		transactionAmount = 40;
-	}
-	else if (amount3 == '*')
-	{
-		transactionAmount = 60;
-	}
-	else if (amount4 == '*')
-	{
-		transactionAmount = 80;
-	}
-	else if (amount5 == '*')
-	{
-		transactionAmount = 100;
-	}
-
+	
 	return transactionAmount;
 }
 
@@ -362,7 +366,8 @@ void UI::ShowErrorMessage(char *message)
 	this->PressAnyKeyToContinue();
 }
 
-void UI::ShowTransactionHistory(vector<Page> transactionHistory)
+// Function to display transaction history
+void UI::ShowTransactionHistory(vector<Page> transactionHistory, string firstName, string lastName)
 {
 	unsigned int currentPage = 0;
 	int keyboardHit = 0;
@@ -371,17 +376,19 @@ void UI::ShowTransactionHistory(vector<Page> transactionHistory)
 	{
 		this->ClearScreen();
 
-		cout << "Transaction History" << endl << endl;
+		cout << endl << " Transaction History for " + firstName + " " + lastName << endl << endl << endl;
+		cout << "\t     Number  |    Amount    | Type |         Date" << endl;
+		cout << "\t    -----------------------------------------------------" << endl;
 
 		for (unsigned int i = 0; i < transactionHistory[currentPage].GetMaximumNumberOfLines(); i++)
 		{
 			cout << transactionHistory[currentPage].GetLine(i) << endl;
 		}
 
-		cout << endl << endl << endl;
+		cout << endl << endl << endl << endl;
 
-		cout << "<--- Previous Page (Left Arrow)\t\t\tNext Page (Right Arrow) ---> " << endl << endl;
-		cout << "Press Escape key to return to Main Menu";
+		cout << " <--- Previous Page (Left Arrow)\t\t   Next Page (Right Arrow) --->" << endl << endl << endl;
+		cout << " Press Escape key to return to Main Menu";
 
 		keyboardHit = _getch();
 		switch (keyboardHit)

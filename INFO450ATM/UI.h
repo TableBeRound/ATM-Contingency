@@ -38,13 +38,13 @@ public:
 	void ShowAccountBalance(string acctNum, double acctBalance);
 	void ShowTransactionSuccessMessage();
 	void ShowErrorMessage(char *message);
-	void ShowTransactionHistory(vector<Page> transactionHistory);
+	void ShowTransactionHistory(vector<Page> transactionHistory, string firstName, string lastName);
 
 	// These functions are frequently used
 	// to manipulate output to the screen.
 	void ClearScreen();
 	void PauseScreen();
-	void PressAnyKeyToContinue(); //<---- Pauses screen and waits for a key press
+	void PressAnyKeyToContinue(); //<--- Pauses screen and waits for a key press
 	void ClearBuffer();           //<--- used to clear cin buffer if needed
 };
 

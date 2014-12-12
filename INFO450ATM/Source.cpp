@@ -30,7 +30,7 @@ int main() {
 		
 		}
 		// Prompt the user whether they would like to close the program
-		cout << "\n\n\nStrike the \" Y \" key to close the program. Press any other key to continue.";
+		cout << "\n\n\n Strike the \" Y \" key to close the program. Press any other key to continue.";
 
 		// Get the integer value corresponding to the key that they struck
 		int key = _getch();

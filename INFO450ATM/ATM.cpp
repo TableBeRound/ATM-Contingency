@@ -144,7 +144,7 @@ void ATM::PerformWithdrawal()
 	double amountToWithdraw = ui->ShowTransactionAmountMenu("withdrawn");
 
 	// Check to see if the customer has the available funds to perform the withdrawal
-	if (account->GetAccountBalance() >= amountToWithdraw)
+	if (amountToWithdraw != 0 && account->GetAccountBalance() >= amountToWithdraw)
 	{
 		// Create a new Transaction object and add it to the "batch" of transactions to process 
 		// when the user chooses to log out.
@@ -153,14 +153,14 @@ void ATM::PerformWithdrawal()
 
 		// Add the amount of the new deposit to the account's balance
 		accountBalance -= amountToWithdraw;
-		account->SetAccountBalance(accountBalance);
-
-		// Show the user that the transaction was a success.
+		account->SetAccountBalance(accountBalance);		
 		ui->ShowTransactionSuccessMessage();
 	}
-	else
+	else if (amountToWithdraw != 0 && account->GetAccountBalance() < amountToWithdraw)
+	{
 		// If the user does not have sufficient funds to cover the withdrawal, display this error message.
 		ui->ShowErrorMessage("Insufficient funds in this account!");
+	}		
 }
 
 // This logic executes if the user selected to make a deposit from the Main Menu
@@ -172,17 +172,18 @@ void ATM::PerformDeposit()
 	// is then returned and stored in the "amountToDeposit" variable declared below.
 	double amountToDeposit = ui->ShowTransactionAmountMenu("deposited");
 
-	// Create a new Transaction object and add it to the "batch" of transactions to process 
-	// when the user chooses to log out.
-	Transaction newDeposit = Transaction(account->GetAccountNumber(), amountToDeposit, "D");
-	collectionOfTransactions.push_back(newDeposit);
+	if (amountToDeposit != 0)
+	{
+		// Create a new Transaction object and add it to the "batch" of transactions to process 
+		// when the user chooses to log out.
+		Transaction newDeposit = Transaction(account->GetAccountNumber(), amountToDeposit, "D");
+		collectionOfTransactions.push_back(newDeposit);
 
-	// Add the amount of the new deposit to the account's balance
-	accountBalance += amountToDeposit;
-	account->SetAccountBalance(accountBalance);
-
-	// Show the user that the transaction was a success.
-	ui->ShowTransactionSuccessMessage();
+		// Add the amount of the new deposit to the account's balance
+		accountBalance += amountToDeposit;
+		account->SetAccountBalance(accountBalance);
+		ui->ShowTransactionSuccessMessage();
+	}	
 }
 
 // This logic executes if the user selected to make a transfer from the Main Menu
@@ -253,7 +254,8 @@ void ATM::PerformTransfer() {
 void ATM::ShowTransactionHistory() 
 {
 	db->populateTransactionHistory(account->GetAccountNumber(), &transactionHistory);
-	ui->ShowTransactionHistory(transactionHistory);	
+	ui->ShowTransactionHistory(transactionHistory, customer->GetFirstName(), customer->GetLastName());	
+	transactionHistory.clear();
 }
 
 // logoutCustomer() writes all the new transactions (if any) to the database

@@ -615,7 +615,7 @@ public:
 			int sizeOfTransactionNumber = std::to_string(retrievedTransactionNumber).length();
 			string transactionNumColumnPadding = "";
 
-			for (sizeOfTransactionNumber; sizeOfTransactionNumber < 8; sizeOfTransactionNumber++)
+			for (sizeOfTransactionNumber; sizeOfTransactionNumber < 6; sizeOfTransactionNumber++)
 			{
 				transactionNumColumnPadding += " ";
 			}
@@ -626,16 +626,16 @@ public:
 			int sizeOfTransactionAmt = retTransAmt.length();
 			string transactionAmtColumnPadding = "";
 
-			for (sizeOfTransactionAmt; sizeOfTransactionAmt < 8; sizeOfTransactionAmt++)
+			for (sizeOfTransactionAmt; sizeOfTransactionAmt < 10; sizeOfTransactionAmt++)
 			{
 				transactionAmtColumnPadding += " ";
 			}
 
-			string additionalLine = "   " + std::to_string(retrievedTransactionNumber) + 
+			string additionalLine = "\t      " + std::to_string(retrievedTransactionNumber) + 
 				transactionNumColumnPadding + " |  $" +
-				retTransAmt + 
-				transactionAmtColumnPadding + " | " +
-				retrievedTransactionType + " | " +
+				transactionAmtColumnPadding + 
+				retTransAmt + " |  " +
+				retrievedTransactionType + "   |  " +
 				retrievedDate;
 
 			linesToPage.push_back(additionalLine);
