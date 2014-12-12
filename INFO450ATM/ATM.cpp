@@ -244,7 +244,7 @@ void ATM::PerformTransfer() {
 			// If the user does not have sufficient funds to cover the withdrawal, display this error message.
 			ui->ShowErrorMessage("Insufficient funds in this account!");
 	}
-	else
+	else if (destinationAccountNumber != -1)
 	{
 		ui->ShowErrorMessage("That is not a valid account number.");
 	}	

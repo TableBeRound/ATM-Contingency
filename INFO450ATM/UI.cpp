@@ -63,10 +63,10 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 	{
 		this->ClearScreen();
 		cout << endl
-			<< "\t\t\t    Welcome " + custFirstName + " " + custLastName
+			<< "\t\t\t    Welcome " + custFirstName + " " + custLastName + "!"
 			<< endl << endl
-			<< "Please use the UP/DOWN arrow keys to make a selection (1-6):" << endl
-			<< endl
+			<< "\n\n  Use the UP/DOWN arrow keys to make a selection (1-6):" << endl
+			<< endl << endl
 			<< "\t[" << select1 << "] 1) Make a withdrawal" << endl      //<---- Choice #1
 			<< "\t[" << select2 << "] 2) Make a deposit" << endl         //<---- Choice #2
 			<< "\t[" << select3 << "] 3) Check account balance" << endl  //<---- Choice #3
@@ -197,18 +197,20 @@ double UI::ShowTransactionAmountMenu(char *actionToBePerformed)
 	while (keyboardHit != KEY_ENTER && keyboardHit != KEY_ESC)
 	{
 		this->ClearScreen();
-		cout << endl
+		cout << endl 
 			<< "\t\t   Please select amount to be " << actionToBePerformed << ":"
+			<< endl << endl << endl << endl
+			<< "  Use the UP/DOWN arrow keys to move the selector (*):" << endl
 			<< endl << endl
-			<< "Please use the UP/DOWN arrow keys to make a selection (1-6):" << endl
-			<< endl
 			<< "\t[" << amount1 << "] 1) $20" << endl      //<---- Choice #1
 			<< "\t[" << amount2 << "] 2) $40" << endl      //<---- Choice #2
 			<< "\t[" << amount3 << "] 3) $60" << endl      //<---- Choice #3
 			<< "\t[" << amount4 << "] 4) $80" << endl      //<---- Choice #4
 			<< "\t[" << amount5 << "] 5) $100" << endl	  //<---- Choice #5			
-			<< endl << endl << endl
-			<< "Press Escape to return to the Main Menu.";
+			<< endl << endl  
+			<< "  Press Enter to make your selection."
+			<< endl << endl << endl << endl << endl << endl << endl
+			<< "  Press Escape to return to the Main Menu.";
 
 		keyboardHit = _getch();
 
@@ -303,21 +305,32 @@ int UI::ShowDestinationAccountPrompt()
 {
 	int destinationAccountNumber = 0;
 	bool inputValidated = false;
+	int keyboardHit = 0;
 
-	while ((!inputValidated) || (destinationAccountNumber == 0))
+	while (((!inputValidated) || (destinationAccountNumber == 0)) && keyboardHit != KEY_ESC)
 	{
 		this->ClearScreen();
-		cout << "Please enter the account number you would like to transfer to: ";
+		cout << endl << "\t\t\t  Transfer Funds to Another Account"
+			<< endl  << endl << endl << endl
+	        << "  Please enter the account number you would like to transfer to." << endl << endl << endl
+			<< "  Destination Account: ";
 		cin >> destinationAccountNumber;
 		this->ClearBuffer();
-		cout << endl << endl << "You entered " + std::to_string(destinationAccountNumber) << endl << endl;
-		cout << "Is this correct? (Press Y for \"Yes\" and N for \"No\")";
-		int c = _getch();
-		switch (c)
+		cout << endl << endl << endl << endl
+			<< "\t\t\t\t  You entered " + std::to_string(destinationAccountNumber) 
+			<< endl << endl << endl << endl << endl << endl;
+		cout << "  Is this correct? (Press Y for \"Yes\" and N for \"No\")" << endl << endl
+			<< endl << endl  
+			<< "  Press the Escape key to return to the Main Menu.";
+		keyboardHit = _getch();
+		switch (keyboardHit)
 		{
 		// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
 		case 121:
 			inputValidated = true;
+			break;
+		case KEY_ESC:
+			destinationAccountNumber = -1;
 			break;
 		default:
 			inputValidated = false;
@@ -329,16 +342,19 @@ int UI::ShowDestinationAccountPrompt()
 }
 
 // Display the menu of possible transactions amounts to the user.
-void UI::ShowAccountBalance(string acctNum, double acctBalance)
+void UI::ShowAccountBalance(string custName, double acctBalance)
 {
 	this->ClearScreen();
 	cout << endl
-		<< " *******************" << endl
-		<< " * Current Balance *" << endl
-		<< " *******************" << endl
-		<< endl << endl
-		<< "The account for " + acctNum + " has: $" << std::fixed << std::setprecision(2) << acctBalance
-		<< endl << endl << endl << endl << endl << endl;
+		<< "\t\t\t\t*******************" << endl
+		<< "\t\t\t\t* Current Balance *" << endl
+		<< "\t\t\t\t*******************" << endl
+		<< endl << endl << endl
+		<< " " + custName << endl << endl
+		<< "    Checking Account: $" << std::fixed << std::setprecision(2) << acctBalance
+		<< endl << endl << endl << endl << endl
+		<< endl << endl << endl << endl << endl
+		<< endl << endl << endl;
 	this->PressAnyKeyToContinue();
 }
 
@@ -380,9 +396,19 @@ void UI::ShowTransactionHistory(vector<Page> transactionHistory, string firstNam
 		cout << "\t     Number  |    Amount    | Type |         Date" << endl;
 		cout << "\t    -----------------------------------------------------" << endl;
 
-		for (unsigned int i = 0; i < transactionHistory[currentPage].GetMaximumNumberOfLines(); i++)
+		for (unsigned int i = 0; i < transactionHistory[currentPage].GetNumberOfLines(); i++)
 		{
 			cout << transactionHistory[currentPage].GetLine(i) << endl;
+		}
+
+		if (transactionHistory[currentPage].GetNumberOfLines() < transactionHistory[currentPage].GetMaximumNumberOfLines())
+		{
+			unsigned int numberOfBlankLines = transactionHistory[currentPage].GetMaximumNumberOfLines() - transactionHistory[currentPage].GetNumberOfLines();
+
+			for (unsigned int i = 0; i < numberOfBlankLines; i++)
+			{
+				cout << endl;
+			}			
 		}
 
 		cout << endl << endl << endl << endl;
@@ -460,7 +486,7 @@ void UI::PauseScreen()
 // the user to strike a key.
 void UI::PressAnyKeyToContinue()
 {
-	cout << "Press any key to continue...";
+	cout << "  Press any key to continue...";
 	while (!_kbhit()){}
 	char key = _getch();
 }
