@@ -190,6 +190,7 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 	char select4 = ' ';
 	char select5 = ' ';
 	char select6 = ' ';
+	char select7 = ' ';
 	int keyboardHit = 0;
 	int userSelection = 0;
 
@@ -202,12 +203,13 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			<< endl << endl
 			<< "\n\n  Use the UP/DOWN arrow keys to make a selection (1-6):" << endl
 			<< endl << endl
-			<< "\t[" << select1 << "] 1) Make a withdrawal" << endl      //<---- Choice #1
-			<< "\t[" << select2 << "] 2) Make a deposit" << endl         //<---- Choice #2
-			<< "\t[" << select3 << "] 3) Check account balance" << endl  //<---- Choice #3
-			<< "\t[" << select4 << "] 4) Make a transfer" << endl		 //<---- Choice #4
-			<< "\t[" << select5 << "] 5) See Account History" << endl	 //<---- Choice #5
-			<< "\t[" << select6 << "] 6) Logout" << endl                 //<---- Choice #6
+			<< "\t[" << select1 << "] 1) Make a withdrawal" << endl          //<---- Choice #1
+			<< "\t[" << select2 << "] 2) Make a deposit" << endl             //<---- Choice #2
+			<< "\t[" << select3 << "] 3) Check account balance" << endl      //<---- Choice #3
+			<< "\t[" << select4 << "] 4) Make a transfer" << endl		     //<---- Choice #4
+			<< "\t[" << select5 << "] 5) See Transaction History" << endl	 //<---- Choice #5
+			<< "\t[" << select6 << "] 6) See Transfer History" << endl	     //<---- Choice #6
+			<< "\t[" << select7 << "] 7) Logout" << endl                     //<---- Choice #7
 			<< endl;
 
 		// Get keyboard input from the customer
@@ -246,6 +248,11 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			else if (select6 == '*')
 			{
 				select6 = ' ';
+				select7 = '*';
+			}
+			else if (select7 == '*')
+			{
+				select7 = ' ';
 				select1 = '*';
 			}
 			break;
@@ -254,7 +261,7 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			if (select1 == '*')
 			{
 				select1 = ' ';
-				select6 = '*';
+				select7 = '*';
 			}
 			else if (select2 == '*')
 			{
@@ -280,6 +287,11 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			{
 				select6 = ' ';
 				select5 = '*';
+			}
+			else if (select7 == '*')
+			{
+				select7 = ' ';
+				select6 = '*';
 			}
 			break;
 		}
@@ -311,6 +323,10 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 	else if (select6 == '*')
 	{
 		userSelection = 6;
+	}
+	else if (select7 == '*')
+	{
+		userSelection = 7;
 	}
 
 	// Return the value of the selection determined by the above if statement.
@@ -579,6 +595,68 @@ void UI::ShowTransactionHistory(vector<Page> transactionHistory, string firstNam
 		}
 	}
 	
+}
+
+// Another history function, this time for transfers - they look slightly different
+void UI::ShowTransferHistory(vector<Page> transferHistory, string firstName, string lastName)
+{
+	unsigned int currentPage = 0;
+	int keyboardHit = 0;
+
+	while (keyboardHit != KEY_ESC)
+	{
+		this->ClearScreen();
+
+		cout << endl << " Transfer History for " + firstName + " " + lastName << endl << endl << endl;
+		cout << "\t     Number  |    Amount    | Type |         Date" << endl;
+		cout << "\t    -----------------------------------------------------" << endl;
+
+		if (transferHistory.size() > 0)
+		{
+			for (unsigned int i = 0; i < transferHistory[currentPage].GetNumberOfLines(); i++)
+			{
+				cout << transferHistory[currentPage].GetLine(i) << endl;
+			}
+
+			if (transferHistory[currentPage].GetNumberOfLines() < transferHistory[currentPage].GetMaximumNumberOfLines())
+			{
+				unsigned int numberOfBlankLines = transferHistory[currentPage].GetMaximumNumberOfLines() - transferHistory[currentPage].GetNumberOfLines();
+
+				for (unsigned int i = 0; i < numberOfBlankLines; i++)
+				{
+					cout << endl;
+				}
+			}
+		}
+		else
+		{
+			for (unsigned int i = 0; i < 10; i++)
+			{
+				cout << endl;
+			}
+		}
+
+		cout << endl << endl << endl << endl;
+
+		cout << " <--- Previous Page (Left Arrow)\t\t   Next Page (Right Arrow) --->" << endl << endl << endl;
+		cout << " Press Escape key to return to Main Menu";
+
+		keyboardHit = _getch();
+		switch (keyboardHit)
+		{
+		case KEY_LEFT:
+			if (currentPage > 0)
+			{
+				currentPage--;
+			}
+			break;
+		case KEY_RIGHT:
+			if (currentPage < (transferHistory.size() - 1))
+			{
+				currentPage++;
+			}
+		}
+	}
 }
 
 // Clear the screen - THIS CODE IS NOT MY OWN.

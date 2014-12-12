@@ -27,7 +27,7 @@ int main() {
 		
 		}
 		// Prompt the user whether they would like to close the program
-		cout << "\n\n\n\n\n\n\t\t       Press any other key to continue." << endl << endl
+		cout << "\n\n\n\n\n\t\t       Press any other key to continue." << endl << endl
 			<< "\t\t Strike the \" Esc \" key to close the program.";
 
 		// Get the integer value corresponding to the key that they struck

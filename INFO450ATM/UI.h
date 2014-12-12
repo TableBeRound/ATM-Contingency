@@ -42,6 +42,7 @@ public:
 	void ShowTransactionSuccessMessage();
 	void ShowErrorMessage(char *message);
 	void ShowTransactionHistory(vector<Page> transactionHistory, string firstName, string lastName);
+	void ShowTransferHistory(vector<Page> transferHistory, string firstName, string lastName);
 
 	// These functions are frequently used
 	// to manipulate output to the screen.

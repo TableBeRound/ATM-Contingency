@@ -34,6 +34,7 @@ public:
 	void PerformDeposit();
 	void PerformTransfer();
 	void ShowTransactionHistory();	
+	void ShowTransferHistory();
 	void LogoutCustomer();
 	void ShutdownATM();
 };

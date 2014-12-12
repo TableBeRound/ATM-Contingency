@@ -601,7 +601,7 @@ public:
 
 #pragma endregion
 
-#pragma region Functions related to Transaction History
+#pragma region Functions related to Creating Transaction and Transfer Histories
 	void populateTransactionHistory(int accountNumber, vector<Page> *transactionHistory)
 	{
 
@@ -681,6 +681,94 @@ public:
 
 		// "Clean up"
 		pStmt->FreeQuery();	
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
+	}
+
+	void populateTransferHistory(int accountNumber, vector<Page> *transferHistory)
+	{
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		int retrievedTransferNumber = 0;
+		int retrievedSourceAccount = 0;
+		int retrievedDestinationAccount = 0;
+		double retrievedTransferAmt = 0.0;		
+		string retrievedDate = "";
+
+		vector <string> linesToPage;
+
+		// Use the customerNumber and accountType passed to this method to query the database.
+		pStmt->Sql("SELECT * FROM AccountTransfer WHERE sourceAccountNumber = ? OR destinationAccount = ? ORDER BY date DESC;");
+		pStmt->BindInt(1, accountNumber);
+		pStmt->BindInt(2, accountNumber);
+
+		// Process the results of the query above - assigning the values of each
+		// column to the variables declared above.
+		while (pStmt->FetchRow())
+		{
+			retrievedTransferNumber = pStmt->GetColumnInt("transferNumber");
+			retrievedSourceAccount = pStmt->GetColumnInt("sourceAccountNumber");
+			retrievedDestinationAccount = pStmt->GetColumnInt("destinationAccount");
+			retrievedTransferAmt = pStmt->GetColumnDouble("transactionAmount");
+			retrievedDate = pStmt->GetColumnString("date");
+
+			int sizeOfTransferNumber = std::to_string(retrievedTransferNumber).length();
+			string transferNumColumnPadding = "";
+
+			for (sizeOfTransferNumber; sizeOfTransferNumber < 6; sizeOfTransferNumber++)
+			{
+				transferNumColumnPadding += " ";
+			}
+
+			string retTransAmt = std::to_string(retrievedTransferAmt);
+			size_t dotIndex = retTransAmt.find(".");
+			retTransAmt = retTransAmt.substr(0, dotIndex + 3);
+			int sizeOfTransferAmt = retTransAmt.length();
+			string transferAmtColumnPadding = "";
+
+			for (sizeOfTransferAmt; sizeOfTransferAmt < 10; sizeOfTransferAmt++)
+			{
+				transferAmtColumnPadding += " ";
+			}
+
+			string additionalLine = "\t      " + std::to_string(retrievedTransferNumber) +
+				transferNumColumnPadding + " |  " +
+				std::to_string(retrievedSourceAccount) + " |  " + 
+				std::to_string(retrievedDestinationAccount) + " |  $" +
+				transferAmtColumnPadding +
+				retTransAmt + " |  " +
+				retrievedDate;
+
+			linesToPage.push_back(additionalLine);
+		}
+
+		// This variable stores the number of lines (transactions)
+		// which have been written.
+		unsigned int numberOfLinesWritten = 0;
+
+		// As long as there are still lines that need to be written, loop
+		while (numberOfLinesWritten < linesToPage.size())
+		{
+			// Create a new page with room for 10 total lines.
+			Page page;
+
+			// While there is still room to write on the page, add an additional line from the vector
+			// made above.  Be sure to increment the numberOfLinesWritten as we add to each page.
+			for (unsigned int i = 0; i < page.GetMaximumNumberOfLines() && numberOfLinesWritten < linesToPage.size(); i++, numberOfLinesWritten++)
+			{
+				page.AddLine(linesToPage[numberOfLinesWritten]);
+			}
+
+			// Once the maximum number of lines has been reached for the page, add the page to the 
+			// transactionHistory vector.
+			transferHistory->push_back(page);
+		}
+
+		// "Clean up"
+		pStmt->FreeQuery();
 
 		// De-allocate memory used to store pointers
 		delete pDatabase;
