@@ -600,7 +600,7 @@ public:
 		vector <string> linesToPage;
 
 		// Use the customerNumber and accountType passed to this method to query the database.
-		pStmt->Sql("SELECT * FROM AccountTransaction WHERE accountNumber = ?;");
+		pStmt->Sql("SELECT * FROM AccountTransaction WHERE accountNumber = ? ORDER BY date DESC;");
 		pStmt->BindInt(1, accountNumber);
 
 		// Process the results of the query above - assigning the values of each
