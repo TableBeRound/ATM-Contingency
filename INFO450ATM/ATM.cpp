@@ -254,6 +254,8 @@ void ATM::LogoutCustomer()
 	transactionHistory.clear();
 }
 
+// This function simply cleans up any pointers that would
+// otherwise be left lying around after shutdown.
 void ATM::ShutdownATM()
 {
 	delete customer;
