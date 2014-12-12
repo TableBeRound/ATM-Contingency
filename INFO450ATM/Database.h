@@ -715,33 +715,61 @@ public:
 			retrievedTransferAmt = pStmt->GetColumnDouble("transactionAmount");
 			retrievedDate = pStmt->GetColumnString("date");
 
-			int sizeOfTransferNumber = std::to_string(retrievedTransferNumber).length();
+			// Determine column padding for transferNumber
+			int sizeOfNumber = std::to_string(retrievedTransferNumber).length();
 			string transferNumColumnPadding = "";
 
-			for (sizeOfTransferNumber; sizeOfTransferNumber < 6; sizeOfTransferNumber++)
+			// Build the column padding
+			for (sizeOfNumber; sizeOfNumber < 7; sizeOfNumber++)
 			{
 				transferNumColumnPadding += " ";
 			}
 
+			// Determine column padding for sourceAccount
+			sizeOfNumber = std::to_string(retrievedSourceAccount).length();
+			string sourceAccountColumnPadding = "";
+
+			// Build the column padding
+			for (sizeOfNumber; sizeOfNumber < 5; sizeOfNumber++)
+			{
+				sourceAccountColumnPadding += " ";
+			}
+
+			// Determine column padding for destinationAccount
+			sizeOfNumber = std::to_string(retrievedDestinationAccount).length();
+			string destinationAccountColumnPadding = "";
+
+			// Build the column padding
+			for (sizeOfNumber; sizeOfNumber < 5; sizeOfNumber++)
+			{
+				destinationAccountColumnPadding += " ";
+			}
+
+			// Format transferAmt output and determine column padding for transferAmt
 			string retTransAmt = std::to_string(retrievedTransferAmt);
 			size_t dotIndex = retTransAmt.find(".");
 			retTransAmt = retTransAmt.substr(0, dotIndex + 3);
 			int sizeOfTransferAmt = retTransAmt.length();
 			string transferAmtColumnPadding = "";
 
+			// Build the column padding
 			for (sizeOfTransferAmt; sizeOfTransferAmt < 10; sizeOfTransferAmt++)
 			{
 				transferAmtColumnPadding += " ";
 			}
 
-			string additionalLine = "\t      " + std::to_string(retrievedTransferNumber) +
+			// Build the line item
+			string additionalLine = "      " + std::to_string(retrievedTransferNumber) +
 				transferNumColumnPadding + " |  " +
-				std::to_string(retrievedSourceAccount) + " |  " + 
-				std::to_string(retrievedDestinationAccount) + " |  $" +
+				std::to_string(retrievedSourceAccount) + 
+				sourceAccountColumnPadding + " |  " + 
+				std::to_string(retrievedDestinationAccount) + 
+				destinationAccountColumnPadding + " |  $" +
 				transferAmtColumnPadding +
 				retTransAmt + " |  " +
 				retrievedDate;
 
+			// Add the line item to the list of lines to be written in the report.
 			linesToPage.push_back(additionalLine);
 		}
 

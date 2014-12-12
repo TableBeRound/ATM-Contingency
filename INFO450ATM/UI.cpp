@@ -608,8 +608,9 @@ void UI::ShowTransferHistory(vector<Page> transferHistory, string firstName, str
 		this->ClearScreen();
 
 		cout << endl << " Transfer History for " + firstName + " " + lastName << endl << endl << endl;
-		cout << "\t     Number  |    Amount    | Type |         Date" << endl;
-		cout << "\t    -----------------------------------------------------" << endl;
+		cout << "     Transfer | Source |  Dest. |   Transfer   |" << endl;
+		cout << "      Number  |  Acct  |  Acct  |    Amount    |         Date" << endl;
+		cout << "    ------------------------------------------------------------------" << endl;
 
 		if (transferHistory.size() > 0)
 		{
