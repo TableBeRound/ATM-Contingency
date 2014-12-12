@@ -18,20 +18,6 @@ Account *account;
 // This database object is used to communicate with the embedded SQLite database.
 Database *db = new Database();
 
-// This vector is used to store all the transactions that the customer
-// performs while they are logged in.  Updates to the AccountTransaction
-// table are made once the user logs out.
-std::vector<Transaction> collectionOfTransactions;
-
-// This vector is used to store all the transfers that the customer
-// performs while they are logged in.  Updates to the AccountTransfer
-// table are made once the user logs out.
-std::vector<Transfer> collectionOfTransfers;
-
-// This vector is used to store those accounts which are sent a 
-// transfer from the currently logged-in customer.
-std::vector<Account *> collectionOfAccounts;
-
 // This vector is used to store Page objects which facilitate the
 // display of the transactionHistory of an account.
 std::vector<Page> transactionHistory;
