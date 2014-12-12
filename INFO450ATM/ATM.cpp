@@ -38,8 +38,11 @@ ATM::~ATM()
 
 bool ATM::Login() {
 
+	// Prompt the user: Are you a returning customer or a new customer?
+	// Store the answer and determine how to proceed below.
 	bool returningCustomer = ui->ShowReturningCustomerNewCustomerPrompt();
 
+	// If they are a returning customer, proceed with normal login procedure.
 	if (returningCustomer)
 	{
 		// prompts the User to enter their email
@@ -64,15 +67,32 @@ bool ATM::Login() {
 				// the idea that in the future customers could have more than one
 				// type of account.
 				account = db->getAccount(customer->GetCustomerNumber(), "C");
-				return true;
+
+				// Check to see if the account is "ACTIVE" or "INACTIVE".  
+				// If it's active, proceed.
+				if (account->GetAccountStatus() == "ACTIVE")
+				{
+					return true;
+				}
+				// If it's not active, give an error message and proceed no further.
+				else
+				{
+					ui->ShowErrorMessage("This account is currently inactive!");
+					return false;
+				}				
 			}
-			else
-				// Return false if the PINs do no match.
+			// Return false if the PINs do no match.
+			else				
 				return false;
 		}
+		// If a bad customer email was given and the database could
+		// not build a customer object from the data, it should return 
+		// a customer number of zero.  Proceed no further.
 		else
 			return false;
 	}
+	// If the user is not a returning customer, they must 
+	// have chosen to create a new customer profile.
 	else
 	{
 		CreateNewCustomer();
@@ -97,7 +117,7 @@ void ATM::MainMenu() {
 		// This variable stores the integer returned by the UI's
 		// ShowTransactionTypeMenu() function.  The integer is
 		// used to determine what ATM-related action to perform.
-		int actionToBePerformed = 0;		
+		int actionToBePerformed = 0;			
 		actionToBePerformed = ui->ShowTransactionTypeMenu(customer->GetFirstName(), customer->GetLastName());
 
 		// Uses the result from above to call the function
@@ -123,11 +143,14 @@ void ATM::MainMenu() {
 			ShowTransferHistory();
 			break;
 		case 7: 
+			ManageAccount();
+			break;
+		case 8:
 			LogoutCustomer();
-			userLogout = true;			
+			userLogout = true;
 			break;
 		}
-	} while (!userLogout);
+	} while (!userLogout && account->GetAccountStatus() == "ACTIVE");
 }
 
 // This logic executes if the user selected to see their balance from the Main Menu
@@ -264,6 +287,21 @@ void ATM::ShowTransferHistory()
 	db->populateTransferHistory(account->GetAccountNumber(), &transferHistory);
 	ui->ShowTransferHistory(transferHistory, customer->GetFirstName(), customer->GetLastName());
 	transferHistory.clear();
+}
+
+// This logic executes if the user selected to manage their account from the Main Menu
+void ATM::ManageAccount()
+{
+	// Call a UI function which displays a prompt to change 
+	// the account status and returns a boolean value.
+	bool changeStatus = ui->ShowChangeAccountStatusPrompt();
+	// If the boolean value is true, set the status of the 
+	// account to INACTIVE and update the database.
+	if(changeStatus)
+	{
+		account->SetAccountStatus("INACTIVE");
+		db->updateStatus(account->GetAccountNumber(), account->GetAccountStatus());
+	}
 }
 
 // logoutCustomer() writes all the new transactions (if any) to the database

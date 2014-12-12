@@ -21,15 +21,18 @@ class Account
 	// checking accounts.
 	string _accountType; 
 	double _balance;
+	string _accountStatus;
 
 public:	
-	Account(int accountNumber, int customerNumber, string accountType, double balance);
+	Account(int accountNumber, int customerNumber, string accountType, double balance, string accountStatus);
 	~Account();
 
 	int GetAccountNumber();
 	int GetCustomerNumber();
 	string GetAccountType();
 	double GetAccountBalance();
+	string GetAccountStatus();
+	void SetAccountStatus(string status);
 	void SetAccountBalance(double newAccountBalance);
 	void CloseAccount();
 };

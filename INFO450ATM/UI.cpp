@@ -191,6 +191,7 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 	char select5 = ' ';
 	char select6 = ' ';
 	char select7 = ' ';
+	char select8 = ' ';
 	int keyboardHit = 0;
 	int userSelection = 0;
 
@@ -206,10 +207,11 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			<< "\t[" << select1 << "] 1) Make a withdrawal" << endl          //<---- Choice #1
 			<< "\t[" << select2 << "] 2) Make a deposit" << endl             //<---- Choice #2
 			<< "\t[" << select3 << "] 3) Check account balance" << endl      //<---- Choice #3
-			<< "\t[" << select4 << "] 4) Make a transfer" << endl		     //<---- Choice #4
+			<< "\t[" << select4 << "] 4) Make a transfer" << endl            //<---- Choice #4
 			<< "\t[" << select5 << "] 5) See Transaction History" << endl	 //<---- Choice #5
-			<< "\t[" << select6 << "] 6) See Transfer History" << endl	     //<---- Choice #6
-			<< "\t[" << select7 << "] 7) Logout" << endl                     //<---- Choice #7
+			<< "\t[" << select6 << "] 6) See Transfer History" << endl       //<---- Choice #6
+			<< "\t[" << select7 << "] 7) Manage Account" << endl             //<---- Choice #7
+			<< "\t[" << select8 << "] 8) Logout" << endl                     //<---- Choice #7
 			<< endl;
 
 		// Get keyboard input from the customer
@@ -253,6 +255,11 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			else if (select7 == '*')
 			{
 				select7 = ' ';
+				select8 = '*';
+			}
+			else if (select8 == '*')
+			{
+				select8 = ' ';
 				select1 = '*';
 			}
 			break;
@@ -261,7 +268,7 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			if (select1 == '*')
 			{
 				select1 = ' ';
-				select7 = '*';
+				select8 = '*';
 			}
 			else if (select2 == '*')
 			{
@@ -292,6 +299,11 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 			{
 				select7 = ' ';
 				select6 = '*';
+			}
+			else if (select8 == '*')
+			{
+				select8 = ' ';
+				select7 = '*';
 			}
 			break;
 		}
@@ -327,6 +339,10 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 	else if (select7 == '*')
 	{
 		userSelection = 7;
+	}
+	else if (select8 == '*')
+	{
+		userSelection = 8;
 	}
 
 	// Return the value of the selection determined by the above if statement.
@@ -658,6 +674,31 @@ void UI::ShowTransferHistory(vector<Page> transferHistory, string firstName, str
 			}
 		}
 	}
+}
+
+bool UI::ShowChangeAccountStatusPrompt()
+{
+	this->ClearScreen();
+	cout << endl << endl << endl << "  Make Account Inactive? (Y/N)";
+
+	int key = _getch();
+
+	if (key == 121)
+	{
+		cout << endl << endl << endl << endl << endl << endl << endl << endl
+			<< "  Are you absolutely sure you want to make this account INACTIVE?" 
+			<< endl << endl << endl << endl
+			<< "  You will be logged out immediately following this action. (Y/N)";
+		key = _getch();
+		if (key == 121)
+		{
+			return true;
+		}
+		else
+			return false;
+	}		
+	else
+		return false;	
 }
 
 // Clear the screen - THIS CODE IS NOT MY OWN.

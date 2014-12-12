@@ -45,9 +45,9 @@ public:
 		SQLiteDatabase *pDatabase = this->connect();
 		// create statement instance for sql queries/statements
 		SQLiteStatement *pStmt = this->createStatement(pDatabase);
-
+		
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Customer (customerNumber INTEGER NOT NULL PRIMARY KEY, lastName VARCHAR(80), firstName VARCHAR(80), emailAddress VARCHAR(80) NOT NULL, PIN INTEGER NOT NULL)");		
-		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL)");				
+		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS Account (accountNumber INTEGER NOT NULL PRIMARY KEY, customerNumber INTEGER NOT NULL, accountType CHAR NOT NULL, balance FLOAT NOT NULL, status VARCHAR(8) DEFAULT 'ACTIVE' NOT NULL)");				
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransaction (transactionNumber INTEGER NOT NULL PRIMARY KEY, accountNumber INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, transactionType VARCHAR(1) NOT NULL, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
 		pStmt->SqlStatement("CREATE TABLE IF NOT EXISTS AccountTransfer (transferNumber INTEGER NOT NULL PRIMARY KEY, sourceAccountNumber INTEGER NOT NULL, destinationAccount INTEGER NOT NULL, transactionAmount FLOAT NOT NULL, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
 
@@ -209,9 +209,9 @@ public:
 		// Use the SQLiteStatement pointer (pStmt) created 
 		// above to send a SQL statement to the database.
 		pStmt->Sql("INSERT INTO Account (customerNumber, accountType, balance) VALUES(?, ?, ?);");
-		pStmt->BindInt(1, customerNumber);      // First question mark in the VALUES() clause above
+		pStmt->BindInt(1, customerNumber);         // First question mark in the VALUES() clause above
 		pStmt->BindString(2, accountType);         // Second question mark in the VALUES() clause above
-		pStmt->BindDouble(3, initialBalance);   // Third question mark in the VALUES() clause above
+		pStmt->BindDouble(3, initialBalance);      // Third question mark in the VALUES() clause above		
 
 		// executes the INSERT statement and cleans-up automatically
 		pStmt->ExecuteAndFree();
@@ -232,7 +232,7 @@ public:
 		delete pStmt;
 
 		// return the account to the calling function
-		return new Account(accountNumber, customerNumber, accountType, initialBalance);
+		return new Account(accountNumber, customerNumber, accountType, initialBalance, "ACTIVE");
 	}
 	
 	// Function used to retrieve account info using the customer number
@@ -244,6 +244,7 @@ public:
 		int retrievedCustomerNumber = 0;
 		string retrievedAccountType = "";
 		double retrievedBalance = 0.0;
+		string retrievedStatus = "";
 
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -264,6 +265,7 @@ public:
 			retrievedCustomerNumber = pStmt->GetColumnInt("customerNumber");
 			retrievedAccountType = pStmt->GetColumnString("accountType");
 			retrievedBalance = pStmt->GetColumnDouble("balance");
+			retrievedStatus = pStmt->GetColumnString("status");
 		}
 
 		// "Clean up"
@@ -275,7 +277,7 @@ public:
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
-		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retrievedAccountType, retrievedBalance);
+		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retrievedAccountType, retrievedBalance, retrievedStatus);
 	}
 
 	// Another function used to retrieve account info, but using the account number instead
@@ -287,6 +289,7 @@ public:
 		int retrievedCustomerNumber = 0;
 		string retrievedAccountType = "";
 		double retrievedBalance = 0.0;
+		string retrievedStatus = "";
 
 		// First create a pointer to a SQLiteDatabase using 
 		// the connect() function defined above and then
@@ -306,6 +309,7 @@ public:
 			retrievedCustomerNumber = pStmt->GetColumnInt("customerNumber");
 			retrievedAccountType = pStmt->GetColumnString("accountType");
 			retrievedBalance = pStmt->GetColumnDouble("balance");
+			retrievedStatus = pStmt->GetColumnString("status");
 		}
 
 		// "Clean up"
@@ -317,7 +321,7 @@ public:
 
 		// Use the variables, which have been assigned values via the query above, 
 		// to create a Customer object to return.
-		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retrievedAccountType, retrievedBalance);
+		return new Account(retrievedAccountNumber, retrievedCustomerNumber, retrievedAccountType, retrievedBalance, retrievedStatus);
 	}
 
 	// Delete Account Function:
@@ -374,6 +378,25 @@ public:
 	
 		pStmt->Sql("UPDATE Account SET balance = ? WHERE accountNumber = ?;");
 		pStmt->BindDouble(1, newBalance);
+		pStmt->BindInt(2, accountNumber);
+		pStmt->ExecuteAndFree();
+
+		// De-allocate memory used to store pointers
+		delete pDatabase;
+		delete pStmt;
+	}
+
+	// Used to change the status of an account
+	void updateStatus(int accountNumber, string status)
+	{
+		// First create a pointer to a SQLiteDatabase using 
+		// the connect() function defined above and then
+		// create a pointer to an SQLiteStatement object.		
+		SQLiteDatabase *pDatabase = this->connect();
+		SQLiteStatement *pStmt = this->createStatement(pDatabase);
+
+		pStmt->Sql("UPDATE Account SET status = ? WHERE accountNumber = ?;");
+		pStmt->BindString(1, status);
 		pStmt->BindInt(2, accountNumber);
 		pStmt->ExecuteAndFree();
 
@@ -602,6 +625,7 @@ public:
 #pragma endregion
 
 #pragma region Functions related to Creating Transaction and Transfer Histories
+
 	void populateTransactionHistory(int accountNumber, vector<Page> *transactionHistory)
 	{
 
