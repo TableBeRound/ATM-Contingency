@@ -202,7 +202,7 @@ int UI::ShowTransactionTypeMenu(string custFirstName, string custLastName)
 		cout << endl
 			<< "\t\t\t    Welcome " + custFirstName + " " + custLastName + "!"
 			<< endl << endl
-			<< "\n\n  Use the UP/DOWN arrow keys to make a selection (1-6):" << endl
+			<< "\n\n  Use the UP/DOWN arrow keys to make a selection (1-8):" << endl
 			<< endl << endl
 			<< "\t[" << select1 << "] 1) Make a withdrawal" << endl          //<---- Choice #1
 			<< "\t[" << select2 << "] 2) Make a deposit" << endl             //<---- Choice #2
