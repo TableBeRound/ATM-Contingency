@@ -179,6 +179,7 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 	}
 }
 
+// function used to check if the PIN entered is between 4 and 6 digits
 bool UI::IsValidPin(int pin)
 {
 	if (pin >= 1000 && pin <= 999999)
@@ -190,6 +191,7 @@ bool UI::IsValidPin(int pin)
 		return false;
 	}
 }
+
 // This was taken from "how do i check a user input string with email format"
 // on stackoverflow.com http://stackoverflow.com/questions/14913341/how-do-i-check-a-user-input-string-with-email-format
 // this really only checks that it is a normal style email of "email@company.com"
