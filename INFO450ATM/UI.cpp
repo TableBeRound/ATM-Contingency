@@ -3,6 +3,7 @@
 #include <iomanip>
 #include "Windows.h"
 #include "Conio.h"
+#include <string>
 
 using namespace std;
 
@@ -108,7 +109,7 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 {
 	bool inputValid = false;
 	int keyboardHit = 0;
-	string firstName= "";
+	string firstName = "";
 	string lastName = "";
 	string emailAddress = "";
 	int pin = 0;
@@ -131,27 +132,37 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 		cout << "     PIN: ";
 		cin >> pin;
 		this->ClearBuffer();
-		cout << endl << endl << endl 
-			<< "  Please review the information entered above." << endl		    
-			<< endl << endl << endl
-			<< "  Is this information correct? (Press \"Y\" for Yes and \"N\" for No)" << endl << endl
-			<< endl << endl
-			<< "  Press the Escape key to cancel.";
-		keyboardHit = _getch();
-		switch (keyboardHit)
+		if (!IsValidEmail(emailAddress))
 		{
-			// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
-		case 121:
-			inputValid = true;
-			break;
-		case KEY_ESC:
-			inputValid = true;
-			break;
-		default:
-			inputValid = false;
-			break;
+			ShowErrorMessage("Invalid Email! Please try again.");
+		}
+		else
+		{
+			cout << endl << endl << endl
+				<< "  Please review the information entered above." << endl
+				<< endl << endl << endl
+				<< "  Is this information correct? (Press \"Y\" for Yes and \"N\" for No)" << endl << endl
+				<< endl << endl
+				<< "  Press the Escape key to cancel.";
+			// holds the screen to wait for keyboard input
+			keyboardHit = _getch();
+			switch (keyboardHit)
+			{
+				// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
+			case 121:
+				inputValid = true;
+				break;
+			case KEY_ESC:
+				inputValid = true;
+				break;
+			default:
+				inputValid = false;
+				break;
+
+			}
 		}
 	}
+	//this was here
 	if (keyboardHit == KEY_ESC)
 	{
 		this->ClearScreen();
@@ -163,9 +174,22 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 		cust->SetLastName(lastName);
 		cust->SetEmailAddress(emailAddress);
 		cust->SetPIN(pin);
-		this->ClearScreen();		
+		this->ClearScreen();
 		cout << "\n\n\n\n\t\t\t Account Creation Successful!\n\n";
 	}
+}
+
+// This was taken from "how do i check a user input string with email format"
+// on stackoverflow.com http://stackoverflow.com/questions/14913341/how-do-i-check-a-user-input-string-with-email-format
+// this really only checks that it is a normal style email of "email@company.com"
+bool UI::IsValidEmail(string const& email)
+{
+	// Searches for the 1st @ in the input string.
+	// The 0 means it searches the entire string for the @ instance
+	size_t locationOfAT = email.find_first_of('@', 0);
+	// returns true as long as email.find_first_of() found an @ in the string
+	// AND if the . is at some location after the the @
+	return locationOfAT != std::string::npos && email.find_first_of('.', locationOfAT) != std::string::npos;
 }
 
 // Prompt the user to enter a PIN
@@ -545,7 +569,7 @@ void UI::ShowErrorMessage(char *message)
 {
 	this->ClearScreen();
 	cout << endl << endl
-		<< " *****  " << message << "  *****" << endl
+		<< "*****  " << message << "  *****" << endl
 		<< endl << endl << endl << endl << endl << endl;
 	this->PressAnyKeyToContinue();
 }
