@@ -138,28 +138,28 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 		//}
 		//else
 		//{
-			cout << endl << endl << endl
-				<< "  Please review the information entered above." << endl
-				<< endl << endl << endl
-				<< "  Is this information correct? (Press \"Y\" for Yes and \"N\" for No)" << endl << endl
-				<< endl << endl
-				<< "  Press the Escape key to cancel.";
-			// holds the screen to wait for keyboard input
-			keyboardHit = _getch();
-			switch (keyboardHit)
-			{
-				// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
-			case 121:
-				inputValid = true;
-				break;
-			case KEY_ESC:
-				inputValid = true;
-				break;
-			default:
-				inputValid = false;
-				break;
+		cout << endl << endl << endl
+			<< "  Please review the information entered above." << endl
+			<< endl << endl << endl
+			<< "  Is this information correct? (Press \"Y\" for Yes and \"N\" for No)" << endl << endl
+			<< endl << endl
+			<< "  Press the Escape key to cancel.";
+		// holds the screen to wait for keyboard input
+		keyboardHit = _getch();
+		switch (keyboardHit)
+		{
+			// 121 is the integer returned by _getch() when the "Y" key is pressed on the keyboard
+		case 121:
+			inputValid = true;
+			break;
+		case KEY_ESC:
+			inputValid = true;
+			break;
+		default:
+			inputValid = false;
+			break;
 
-			}
+		}
 		//}
 	}
 	if (keyboardHit == KEY_ESC)
