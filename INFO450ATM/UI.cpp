@@ -129,12 +129,12 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 		cout << "     Email Address: ";
 		cin >> emailAddress;
 		this->ClearBuffer();
-		cout << "     PIN: ";
+		cout << "     PIN (between 4 and 6 digits): ";
 		cin >> pin;
 		this->ClearBuffer();
-		if (!IsValidEmail(emailAddress))
+		if (!IsValidEmail(emailAddress) || !IsValidPin(pin))
 		{
-			ShowErrorMessage("Invalid Email! Please try again.");
+			ShowErrorMessage("Invalid Email or PIN! Please try again.");
 		}
 		else
 		{
@@ -179,6 +179,17 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 	}
 }
 
+bool UI::IsValidPin(int pin)
+{
+	if (pin >= 1000 && pin <= 999999)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 // This was taken from "how do i check a user input string with email format"
 // on stackoverflow.com http://stackoverflow.com/questions/14913341/how-do-i-check-a-user-input-string-with-email-format
 // this really only checks that it is a normal style email of "email@company.com"
