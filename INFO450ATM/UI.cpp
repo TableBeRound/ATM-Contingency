@@ -162,7 +162,6 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 			}
 		}
 	}
-	//this was here
 	if (keyboardHit == KEY_ESC)
 	{
 		this->ClearScreen();
@@ -195,13 +194,18 @@ bool UI::IsValidPin(int pin)
 // This was taken from "how do i check a user input string with email format"
 // on stackoverflow.com http://stackoverflow.com/questions/14913341/how-do-i-check-a-user-input-string-with-email-format
 // this really only checks that it is a normal style email of "email@company.com"
+// used http://www.cplusplus.com/reference/string/string/find_first_of/ to learn 
+// the context of find_first_of()
 bool UI::IsValidEmail(string const& email)
 {
 	// Searches for the 1st @ in the input string.
-	// The 0 means it searches the entire string for the @ instance
-	size_t locationOfAT = email.find_first_of('@', 0);
+	// The 1 means it starts from position 1 in the string.
+	// This will prevent an email with now "username" field like @company.com from working
+	// (an unsigned int-->)size_t locationOfAT is the numerical location
+	// in the string email that the charcter @ is
+	size_t locationOfAT = email.find_first_of('@', 1);
 	// returns true as long as email.find_first_of() found an @ in the string
-	// AND if the . is at some location after the the @
+	// AND as long as a . is found, and it is at some location after the @
 	return locationOfAT != std::string::npos && email.find_first_of('.', locationOfAT) != std::string::npos;
 }
 
