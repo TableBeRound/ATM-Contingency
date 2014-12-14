@@ -44,8 +44,6 @@ public:
 	void ShowTransactionHistory(vector<Page> transactionHistory, string firstName, string lastName);
 	void ShowTransferHistory(vector<Page> transferHistory, string firstName, string lastName);
 	bool ShowChangeAccountStatusPrompt();
-	bool IsValidEmail(string const& email);
-	bool IsValidPin(int pin);
 
 	// These functions are frequently used
 	// to manipulate output to the screen.

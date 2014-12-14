@@ -132,12 +132,12 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 		cout << "     PIN (between 4 and 6 digits): ";
 		cin >> pin;
 		this->ClearBuffer();
-		if (!IsValidEmail(emailAddress) || !IsValidPin(pin))
-		{
-			ShowErrorMessage("Invalid Email or PIN! Please try again.");
-		}
-		else
-		{
+		//if (!IsValidEmail(emailAddress) || !IsValidPin(pin))
+		//{
+		//	ShowErrorMessage("Invalid Email or PIN! Please try again.");
+		//}
+		//else
+		//{
 			cout << endl << endl << endl
 				<< "  Please review the information entered above." << endl
 				<< endl << endl << endl
@@ -160,7 +160,7 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 				break;
 
 			}
-		}
+		//}
 	}
 	if (keyboardHit == KEY_ESC)
 	{
@@ -178,36 +178,38 @@ void UI::ShowCreateNewCustomerProfileForm(Customer *cust)
 	}
 }
 
-// function used to check if the PIN entered is between 4 and 6 digits
-bool UI::IsValidPin(int pin)
-{
-	if (pin >= 1000 && pin <= 999999)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-// This was taken from "how do i check a user input string with email format"
-// on stackoverflow.com http://stackoverflow.com/questions/14913341/how-do-i-check-a-user-input-string-with-email-format
-// this really only checks that it is a normal style email of "email@company.com"
-// used http://www.cplusplus.com/reference/string/string/find_first_of/ to learn 
-// the context of find_first_of()
-bool UI::IsValidEmail(string const& email)
-{
-	// Searches for the 1st @ in the input string.
-	// The 1 means it starts from position 1 in the string.
-	// This will prevent an email with now "username" field like @company.com from working
-	// (an unsigned int-->)size_t locationOfAT is the numerical location
-	// in the string email that the charcter @ is
-	size_t locationOfAT = email.find_first_of('@', 1);
-	// returns true as long as email.find_first_of() found an @ in the string
-	// AND as long as a . is found, and it is at some location after the @
-	return locationOfAT != std::string::npos && email.find_first_of('.', locationOfAT) != std::string::npos;
-}
+#pragma region Pin and Email Validation
+//// function used to check if the PIN entered is between 4 and 6 digits
+//bool UI::IsValidPin(int pin)
+//{
+//	if (pin >= 1000 && pin <= 999999)
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}
+//
+//// This was taken from "how do i check a user input string with email format"
+//// on stackoverflow.com http://stackoverflow.com/questions/14913341/how-do-i-check-a-user-input-string-with-email-format
+//// this really only checks that it is a normal style email of "email@company.com"
+//// used http://www.cplusplus.com/reference/string/string/find_first_of/ to learn 
+//// the context of find_first_of()
+//bool UI::IsValidEmail(string const& email)
+//{
+//	// Searches for the 1st @ in the input string.
+//	// The 1 means it starts from position 1 in the string.
+//	// This will prevent an email with now "username" field like @company.com from working
+//	// (an unsigned int-->)size_t locationOfAT is the numerical location
+//	// in the string email that the charcter @ is
+//	size_t locationOfAT = email.find_first_of('@', 1);
+//	// returns true as long as email.find_first_of() found an @ in the string
+//	// AND as long as a . is found, and it is at some location after the @
+//	return locationOfAT != std::string::npos && email.find_first_of('.', locationOfAT) != std::string::npos;
+//}
+#pragma endregion Pin and Email Validation
 
 // Prompt the user to enter a PIN
 int UI::ShowPINPrompt()
@@ -586,7 +588,7 @@ void UI::ShowErrorMessage(char *message)
 {
 	this->ClearScreen();
 	cout << endl << endl
-		<< "*****  " << message << "  *****" << endl
+		<< "\t   *****  " << message << "  *****" << endl
 		<< endl << endl << endl << endl << endl << endl;
 	this->PressAnyKeyToContinue();
 }

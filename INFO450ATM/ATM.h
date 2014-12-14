@@ -38,6 +38,8 @@ public:
 	void ManageAccount();
 	void LogoutCustomer();
 	void ShutdownATM();
+	bool IsValidEmail(string const& email);
+	bool IsValidPin(int pin);
 };
 
 #endif

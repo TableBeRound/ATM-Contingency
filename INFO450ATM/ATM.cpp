@@ -102,10 +102,61 @@ bool ATM::Login() {
 
 void ATM::CreateNewCustomer()
 {
+	int keyboardhit = 0;
+
 	ui->ShowCreateNewCustomerProfileForm(customer);
-	db->createCustomer(customer->GetLastName(), customer->GetFirstName(), customer->GetEmailAddress(), customer->GetPIN());
-	customer = db->getCustomer(customer->GetEmailAddress());
-	db->createAccount(customer->GetCustomerNumber(), "C");
+	// waits for the user to confirm if they want to use the information they already input
+	// if they confirm using it, and the email address or pin are not in a proper format
+	// then it will throw an error message and allow them to try again
+	if (!IsValidEmail(customer->GetEmailAddress()) || !IsValidPin(customer->GetPIN()))
+	{
+		ui->ShowErrorMessage("Invalid Email or PIN! Please try again.");
+		CreateNewCustomer();
+	}
+	// if the input that was confirmed had a proper email address and pin
+	// then the account is created
+	else
+	{
+		// everything below this line is original
+		// ***************************************************
+		//ui->ShowCreateNewCustomerProfileForm(customer);
+		db->createCustomer(customer->GetLastName(), customer->GetFirstName(), customer->GetEmailAddress(), customer->GetPIN());
+		customer = db->getCustomer(customer->GetEmailAddress());
+		db->createAccount(customer->GetCustomerNumber(), "C");
+		// ***************************************************
+		// everything above this line is original
+	}
+}
+
+// function used to check if the PIN entered is between 4 and 6 digits
+bool ATM::IsValidPin(int pin)
+{
+	if (pin >= 1000 && pin <= 999999)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+// This was taken from "how do i check a user input string with email format"
+// on stackoverflow.com http://stackoverflow.com/questions/14913341/how-do-i-check-a-user-input-string-with-email-format
+// this really only checks that it is a normal style email of "email@company.com"
+// used http://www.cplusplus.com/reference/string/string/find_first_of/ to learn 
+// the context of find_first_of()
+bool ATM::IsValidEmail(string const& email)
+{
+	// Searches for the 1st @ in the input string.
+	// The 1 means it starts from position 1 in the string.
+	// This will prevent an email with now "username" field like @company.com from working
+	// (an unsigned int-->)size_t locationOfAT is the numerical location
+	// in the string email that the charcter @ is
+	size_t locationOfAT = email.find_first_of('@', 1);
+	// returns true as long as email.find_first_of() found an @ in the string
+	// AND as long as a . is found, and it is at some location after the @
+	return locationOfAT != std::string::npos && email.find_first_of('.', locationOfAT) != std::string::npos;
 }
 
 // The Main Menu uses a switch to determine what the user would like to do during this interaction.
